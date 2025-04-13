@@ -74,14 +74,6 @@
 
   ## Enable services
 
-  # SDDM - set package and theme
-  services.displayManager.sddm.autoNumlock = true;
-
-  # libinput gestures
-  services.libinput.enable = true;
-  services.xserver.windowManager.fvwm2.gestures = true;
-
-
   services.flatpak.enable = true;
 
   virtualisation.docker.enable = true;

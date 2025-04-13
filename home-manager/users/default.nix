@@ -1,4 +1,4 @@
-{ config, pkgs, inputs, nixpkgs, ... }:
+{ config, pkgs, lib, inputs, nixpkgs, ... }:
 let
   nixvim = inputs.nixvim.legacyPackages.${pkgs.system};
 in
@@ -64,7 +64,7 @@ in
 
     # Browsers
     # zen
-    args.inputs.zen-browser.packages.${system}.twilight
+    inputs.zen-browser.packages.${system}.twilight
     # vivaldi
     ((vivaldi.overrideAttrs
       (oldattrs: {
@@ -96,7 +96,7 @@ in
         ms-python.python
         ms-python.debugpy
 
-        catppuccin.cattppuccin-vscode
+        # catppuccin.cattppuccin-vscode
       ];
     })
 
@@ -119,21 +119,12 @@ in
   programs.ghostty.enable = true;
   programs.git.enable = true;
 
-
-  ## Configure home-manager
-  home-manager.backupFileExtension = "hm.bak";
-
+  #
+  # ## Configure home-manager
+  # home-manager.backupFileExtension = "hm.bak";
+  #
 
   # # Set cursor configuration and theme
-
-  environment.variables = {
-    XCURSOR_THEME = "Catppuccin Mocha Mauve";
-    XCURSOR_SIZE = "20";
-    HYPRCURSOR_THEME = "Catppuccin Mocha Mauve";
-    HYPRCURSOR_SIZE = "20";
-
-    # QT_QPA_PLATFORMTHEME="kvantum";
-  };
 
   # pointer cursor change in home manager
   home.pointerCursor = {

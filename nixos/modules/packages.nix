@@ -1,6 +1,8 @@
-{ pkgs, ... }:
+{ pkgs, nixpkgs, ... }:
 
 {
+  # nixpkgs.config.allowUnfree = true;
+
   environment.systemPackages = with pkgs; [
 
     # Nix utils
@@ -142,6 +144,5 @@
 
   # # enable hyprlock
   # programs.hyprlock.enable = true;
-
 
 }

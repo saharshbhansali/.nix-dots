@@ -3,14 +3,24 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
     nixvim = {
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    zen-browser = {
+      url = "github:0xc000022070/zen-browser-flake";
+      # IMPORTANT: we're using "libgbm" and is only available in unstable so ensure
+      # to have it up to date or simply don't specify the nixpkgs input
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
 
   outputs = { self, nixpkgs, home-manager, nixvim, ... } @ inputs:
@@ -24,8 +34,9 @@
     {
       nixosConfigurations.my-host = nixpkgs.lib.nixosSystem {
         inherit system;
-        specialArgs = { inherit inputs; };
+        specialArgs = { inherit inputs pkgs; };
         modules = [
+          ./hardware-configuration.nix
           ./nixos/hosts/default.nix
 
           # Home Manager as NixOS module
@@ -33,11 +44,11 @@
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-            home-manager.users.yourUser = import ./home-manager/users/default.nix;
+            home-manager.users.saharsh = import ./home-manager/users/default.nix;
 
             # Pass flake inputs to home-manager modules
             home-manager.extraSpecialArgs = {
-              inherit inputs;
+              inherit inputs home-manager;
             };
           }
         ];
