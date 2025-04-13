@@ -9,6 +9,7 @@
     ../modules/nixvim.nix
     ../modules/kde-desktop.nix
     # ../modules/gnome-desktop.nix
+    ../modules/sddm.nix
   ];
 
 
@@ -83,5 +84,6 @@
     setSocketVariable = true;
   };
 
+  networking.networkmanager.enable = true;
 
 }

@@ -1,7 +1,7 @@
 { config, pkgs, lib, inputs, nixpkgs, ... }:
-let
-  nixvim = inputs.nixvim.legacyPackages.${pkgs.system};
-in
+# let
+#   nixvim = inputs.nixvim.legacyPackages.${pkgs.system};
+# in
 {
   home.stateVersion = "24.11";
 
@@ -20,28 +20,28 @@ in
   programs.zsh.enable = true;
 
 
-  # imports = [
-  #   nixvim.homeManagerModules.nixvim
-  # ];
-  #
-  # programs.nixvim = {
-  #   enable = true;
-  #
-  #   colorschemes.catppuccin.enable = true;
-  #
-  #   plugins.lazy.enable = true;
-  #
-  #   plugins.lualine.enable = true;
-  #   plugins.yanky.enable = true;
-  #   plugins.harpoon.enable = true;
-  #   plugins.telescope.enable = true;
-  #   plugins.treesitter.enable = true;
-  #   # plugins.nvim-treesitter-textobjects.enable = true;
-  #   plugins.mini.enable = true;
-  #   plugins.web-devicons.enable = true;
-  #   plugins.fzf-lua.enable = true;
-  #   # plugins.harpoon.enable = true;
-  # };
+  imports = [
+    inputs.nixvim.homeManagerModules.nixvim
+  ];
+
+  programs.nixvim = {
+    enable = true;
+
+    colorschemes.catppuccin.enable = true;
+
+    plugins.lazy.enable = true;
+
+    plugins.lualine.enable = true;
+    plugins.yanky.enable = true;
+    plugins.harpoon.enable = true;
+    plugins.telescope.enable = true;
+    plugins.treesitter.enable = true;
+    # plugins.nvim-treesitter-textobjects.enable = true;
+    plugins.mini.enable = true;
+    plugins.web-devicons.enable = true;
+    plugins.fzf-lua.enable = true;
+    # plugins.harpoon.enable = true;
+  };
 
 
   ## Install packages
