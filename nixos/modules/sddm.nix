@@ -1,4 +1,4 @@
-{ ... }
+{ pkgs, config, lib, ... }:
 
 {
 
@@ -7,7 +7,7 @@
   # services.displayManager.sddm.package = lib.mkForce pkgs.libsForQt5.sddm;
   # # services.displayManager.sddm.theme = lib.mkForce "where-is-my-sddm-theme";
   services.displayManager.sddm.enable = true;
-  services.displayManager.sddm.theme = lib.mkDefault "where-is-my-sddm-theme";
+  services.displayManager.sddm.theme = lib.mkForce "where-is-my-sddm-theme";
   services.displayManager.sddm.autoNumlock = true;
   # # Enable numlock on startup
   # services.xserver.displayManager.setupCommands = "${pkgs.numlockx}/bin/numlockx on";
