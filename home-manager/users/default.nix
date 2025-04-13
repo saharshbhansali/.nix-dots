@@ -19,29 +19,33 @@
   programs.home-manager.enable = true;
   programs.zsh.enable = true;
 
-
   imports = [
-    inputs.nixvim.homeManagerModules.nixvim
+    ../modules/hm-nixvim.nix
   ];
-
-  programs.nixvim = {
-    enable = true;
-
-    colorschemes.catppuccin.enable = true;
-
-    plugins.lazy.enable = true;
-
-    plugins.lualine.enable = true;
-    plugins.yanky.enable = true;
-    plugins.harpoon.enable = true;
-    plugins.telescope.enable = true;
-    plugins.treesitter.enable = true;
-    # plugins.nvim-treesitter-textobjects.enable = true;
-    plugins.mini.enable = true;
-    plugins.web-devicons.enable = true;
-    plugins.fzf-lua.enable = true;
-    # plugins.harpoon.enable = true;
-  };
+  # imports = [
+  #   inputs.nixvim.homeManagerModules.nixvim
+  # ];
+  #
+  # programs.nixvim = {
+  #   enable = true;
+  #
+  #   clipboard.providers.wl-copy.enable = true;
+  #
+  #   colorschemes.catppuccin.enable = true;
+  #
+  #   plugins.lazy.enable = true;
+  #
+  #   plugins.lualine.enable = true;
+  #   plugins.yanky.enable = true;
+  #   plugins.harpoon.enable = true;
+  #   plugins.telescope.enable = true;
+  #   plugins.treesitter.enable = true;
+  #   # plugins.nvim-treesitter-textobjects.enable = true;
+  #   plugins.mini.enable = true;
+  #   plugins.web-devicons.enable = true;
+  #   plugins.fzf-lua.enable = true;
+  #   # plugins.harpoon.enable = true;
+  # };
 
 
   ## Install packages
