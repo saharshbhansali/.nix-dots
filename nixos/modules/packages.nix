@@ -129,8 +129,8 @@
     xfce.thunar
     xfce.thunar-archive-plugin
 
-    # VM Software
-    vmware-workstation
+    # # VM Software
+    # vmware-workstation
 
   ];
 

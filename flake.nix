@@ -32,7 +32,7 @@
       };
     in
     {
-      nixosConfigurations.my-host = nixpkgs.lib.nixosSystem {
+      nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
         inherit system;
         specialArgs = { inherit inputs pkgs; };
         modules = [
