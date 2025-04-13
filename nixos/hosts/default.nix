@@ -25,6 +25,7 @@
     shell = pkgs.zsh;
   };
 
+  users.defaultUserShell = pkgs.zsh;
 
   ## Enable services
 
