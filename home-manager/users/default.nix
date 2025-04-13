@@ -45,7 +45,7 @@ in
 
 
   ## Install packages
-  nixpkgs.config.allowUnfree = true;
+  # nixpkgs.config.allowUnfree = true;
 
   # User level packages
   home.packages = with pkgs; [
@@ -139,6 +139,8 @@ in
 
   # Set environment variables for X and Wayland cursor settings
   home.sessionVariables = {
+    EDITOR = "nvim";
+
     XCURSOR_THEME = "Catppuccin Mocha Mauve";
     XCURSOR_SIZE = "20";
     HYPRCURSOR_THEME = lib.mkForce "Catppuccin Mocha Mauve";
