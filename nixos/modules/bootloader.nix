@@ -14,6 +14,7 @@
        useOSProber = true;
        #efiInstallAsRemovable = true; # in case canTouchEfiVariables doesn't work for your system
        devices = ["nodev"];
+       theme = pkgs.where-is-my-sddm-theme;
     };
   };
 
