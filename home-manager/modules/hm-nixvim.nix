@@ -1,6 +1,7 @@
-{ config, pkgs, inputs, lib, ... }:
+{ config, lib, pkgs, inputs, ... }:
 
 {
+
   imports = [ inputs.nixvim.homeManagerModules.nixvim ];
 
   programs.nixvim = {
@@ -35,4 +36,5 @@
       web-devicons.enable = true;
     };
   };
+
 }
