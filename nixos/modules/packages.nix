@@ -83,6 +83,9 @@
     borgbackup
     pika-backup
 
+    # Media utils
+    pamixer
+
     # Development utils
     devenv
     direnv
@@ -102,7 +105,7 @@
     kdePackages.kwalletmanager
 
     # GTK utils
-    # gtk2
+    gtk2
     gtk3
     gtk4
 
