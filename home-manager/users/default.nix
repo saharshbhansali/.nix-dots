@@ -57,8 +57,8 @@
     # Terminal programs
     chezmoi
 
-    # Disk utils
-    ventoy-full
+    # # Disk utils
+    # ventoy-full
 
     # Spotify
     spotify
