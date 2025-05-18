@@ -1,4 +1,4 @@
-{ config, pkgs, inputs, lib, ... }:
+{ config, lib, pkgs, inputs, ... }:
 
 {
 
@@ -8,14 +8,22 @@
 
 
   imports = [
+    ## System configuration
     ../modules/bootloader.nix
     ../modules/swap.nix
     ../modules/filesystem.nix
+    ## Application installation
     ../modules/packages.nix
+    ## Application configurations
     ../modules/nixvim.nix
-    ../modules/kde-desktop.nix
-    # ../modules/gnome-desktop.nix
-    ../modules/sddm.nix
+    ## Service configurations
+    ../modules/gestures.nix
+    ## Desktop Environment configurations
+    ../modules/gnome-desktop.nix
+    ../modules/gdm.nix
+    # ../modules/kde-desktop.nix
+    # ../modules/sddm.nix
+    # ../modules/cosmic-desktop.nix
   ];
 
 
