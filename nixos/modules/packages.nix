@@ -53,6 +53,7 @@
     diff-so-fancy
     thefuck
     btop
+    starship
 
     # Fetch utils
     pfetch
