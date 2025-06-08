@@ -90,15 +90,20 @@
     # Development utils
     devenv
     direnv
-    gcc                    # gcc compiler
-    clang                  # clang compiler
-    gnumake                # make build tool
-    cmake                  # cmake build system
-    python313              # python 3 interpreter
-    python313Packages.pip  # python 3 package manager
-    pipx                   # install python packages globally
-    strace                 # for tracing system calls
-    gdb                    # for debugging
+    gcc                             # gcc compiler
+    clang                           # clang compiler
+    gnumake                         # make build tool
+    cmake                           # cmake build system
+    python313                       # python 3.13 interpreter
+    python313Packages.pip           # python 3.13 package manager
+    python313Packages.virtualenv    # python 3.13 virtual environment
+    python312                       # python 3.12 interpreter
+    python312Packages.pip           # python 3.12 package manager
+    python312Packages.virtualenv    # python 3.12 virtual environment
+    python-launcher                 # python version manager
+    pipx                            # install python packages globally
+    strace                          # for tracing system calls
+    gdb                             # for debugging
 
     # KDE Wallet utils
     # kwalletcli
