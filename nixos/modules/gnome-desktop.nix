@@ -13,7 +13,7 @@
   xdg.portal.config.common.default = "*";
 
   # Enable GNOME
-  services.xserver.desktopManager.gnome.enable = true;
+  services.desktopManager.gnome.enable = true;
 
   # dconf editor for GNOME settings
   programs.dconf.enable = true;
