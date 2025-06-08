@@ -51,7 +51,7 @@
     fd
     tldr
     diff-so-fancy
-    thefuck
+    pay-respects
     btop
     starship
 
