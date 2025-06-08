@@ -26,6 +26,7 @@
     gnome-tweaks
     gnomeExtensions.apps
     gnomeExtensions.window-gestures
+    gnomeExtensions.touchpad-gesture-customization
     gnomeExtensions.x11-gestures
     gnomeExtensions.dash-to-dock
     gnomeExtensions.dash-to-panel
