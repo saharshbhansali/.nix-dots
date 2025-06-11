@@ -20,6 +20,7 @@
     ../modules/hm-programs.nix
     ../modules/hm-nixvim.nix
     ../modules/hm-cursor.nix
+    ../modules/hm-gdm.nix
   ];
 
 
