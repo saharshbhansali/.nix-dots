@@ -35,7 +35,6 @@
     # gnomeExtensions.system-monitor
     gnomeExtensions.pano
     # gnomeExtensions.window-list
-    # gnomeExtensions.window-list
     gnomeExtensions.workspace-indicator
     gnomeExtensions.unmess
     # gnomeExtensions.clipboard-indicator
