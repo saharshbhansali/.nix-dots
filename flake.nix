@@ -46,6 +46,9 @@
             home-manager.useUserPackages = true;
             home-manager.users.saharsh = import ./home-manager/users/default.nix;
 
+            ## Set backup file extension
+            home-manager.backupFileExtension = "hm.bak";
+
             # Pass flake inputs to home-manager modules
             home-manager.extraSpecialArgs = {
               inherit inputs home-manager;
