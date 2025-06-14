@@ -21,6 +21,7 @@
     ../modules/hm-nixvim.nix
     ../modules/hm-cursor.nix
     ../modules/hm-gdm.nix
+    ../modules/hm-configs.nix
   ];
 
 
@@ -39,7 +40,5 @@
 
     # QT_QPA_PLATFORMTHEME="kvantum";
   };
-
-  home.file.".zshrc".source = ./.config/zsh/.zshrc;
 
 }
