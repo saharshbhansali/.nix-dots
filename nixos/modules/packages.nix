@@ -9,6 +9,7 @@
     nix-inspect
     steam-run
     appimage-run
+    nix-index
 
     # Hypr utils
     hyprlock
@@ -49,7 +50,9 @@
     bat
     fzf
     fd
-    tldr
+    # tldr
+    # tlrc
+    tealdeer
     diff-so-fancy
     pay-respects
     btop
