@@ -149,7 +149,14 @@ eval "$(fzf --zsh)"
 eval "$(zoxide init --cmd cd zsh)"
 # eval "$(thefuck --alias)"
 eval "$(pay-respects zsh --alias)"
+
+export ATUIN_NOBIND="true"
 eval "$(atuin init zsh)"
+
+bindkey '^r' atuin-up-search
+# # bind to the up key, which depends on terminal mode
+# bindkey '^[[A' atuin-up-search
+# bindkey '^[OA' atuin-up-search
 
 #-----------------------------------------------------------------------------------------------------------
 
