@@ -2,10 +2,10 @@
 
 {
 
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
-
   system.stateVersion = "24.11";
 
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.download-buffer-size = 524288000;
 
   imports = [
     ## System configuration
