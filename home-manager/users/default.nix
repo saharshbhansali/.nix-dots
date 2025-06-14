@@ -40,4 +40,6 @@
     # QT_QPA_PLATFORMTHEME="kvantum";
   };
 
+  home.file.".zshrc".source = ./.config/zsh/.zshrc;
+
 }
