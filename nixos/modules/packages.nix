@@ -1,4 +1,4 @@
-{ pkgs, nixpkgs, ... }:
+{ pkgs, nixpkgs, lib, config, ... }:
 
 {
   # nixpkgs.config.allowUnfree = true;
@@ -144,6 +144,7 @@
   ];
 
   programs.zsh.enable = true;
+  programs.fish.enable = true;
 
   ## Enable programs
 

@@ -35,4 +35,5 @@
       web-devicons.enable = true;
     };
   };
+
 }
