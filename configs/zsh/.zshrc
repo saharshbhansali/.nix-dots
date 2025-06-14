@@ -149,6 +149,7 @@ eval "$(fzf --zsh)"
 eval "$(zoxide init --cmd cd zsh)"
 # eval "$(thefuck --alias)"
 eval "$(pay-respects zsh --alias)"
+eval "$(atuin init zsh)"
 
 #-----------------------------------------------------------------------------------------------------------
 

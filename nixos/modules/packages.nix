@@ -54,6 +54,7 @@
     pay-respects
     btop
     starship
+    atuin
 
     # Fetch utils
     pfetch
