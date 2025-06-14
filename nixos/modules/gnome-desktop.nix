@@ -14,6 +14,7 @@
 
   # Enable GNOME
   services.desktopManager.gnome.enable = true;
+  services.xserver.xkb.options = "caps:ctrl_modifier";
 
   # dconf editor for GNOME settings
   programs.dconf.enable = true;
