@@ -14,6 +14,7 @@
     ../modules/filesystem.nix
     ## Application installation
     ../modules/packages.nix
+    ../modules/programs.nix
     ## Application configurations
     ../modules/nixvim.nix
     ## Service configurations

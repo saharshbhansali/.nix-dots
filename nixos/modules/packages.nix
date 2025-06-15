@@ -1,6 +1,7 @@
 { pkgs, nixpkgs, lib, config, ... }:
 
 {
+
   # nixpkgs.config.allowUnfree = true;
 
   environment.systemPackages = with pkgs; [
@@ -146,16 +147,5 @@
     # vmware-workstation
 
   ];
-
-  programs.zsh.enable = true;
-  programs.fish.enable = true;
-
-  ## Enable programs
-
-  # dconf editor for GNOME settings
-  programs.dconf.enable = true;
-
-  # # enable hyprlock
-  # programs.hyprlock.enable = true;
 
 }
