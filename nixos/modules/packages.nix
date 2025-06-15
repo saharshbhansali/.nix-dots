@@ -59,6 +59,7 @@
     btop
     starship
     atuin
+    carapace
 
     # Fetch utils
     pfetch

@@ -143,20 +143,18 @@ zstyle ':fzf-tab:complete:nvim:*' fzf-preview 'ls --color $realpath'
 zstyle ':fzf-tab:complete:bat:*' fzf-preview 'ls --color $realpath'
 zstyle ':fzf-tab:complete:cat:*' fzf-preview 'ls --color $realpath'
 zstyle ':fzf-tab:complete:chezmoi:*' fzf-preview 'ls --color $realpath'
+# Carapace completions
+export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense' # optional
+zstyle ':completion:*' format $'\e[2;37mCompleting %d\e[m'
+source <(carapace _carapace)
+zstyle ':completion:*:git:*' group-order 'main commands' 'alias commands' 'external commands'
 
 # Shell integrations
 eval "$(fzf --zsh)"
 eval "$(zoxide init --cmd cd zsh)"
 # eval "$(thefuck --alias)"
 eval "$(pay-respects zsh --alias)"
-
-export ATUIN_NOBIND="true"
 eval "$(atuin init zsh)"
-
-bindkey '^r' atuin-up-search
-# # bind to the up key, which depends on terminal mode
-# bindkey '^[[A' atuin-up-search
-# bindkey '^[OA' atuin-up-search
 
 #-----------------------------------------------------------------------------------------------------------
 
