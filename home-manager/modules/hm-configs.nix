@@ -15,4 +15,6 @@
     recursive = true;
   };
 
+  home.file.".config/atuin/config.toml".source = ../../configs/atuin/config.toml;
+
 }
