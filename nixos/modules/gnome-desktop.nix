@@ -27,18 +27,19 @@
     gnome-tweaks
     gnomeExtensions.apps
     gnomeExtensions.arcmenu
-    gnomeExtensions.window-gestures
+    # gnomeExtensions.window-gestures
     gnomeExtensions.touchpad-gesture-customization
-    gnomeExtensions.x11-gestures
+    # gnomeExtensions.x11-gestures
     gnomeExtensions.dash-to-dock
     # gnomeExtensions.dash-to-panel
     gnomeExtensions.user-themes
     # gnomeExtensions.system-monitor
-    gnomeExtensions.pano
     # gnomeExtensions.window-list
     gnomeExtensions.workspace-indicator
     gnomeExtensions.unmess
-    # gnomeExtensions.clipboard-indicator
+    gnomeExtensions.clipboard-indicator
+    gnomeExtensions.pano
+    gnomeExtensions.clipboard-history
     gnomeExtensions.vitals
     # gnomeExtensions.cmud
     gnomeExtensions.forge
