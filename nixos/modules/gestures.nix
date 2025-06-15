@@ -1,4 +1,4 @@
-{ ... }:
+{ config, lib, pkgs, ... }:
 
 {
 
@@ -12,11 +12,17 @@
 
   ## Create a service to launch the gestures daemon
   systemd.user.services.libinput-gestures-service = {
+    enable = false;
     description = "libinput gestures daemon";
-    script = ''
-      libinput-gestures
-    '';
-    wantedBy = [ "multi-user.target" ];
+    wantedBy = [ "default.target" ];
+    serviceConfig = {
+      ExecStart = "${pkgs.libinput-gestures}/bin/libinput-gestures";
+    };
+    path = with pkgs; [
+      wmctrl
+      pamixer
+      xdotool
+    ];
   };
 
 }
