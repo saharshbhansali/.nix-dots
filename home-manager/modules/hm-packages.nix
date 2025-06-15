@@ -10,6 +10,18 @@
 
     # Terminal programs
     chezmoi
+    grc
+
+    # Fish plugins
+    fishPlugins.z
+    fishPlugins.plugin-git
+    fishPlugins.git-abbr
+    # fishPlugins.fzf
+    fishPlugins.fzf-fish
+    fishPlugins.transient-fish
+    fishPlugins.grc
+    fishPlugins.colored-man-pages
+    fishPlugins.bass
 
     # # Disk utils
     # ventoy-full

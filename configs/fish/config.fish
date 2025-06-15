@@ -21,7 +21,8 @@ set -gx VISUAL emacs
 set -gx VAGRANT_DEFAULT_PROVIDER virtualbox
 
 # Fzf 
-fzf --fish | source
+# fzf --fish | source
+fzf_configure_bindings --variables=\e\cv --history=
 
 # Zoxide
 zoxide init fish | source
@@ -39,9 +40,9 @@ pay-respects init fish | source
 # Keybindings (example)
 bind \cp up-or-search
 bind \cn down-or-search
-
-# Load FZF keybindings if needed
-fzf_key_bindings
+# bind to ctrl-r in normal and insert mode, add any other bindings you want here too
+bind \cr _atuin_search
+bind -M insert \cr _atuin_search
 
 # Load custom aliases and autorun scripts if they exist
 for file in ~/.config/fish/conf.d/*.fish
