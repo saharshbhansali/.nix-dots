@@ -7,7 +7,9 @@
   programs.nixvim = {
     enable = true;
 
+    clipboard.register = "unnamedplus";
     clipboard.providers.wl-copy.enable = true;
+    clipboard.providers.xclip.enable = true;
 
     colorschemes.catppuccin.enable = true;
 
