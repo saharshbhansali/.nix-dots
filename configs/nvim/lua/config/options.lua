@@ -9,4 +9,5 @@ opt.shiftwidth = 4
 opt.expandtab = true
 opt.smartindent = true
 
--- opt.clipboard = "unnamedplus"
+opt.clipboard = "unnamedplus"
+
