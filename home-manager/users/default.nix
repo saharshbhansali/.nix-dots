@@ -22,6 +22,7 @@
     ../modules/hm-cursor.nix
     ../modules/hm-gdm.nix
     ../modules/hm-configs.nix
+    ../modules/hm-gestures.nix
   ];
 
 
