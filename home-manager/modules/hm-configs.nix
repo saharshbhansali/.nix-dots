@@ -4,6 +4,7 @@
 
   # Configure programs
   home.file.".zshrc".source = ../../configs/zsh/.zshrc;
+  home.file.".p10k.zsh".source = ../../configs/zsh/.p10k.zsh;
   home.file.".config/ohmyzsh-custom" = {
     source = ../../configs/zsh/ohmyzsh-custom;
     recursive = true;
