@@ -23,6 +23,17 @@
     fishPlugins.colored-man-pages
     fishPlugins.bass
 
+    # Official nushell plugins available in nixpkgs-unstable
+    nushellPlugins.semver
+    nushellPlugins.query        # SQL-like query support
+    nushellPlugins.net
+    nushellPlugins.highlight    # syntax highlighting
+    nushellPlugins.units
+    nushellPlugins.polars       # DataFrame support via Polars (super powerful)
+    nushellPlugins.gstat        # git plugin
+    nushellPlugins.formats
+    nushellPlugins.dbus
+
     # # Disk utils
     # ventoy-full
 
@@ -49,6 +60,9 @@
       proprietaryCodecs = true;
       enableWidevine = true;
     })
+    # firefox and chromium
+    firefox
+    chromium
 
     # # VS Code
     # vscode-fhs
@@ -79,6 +93,9 @@
     protonvpn-gui
     cloudflare-warp
     wgcf
+
+    # KDE Utils
+    konsave
 
   ];
 
