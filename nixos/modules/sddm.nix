@@ -2,18 +2,6 @@
 
 
 {
-  environment.systemPackages = with pkgs; [
-    # SDDM themeing
-    (where-is-my-sddm-theme.override {
-      themeConfig = {
-        General = {
-          passwordFontSize = "50";
-          passwordInputWidth = "0.7";
-          # showSessionsByDefault = "true";
-        };
-      };
-    })
-  ];
 
   # SDDM - set package and theme
   services.displayManager.sddm.enable = true;
@@ -34,5 +22,18 @@
   #     ExecStart = "${pkgs.numlockx}/bin/numlockx on";
   #   };
   # };
+
+  environment.systemPackages = with pkgs; [
+    # SDDM themeing
+    (where-is-my-sddm-theme.override {
+      themeConfig = {
+        General = {
+          passwordFontSize = "50";
+          passwordInputWidth = "0.7";
+          # showSessionsByDefault = "true";
+        };
+      };
+    })
+  ];
 
 }
