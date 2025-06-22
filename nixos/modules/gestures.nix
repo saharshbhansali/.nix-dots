@@ -12,7 +12,7 @@
 
   ## Create a service to launch the gestures daemon
   systemd.user.services.libinput-gestures-service = {
-    enable = false;
+    enable = true;
     description = "libinput gestures daemon";
     wantedBy = [ "default.target" ];
     serviceConfig = {
