@@ -97,6 +97,14 @@
     # KDE Utils
     konsave
 
+    # LLMs
+    ollama
+    # ollama-cuda
+    kdePackages.alpaka
+    alpaca
+    oterm
+    litellm
+
   ];
 
 }
