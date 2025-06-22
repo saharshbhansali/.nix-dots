@@ -58,5 +58,7 @@
     gnomeExtensions.yakuake
     gnomeExtensions.zilence
     gnomeExtensions.wallhub
+    gnomeExtensions.dev-container-manager
+
   ];
 }
