@@ -127,6 +127,7 @@ setopt hist_ignore_all_dups
 setopt hist_save_no_dups
 setopt hist_ignore_dups
 setopt hist_find_no_dups
+# setopt glob_dots
 
 # # Command correction
 # ENABLE_CORRECTION="true"
@@ -143,10 +144,11 @@ zstyle ':fzf-tab:complete:nvim:*' fzf-preview 'ls --color $realpath'
 zstyle ':fzf-tab:complete:bat:*' fzf-preview 'ls --color $realpath'
 zstyle ':fzf-tab:complete:cat:*' fzf-preview 'ls --color $realpath'
 zstyle ':fzf-tab:complete:chezmoi:*' fzf-preview 'ls --color $realpath'
+
 # Carapace completions
-export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense' # optional
+export CARAPACE_BRIDGES='zsh' # optional
 zstyle ':completion:*' format $'\e[2;37mCompleting %d\e[m'
-source <(carapace _carapace)
+source <(carapace _carapace | sed -E 's/(^|\s)(nvim|ls|cd|vscode)(\s|$)/ /g')
 zstyle ':completion:*:git:*' group-order 'main commands' 'alias commands' 'external commands'
 
 # Shell integrations
