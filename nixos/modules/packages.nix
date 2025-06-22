@@ -41,25 +41,32 @@
     less
     more
     man
+    # tldr
+    # tlrc
+    tealdeer
     tree
     pciutils
+    procs
+    dust
 
     # Terminal enhancers
-    zoxide
     rip2
     eza
     bat
     fzf
     fd
-    # tldr
-    # tlrc
-    tealdeer
-    diff-so-fancy
+    jq
+    sd
+
+    # Terminal customization
+    zoxide
     pay-respects
-    btop
     starship
     atuin
     carapace
+    btop
+    bottom
+    diff-so-fancy
 
     # Fetch utils
     pfetch
@@ -121,16 +128,6 @@
     gtk3
     gtk4
 
-    # SDDM themeing
-    where-is-my-sddm-theme
-
-    # Cursors and icons
-    catppuccin-cursors.mochaRed
-    catppuccin-cursors.mochaMauve
-    catppuccin-cursors.mochaLavender
-    rose-pine-cursor
-    # rose-pine-hyprcursor
-
     # BitWarden
     bitwarden-cli
     bitwarden-desktop
@@ -146,6 +143,23 @@
 
     # # VM Software
     # vmware-workstation
+
+    # SDDM themeing
+    where-is-my-sddm-theme
+
+    # Cursors and icons
+    catppuccin-cursors.mochaRed
+    catppuccin-cursors.mochaMauve
+    catppuccin-cursors.mochaLavender
+    rose-pine-cursor
+    # rose-pine-hyprcursor
+
+    # Fonts
+    nerd-fonts.jetbrains-mono
+    nerd-fonts.droid-sans-mono
+    nerd-fonts.fira-code
+    nerd-fonts.caskaydia-cove
+    nerd-fonts.dejavu-sans-mono
 
   ];
 
