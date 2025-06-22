@@ -144,9 +144,6 @@
     # # VM Software
     # vmware-workstation
 
-    # SDDM themeing
-    where-is-my-sddm-theme
-
     # Cursors and icons
     catppuccin-cursors.mochaRed
     catppuccin-cursors.mochaMauve
