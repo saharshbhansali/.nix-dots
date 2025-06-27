@@ -7,10 +7,13 @@
   environment.systemPackages = with pkgs; [
 
     # Nix utils
-    nix-inspect
+    cachix
     steam-run
     appimage-run
+    nix-inspect
     nix-index
+    nh
+    nix-output-monitor
 
     # Hypr utils
     hyprlock
