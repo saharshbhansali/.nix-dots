@@ -54,6 +54,7 @@
     eza
     bat
     fzf
+    ripgrep-all
     fd
     jq
     sd
@@ -117,6 +118,7 @@
     pipx                            # install python packages globally
     strace                          # for tracing system calls
     gdb                             # for debugging
+    asdf-vm                         # asdf version manager
 
     # KDE Wallet utils
     # kwalletcli
