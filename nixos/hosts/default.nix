@@ -4,8 +4,24 @@
 
   system.stateVersion = "24.11";
 
+  ## Nix settings
+
+  # System settings
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nix.settings.download-buffer-size = 524288000;
+
+  # # Trusted-users list
+  # nix.settings.trusted-users = [ "root" "saharsh" ];
+
+  # Extra options
+  nix.extraOptions = ''
+    # Add cachix binary caches
+    extra-substituters = https://devenv.cachix.org
+    extra-trusted-public-keys = devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw=
+  '';
+
+
+  ## Package/module imports
 
   imports = [
     ## System configuration
@@ -29,6 +45,8 @@
   ];
 
 
+  ## User setup
+
   users.users.saharsh = {
     isNormalUser = true;
     extraGroups = [ "wheel" "networkmanager" "video" "audio" "input" ];
@@ -39,14 +57,14 @@
 
   ## Enable services
 
-
+  # Networking services
   networking.networkmanager.enable = true;
   networking.hostName = "nixos";
 
-
+  # Flatpak
   services.flatpak.enable = true;
 
-
+  # Virtualisation and docker
   virtualisation.docker.enable = true;
   virtualisation.docker.storageDriver = "btrfs";
   virtualisation.docker.rootless = {
@@ -54,5 +72,6 @@
     setSocketVariable = true;
   };
 
+  ## Miscellaneous settings
 
 }
