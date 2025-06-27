@@ -12,6 +12,7 @@
     ../modules/bootloader.nix
     ../modules/swap.nix
     ../modules/filesystem.nix
+    ../modules/shell.nix
     ## Application installation
     ../modules/packages.nix
     ../modules/programs.nix

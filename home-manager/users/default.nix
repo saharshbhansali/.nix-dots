@@ -19,10 +19,11 @@
     ../modules/hm-packages.nix
     ../modules/hm-programs.nix
     ../modules/hm-nixvim.nix
-    ../modules/hm-cursor.nix
-    ../modules/hm-gdm.nix
+    ../modules/hm-shell.nix
     ../modules/hm-configs.nix
     ../modules/hm-nushell.nix
+    ../modules/hm-cursor.nix
+    ../modules/hm-gdm.nix
   ];
 
 
