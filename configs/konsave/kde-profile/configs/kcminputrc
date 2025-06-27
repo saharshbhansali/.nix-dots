@@ -1,0 +1,7 @@
+[Libinput][1267][12541][ELAN0718:00 04F3:30FD Touchpad]
+ClickMethod=2
+NaturalScroll=true
+TapDragLock=true
+
+[Mouse]
+cursorTheme=catppuccin-mocha-mauve-cursors
