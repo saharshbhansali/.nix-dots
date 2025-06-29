@@ -2,7 +2,14 @@ return {
     {
         "folke/tokyonight.nvim",
         lazy = true,
-        opts = { style = "moon" },
+        opts = {
+            transparent = true;
+            style = "moon"
+            -- styles = {
+            --     sidebars = "transparent",
+            --     floats = "transparent",
+            -- },
+        },
     },
 
     {
@@ -10,6 +17,7 @@ return {
         lazy = true,
         name = "catppuccin",
         opts = {
+            transparent_background = true;
             integrations = {
                 aerial = true,
                 alpha = true,
