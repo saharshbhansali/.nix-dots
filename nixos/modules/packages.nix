@@ -102,6 +102,7 @@
     pika-backup
 
     # Media utils
+    ffmpeg
     pamixer
 
     # Development utils
