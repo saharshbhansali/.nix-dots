@@ -91,9 +91,9 @@ alias 'menu'='rofi -combi-modi window,drun,ssh -theme Arc-Dark -font "hack 12" -
 
 alias 'brightness'='xrandr --brightness'
 
-# VIM customizations - can't autogenerate .vimrc rip
+## VIM customizations - can't autogenerate .vimrc rip
 
-alias 'vim'='vim "+set nu"'
+# alias 'vim'='vim "+set nu"'
 
 # Weather Report
 
@@ -170,7 +170,7 @@ alias 'OMV'="~/obsidian-MainVault/"
 
 ## asdf Alias
 
-alias 'asdf'="/opt/asdf-vm/bin/asdf"
+# alias 'asdf'="/opt/asdf-vm/bin/asdf"
 
 ## X Alias
 

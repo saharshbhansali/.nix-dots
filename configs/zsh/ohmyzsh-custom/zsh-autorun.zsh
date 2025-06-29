@@ -35,13 +35,13 @@ export XDG_CONFIG_HOME="$HOME/.config/"
 # Set Spicetify path
 SPICETIFY="$HOME/.spicetify"
 
-# pnpm
-export PNPM_HOME="$HOME/.local/share/pnpm"
+# volta
+export VOLTA_HOME="$HOME/.volta/bin/"
 case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
+  *":$VOLTA_HOME:"*) ;;
+  *) export PATH="$PATH:$VOLTA_HOME" ;;
 esac
-# pnpm end
+# volta end
 
 # export PATH="$PATH:$SYSTEM_BINS:$HOME_BINS:$XDG_CONFIG_HOME:$SPICETIFY:$RBENV_PATH:$GO_ALL"
 # export PATH="$PATH:$SYSTEM_BINS:$HOME_BINS:$XDG_CONFIG_HOME:$SPICETIFY"

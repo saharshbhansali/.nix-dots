@@ -123,6 +123,10 @@
     strace                          # for tracing system calls
     gdb                             # for debugging
     asdf-vm                         # asdf version manager
+    volta                           # node version manager
+    go                              # go programming language
+    rustc                           # rust compiler
+    rustup                          # rust package manager
 
     # KDE Wallet utils
     # kwalletcli
