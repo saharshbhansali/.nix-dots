@@ -34,7 +34,9 @@
     yazi
 
     ## Terminal utils
-    gunzip
+    gzip
+    zip
+    # unzip
 
     ## Networking utils
     wget
