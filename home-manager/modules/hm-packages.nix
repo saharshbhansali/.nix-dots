@@ -5,14 +5,14 @@
   ## Install packages
   # nixpkgs.config.allowUnfree = true;
 
-  # User level packages
+  ## User level packages
   home.packages = with pkgs; [
 
-    # Terminal programs
+    ## Terminal programs
     chezmoi
     grc
 
-    # Fish plugins
+    ## Fish plugins
     fishPlugins.z
     fishPlugins.plugin-git
     fishPlugins.git-abbr
@@ -23,7 +23,7 @@
     fishPlugins.colored-man-pages
     fishPlugins.bass
 
-    # Official nushell plugins available in nixpkgs-unstable
+    ## Official nushell plugins available in nixpkgs-unstable
     nushellPlugins.semver
     nushellPlugins.query        # SQL-like query support
     nushellPlugins.net
@@ -34,16 +34,16 @@
     nushellPlugins.formats
     nushellPlugins.dbus
 
-    # # Disk utils
+    # ## Disk utils
     # ventoy-full
 
-    # Spotify
+    ## Spotify
     spotify
     spicetify-cli
     # spotify-tui
     # spotifyd
 
-    # Browsers
+    ## Browsers
     # zen
     inputs.zen-browser.packages.${system}.twilight
     # vivaldi
@@ -64,7 +64,7 @@
     firefox
     chromium
 
-    # # VS Code
+    # ## VS Code
     # vscode-fhs
     # vscodium
     (vscode-with-extensions.override {
@@ -85,20 +85,21 @@
     })
     vimPlugins.supermaven-nvim
 
-    # Other Programs
+    ## Other Programs
     stremio
     obsidian
+    wox
 
-    # VPN software
+    ## VPN software
     protonvpn-cli
     protonvpn-gui
     cloudflare-warp
     wgcf
 
-    # KDE Utils
+    ## KDE Utils
     konsave
 
-    # LLMs
+    ## LLMs
     ollama
     # ollama-cuda
     kdePackages.alpaka
