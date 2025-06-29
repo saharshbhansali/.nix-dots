@@ -11,3 +11,5 @@ opt.smartindent = true
 
 opt.clipboard = "unnamedplus"
 
+opt.pumblend = 0
+opt.winblend = 0
