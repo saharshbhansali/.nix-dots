@@ -83,6 +83,7 @@
         # catppuccin.cattppuccin-vscode
       ];
     })
+    vimPlugins.supermaven-nvim
 
     # Other Programs
     stremio
