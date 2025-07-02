@@ -8,3 +8,8 @@ opt.softtabstop = 4
 opt.shiftwidth = 4
 opt.expandtab = true
 opt.smartindent = true
+
+opt.clipboard = "unnamedplus"
+
+opt.pumblend = 0
+opt.winblend = 0

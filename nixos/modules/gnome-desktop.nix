@@ -14,6 +14,7 @@
 
   # Enable GNOME
   services.desktopManager.gnome.enable = true;
+  services.xserver.xkb.options = "caps:ctrl_modifier";
 
   # dconf editor for GNOME settings
   programs.dconf.enable = true;
@@ -33,11 +34,12 @@
     # gnomeExtensions.dash-to-panel
     gnomeExtensions.user-themes
     # gnomeExtensions.system-monitor
-    gnomeExtensions.pano
     # gnomeExtensions.window-list
     gnomeExtensions.workspace-indicator
     gnomeExtensions.unmess
-    # gnomeExtensions.clipboard-indicator
+    gnomeExtensions.clipboard-indicator
+    gnomeExtensions.pano
+    gnomeExtensions.clipboard-history
     gnomeExtensions.vitals
     # gnomeExtensions.cmud
     gnomeExtensions.forge
@@ -56,5 +58,7 @@
     gnomeExtensions.yakuake
     gnomeExtensions.zilence
     gnomeExtensions.wallhub
+    gnomeExtensions.dev-container-manager
+
   ];
 }

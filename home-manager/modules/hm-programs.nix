@@ -6,7 +6,7 @@
   # manage your shell, otherwise it will not be able to add its hooks
   # to your profile.
   programs.home-manager.enable = true;
-  programs.zsh.enable = true;
+  # programs.zsh.enable = true;
 
 
   ## Enable other programs

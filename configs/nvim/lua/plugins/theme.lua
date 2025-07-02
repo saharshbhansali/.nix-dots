@@ -2,7 +2,14 @@ return {
     {
         "folke/tokyonight.nvim",
         lazy = true,
-        opts = { style = "moon" },
+        opts = {
+            transparent = true;
+            style = "moon"
+            -- styles = {
+            --     sidebars = "transparent",
+            --     floats = "transparent",
+            -- },
+        },
     },
 
     {
@@ -10,6 +17,18 @@ return {
         lazy = true,
         name = "catppuccin",
         opts = {
+            transparent_background = true;
+            dim_inactive = {
+                enabled = false, -- dims the background color of inactive window
+                shade = "dark",
+                percentage = 0.00, -- percentage of the shade to apply to the inactive window
+            },
+            -- custom_highlights = function(colors)
+            --     return {
+            --         NormalFloat = { bg = nil, fg = colors.text },
+            --         Normal = { bg = nil , fg = colors.base },
+            --     }
+            -- end,
             integrations = {
                 aerial = true,
                 alpha = true,

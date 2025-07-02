@@ -7,13 +7,20 @@
   programs.nixvim = {
     enable = true;
 
+    clipboard.register = "unnamedplus";
     clipboard.providers.wl-copy.enable = true;
+    clipboard.providers.xclip.enable = true;
 
     colorschemes.catppuccin.enable = true;
 
+    viAlias = true;
+    vimAlias = true;
+
+    luaLoader.enable = true;
+
     # plugins = {
     #   lazy.enable = true;
-
+    #
     #   lsp = {
     #     enable = true;
     #     servers = {
@@ -25,7 +32,7 @@
     #       };
     #     };
     #   };
-
+    #
     #   treesitter.enable = true;
     #   which-key.enable = true;
     #   lualine.enable = true;
