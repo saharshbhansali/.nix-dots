@@ -36,7 +36,7 @@
     ## Terminal utils
     gzip
     zip
-    # unzip
+    unzip
 
     ## Networking utils
     wget
