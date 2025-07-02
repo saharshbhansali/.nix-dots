@@ -32,6 +32,7 @@
     ## Application installation
     ../modules/packages.nix
     ../modules/programs.nix
+    ../modules/services.nix
     ## Application configurations
     ../modules/nixvim.nix
     ## Service configurations
