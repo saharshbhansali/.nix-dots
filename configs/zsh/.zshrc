@@ -148,7 +148,13 @@ zstyle ':fzf-tab:complete:chezmoi:*' fzf-preview 'ls --color $realpath'
 # Carapace completions
 export CARAPACE_BRIDGES='zsh' # optional
 zstyle ':completion:*' format $'\e[2;37mCompleting %d\e[m'
-source <(carapace _carapace | sed -E 's/(^|\s)(nvim|ls|cd|vscode)(\s|$)/ /g')
+# Define the list of command exceptions
+CARAPACE_EXCEPTIONS=(nvim ls la exa eza rm rem rip cd mkdir md vscode)
+# Join the list into a regex pattern: (nvim|ls|la|...)
+CARAPACE_PATTERN="($(printf '%s|' "${CARAPACE_EXCEPTIONS[@]}" | sed 's/|$//'))"
+# Run carapace and apply the regex pattern via sed
+source <(carapace _carapace | sed -E "s/(^|\\s)${CARAPACE_PATTERN}(\\s|$)/ /g")
+# source <(carapace _carapace | sed -E 's/(^|\s)(nvim|ls|la|rm|rem|cd|vscode)(\s|$)/ /g')
 zstyle ':completion:*:git:*' group-order 'main commands' 'alias commands' 'external commands'
 
 # Shell integrations
