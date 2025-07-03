@@ -34,7 +34,8 @@
     ../modules/programs.nix
     ../modules/services.nix
     ## Application configurations
-    ../modules/nixvim.nix
+    # ../modules/nixvim.nix
+    ../modules/neovim.nix
     ## Service configurations
     ../modules/gestures.nix
     ## Desktop Environment configurations
