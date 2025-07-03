@@ -57,11 +57,14 @@ in {
   # environment.etc."nvim/init.lua".text = lazySpec;
 
   # Optional: mount your own custom Lua config directory
-  environment.etc."nvim".source = ../../configs/nvim;
+  environment.etc."lazynvim".source = ../../configs/nvim;
+
+  # Create a symlink to ~/.config/nvim → /etc/lazyvim
+  systemd.user.tmpfiles.rules = [
+    "L+ %h/.config/nvim - - - - /etc/lazyvim"
+  ];
 
   # Treesitter parser binaries
   # environment.etc."nvim/parser".source = "${treesitterParsers}/parser";
 
-  # Let Neovim know where to look for config if needed
-  # environment.variables.XDG_CONFIG_DIRS = [ "/etc" ];
 }
