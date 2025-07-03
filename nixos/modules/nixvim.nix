@@ -1,67 +1,94 @@
-{ config, lib, pkgs, ... }:
+{ config, pkgs, inputs, ... }:
 
-let 
-  vimPkgs = pkgs.vimPlugins;
-  lazyPlugins = with vimPkgs; [
-    lazy-nvim
-    nvim-treesitter
-  ];
-
-  lazySpec = ''
-    require("lazy").setup({
-      defaults = { lazy = true },
-      install = { missing = false },
-      change_detection = { enabled = false },
-      performance = { packpath = { reset = false }, rtp = { reset = false } },
-      spec = {
-        { "LazyVim/LazyVim", import = "lazyvim.plugins" },
-        { "nvim-telescope/telescope-fzf-native.nvim", enabled = true },
-        { "williamboman/mason-lspconfig.nvim", enabled = false },
-        { "williamboman/mason.nvim", enabled = false },
-        -- Your extra plugins here
-      },
-    })
-  '';
-
+let
+  # Define a symlink-join of selected treesitter parsers for supported languages
   treesitterParsers = pkgs.symlinkJoin {
-    name = "nvim-treesitter-parsers";
-    paths = pkgs.vimPlugins.nvim-treesitter.withAllGrammars.dependencies;
+    name = "treesitter-parsers";
+    paths = (pkgs.vimPlugins.nvim-treesitter.withPlugins (plugins: with plugins; [
+      c      cpp  # C/C++
+      lua    python  go  rust  # core languages
+      nix    bash  fish   # shell, nix
+      javascript typescript html css json  # web, ts
+      zig   # Zig
+      markdown  # Markdown
+      # (tailwind itself is handled via LSP: no parser needed)
+    ])).dependencies;
   };
-
 in {
-  environment.systemPackages = with pkgs; [
-    neovim
-    lua-language-server
-    stylua
-    ripgrep
-    python3Packages.python-lsp-server
-    rust-analyzer
-    gopls
-    bash-language-server
-    typescript-language-server
-    tailwindcss-language-server
-    zig
-    zls
-    # add more if needed
-  ];
+  imports = [ inputs.nixvim.nixosModules.nixvim ];
+  options = {
+    # (no custom options defined; we rely on nixvim defaults)
+  };
+  config = {
+    programs.nixvim = {
+      enable = true;
+      # Ensure nvim uses our generated config:
+      wrapRc = true;  
 
-  # This mounts lazy.nvim and any other plugins you want preloaded
-  environment.etc."nvim/init.lua".source = ../../configs/nvim;
-  environment.etc."nvim/lazy-lock.json".source = ../../configs/nvim/lazy-lock.json;
-  environment.etc."nvim/lazyvim.json".source = ../../configs/nvim/lazyvim.json;
-  environment.etc."nvim/stylua.toml".source = ../../configs/nvim/stylua.toml;
-  environment.etc."nvim/lua/plugins/mini-plugins.lua".source = ../../configs/nvim/lua/plugins/mini-plugins.lua;
-  environment.etc."nvim/lua/plugins/theme.lua".source = ../../configs/nvim/lua/plugins/theme.lua;
-  environment.etc."nvim/lua/plugins/example.lua".source = ../../configs/nvim/lua/plugins/example.lua;
-  environment.etc."nvim/lua/config/lazy.lua".source = ../../configs/nvim/lua/config/lazy.lua;
-  environment.etc."nvim/lua/config/autocmds.lua".source = ../../configs/nvim/lua/config/autocmds.lua;
-  environment.etc."nvim/lua/config/keymaps.lua".source = ../../configs/nvim/lua/config/keymaps.lua;
-  environment.etc."nvim/lua/config/options.lua".source = ../../configs/nvim/lua/config/options.lua;
-  environment.etc."nvim/lua/config/transparency.lua".source = ../../configs/nvim/lua/config/transparency.lua;
+      # Install extra system packages (LSP servers, formatters, etc.) 
+      # instead of using Mason runtime installs:
+      extraPackages = with pkgs; [
+        lua-language-server  # for Lua
+        pyright             # Python LSP (or pyrefly)
+        rust-analyzer       # Rust
+        gopls               # Go
+        clang-tools         # includes clangd for C/C++
+        zig                 # Zig (LSP comes with zig)
+        nix               # (nix environment)
+        bash-language-server  # Bash
+        typescript-language-server  # TypeScript
+        tailwindcss-language-server  # Tailwind CSS
+        marksman            # Markdown LSP
+        # + any needed formatters e.g. prettier, stylua, etc.
+        stylua             # Lua formatter
+        pre-commit         # for Python linting (optional)
+        fzf                # fzf native (for fzf.nvim)
+      ];
 
-  # This adds Treesitter parser .so files to XDG_CONFIG_HOME/nvim/parser
-  # xdg.configFile."nvim/parser".source = "${treesitterParsers}/parser";
+      # Use nixvim's module system to enable plugins:
+      # (E.g. nvim-lspconfig, treesitter, cmp, etc. as provided by nixvim)
+      plugins = {
+        lazy.enable = true;        # LazyVim plugin manager
+        # nvim-treesitter.enable = true;
+        # nvim-lspconfig.enable = true;  # Core LSP plugin
+        # nvim-cmp.enable = true;        # Completion engine
+        # Additional plugins can be enabled via nixvim modules if available...
+      };
 
-  # Optional: mount your `lua/` config
-  # xdg.configFile."nvim/lua".source = ./lua;
+      # If a plugin module does not exist in nixvim, use extraPlugins:
+      # e.g. one might add `vim-nix` for Nix support if needed.
+      extraPlugins = with pkgs.vimPlugins; [
+        # e.g. vim-nix for Nix filetype highlighting, etc.
+        vim-nix
+      ];
+
+      # Treesitter configuration (ensure the above languages are installed)
+      # This generates the `parser` directory via nix_symlinkJoin:
+      # xdg.configFile."nvim/parser".source = "${treesitterParsers}/parser";
+
+      # The actual Lua config for LazyVim (using lazy.nvim):
+      extraConfigLua = ''
+        -- Initialize lazy.nvim with LazyVim plugin specs
+        require("lazy").setup({
+          spec = {
+            -- Import LazyVim core plugins:
+            { "LazyVim/LazyVim", import = "lazyvim.plugins" },
+            -- Ensure fzf-native (Telescope) is enabled (needed on Nix to enable the compiled C plugin):
+            { "nvim-telescope/telescope-fzf-native.nvim", enabled = true },
+            -- Disable Mason and mason-lspconfig (we use Nix for LSP installs):
+            { "williamboman/mason.nvim", enabled = false },
+            { "williamboman/mason-lspconfig.nvim", enabled = false },
+            -- (Import any user-supplied LazyVim plugin specs):
+            { import = "plugins" },
+            -- Override nvim-treesitter to avoid LazyVim auto-installs (we manage via nix):
+            { "nvim-treesitter/nvim-treesitter", opts = { ensure_installed = {} } },
+          }
+        })
+      '';
+
+      # Allow dropping custom Lua config files via XDG (e.g. lua/ directory in flake)
+      # This lets the user provide additional lua config with `xdg.configFile`.
+      # xdg.configFile."nvim/lua".source = ./lua;
+    };
+  };
 }
