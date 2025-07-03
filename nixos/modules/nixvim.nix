@@ -46,7 +46,18 @@ in {
   ];
 
   # This mounts lazy.nvim and any other plugins you want preloaded
-  environment.etc."nvim/init.lua".text = lazySpec;
+  environment.etc."nvim/init.lua".source = ../../configs/nvim;
+  environment.etc."nvim/lazy-lock.json".source = ../../configs/nvim/lazy-lock.json;
+  environment.etc."nvim/lazyvim.json".source = ../../configs/nvim/lazyvim.json;
+  environment.etc."nvim/stylua.toml".source = ../../configs/nvim/stylua.toml;
+  environment.etc."nvim/lua/plugins/mini-plugins.lua".source = ../../configs/nvim/lua/plugins/mini-plugins.lua;
+  environment.etc."nvim/lua/plugins/theme.lua".source = ../../configs/nvim/lua/plugins/theme.lua;
+  environment.etc."nvim/lua/plugins/example.lua".source = ../../configs/nvim/lua/plugins/example.lua;
+  environment.etc."nvim/lua/config/lazy.lua".source = ../../configs/nvim/lua/config/lazy.lua;
+  environment.etc."nvim/lua/config/autocmds.lua".source = ../../configs/nvim/lua/config/autocmds.lua;
+  environment.etc."nvim/lua/config/keymaps.lua".source = ../../configs/nvim/lua/config/keymaps.lua;
+  environment.etc."nvim/lua/config/options.lua".source = ../../configs/nvim/lua/config/options.lua;
+  environment.etc."nvim/lua/config/transparency.lua".source = ../../configs/nvim/lua/config/transparency.lua;
 
   # This adds Treesitter parser .so files to XDG_CONFIG_HOME/nvim/parser
   # xdg.configFile."nvim/parser".source = "${treesitterParsers}/parser";
