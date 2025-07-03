@@ -11,7 +11,7 @@
 # export GEM_HOME="$HOME/.gems/"
 # export GEM_BIN="$HOME/.gems/bin"
 # source /usr/share/rvm/scripts/rvm
-RBENV_PATH="$HOME/.rbenv/shims/"
+# RBENV_PATH="$HOME/.rbenv/shims/"
 # eval "$(rbenv init -)"
 
 # GoLang Setup 
@@ -25,25 +25,29 @@ GO_ALL=""
 # Node Setup
 # NODE="$HOME/.nvm/versions/node/v16.17.0/bin:"
 
+# volta
+export VOLTA_PATH="$HOME/.volta/bin/"
+case ":$PATH:" in
+  *":$VOLTA_PATH:"*) VOLTA_HOME="" ;;
+  *) VOLTA_HOME="$VOLTA_PATH" ;;
+esac
+# volta end
+
+# Rust Setup
+CARGO_HOME="$HOME/.cargo/bin"
+
+# Set Spicetify path
+SPICETIFY="$HOME/.spicetify"
+
 # Set all system related paths
 export SYSTEM_BINS="/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/usr/lib64/ccache:/var/lib/snapd/snap/bin"
 
 # Set all home related paths
 export HOME_BINS="$HOME/bin:$HOME/.local/bin"
 export XDG_CONFIG_HOME="$HOME/.config/"
-
-# Set Spicetify path
-SPICETIFY="$HOME/.spicetify"
-
-# volta
-export VOLTA_HOME="$HOME/.volta/bin/"
-case ":$PATH:" in
-  *":$VOLTA_HOME:"*) ;;
-  *) export PATH="$PATH:$VOLTA_HOME" ;;
-esac
-# volta end
+BINS="$HOME_BINS:$VOLTA_HOME:$CARGO_HOME"
 
 # export PATH="$PATH:$SYSTEM_BINS:$HOME_BINS:$XDG_CONFIG_HOME:$SPICETIFY:$RBENV_PATH:$GO_ALL"
 # export PATH="$PATH:$SYSTEM_BINS:$HOME_BINS:$XDG_CONFIG_HOME:$SPICETIFY"
-export PATH="$PATH:$HOME_BINS:$XDG_CONFIG_HOME:$SPICETIFY"
+export PATH="$PATH:$BINS:$XDG_CONFIG_HOME:$SPICETIFY"
 
