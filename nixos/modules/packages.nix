@@ -61,6 +61,7 @@
     eza
     bat
     fzf
+    ripgrep
     ripgrep-all
     fd
     jq
