@@ -40,6 +40,28 @@
       mini.enable = true;
       web-devicons.enable = true;
     };
+
+    # extraLuaConfig = ''
+    #   require("lazy").setup({
+    #     -- your plugin specifications here
+    #   })
+    # '';
+
   };
+
+  environment.systemPackages = with pkgs.vimPlugins; [
+    LazyVim
+    # neovim
+    # neovim-remote
+    # nvim-lspconfig
+    # nvim-treesitter
+    # which-key
+    # lualine
+    # yanky
+    # harpoon
+    # telescope
+    # mini
+    # web-devicons
+  ];
 
 }

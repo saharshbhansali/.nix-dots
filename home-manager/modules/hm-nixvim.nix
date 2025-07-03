@@ -44,4 +44,12 @@
     # };
   };
 
+  ## User level packages
+  home.packages = with pkgs; [
+    # vimPlugins.mason-tool-installer-nvim
+    # vimPlugins.mason-nvim-dap-nvim
+    # vimPlugins.mason-nvim
+    # vimPlugins.mason-null-ls-nvim
+    # vimPlugins.mason-lspconfig-nvim
+  ];
 }
