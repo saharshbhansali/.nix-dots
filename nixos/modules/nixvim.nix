@@ -61,7 +61,7 @@ in {
 
   # Create a symlink to ~/.config/nvim → /etc/lazyvim
   systemd.user.tmpfiles.rules = [
-    "L+ %h/.config/nvim - - - - /etc/lazyvim"
+    "L+ /root/.config/nvim - - - - /etc/lazyvim"
   ];
 
   # Treesitter parser binaries
