@@ -32,10 +32,7 @@
 
   home.file.".config/libinput-gestures.conf".source = ../../configs/libinput-gestures.conf;
 
-  home.file.".config/konsave/conf.yaml".source = ../../configs/konsave/conf.yaml;
-  home.file.".config/konsave/profiles/kde-profile" = {
-    source = ../../configs/konsave/kde-profile;
-    recursive = true;
-  };
+  home.file.".config/konsave/kde-profile.knsv".source = ../../configs/konsave/kde-profile.knsv;
+  home.file.".config/konsave/keyboard-shortcuts.kksrc".source = ../../configs/konsave/keyboard-shortcuts.kksrc;
 
 }
