@@ -76,24 +76,6 @@ ZELLIJ_AUTO_EXIT="true"; export ZELLIJ_AUTO_EXIT
 
 #-----------------------------------------------------------------------------------------------------------
 
-# NVM setup 
-export NVM_DIR="$HOME/.config/nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-# Vagrant Setup
-export VAGRANT_DEFAULT_PROVIDER=virtualbox
-
-#-----------------------------------------------------------------------------------------------------------
-
-# GVM Setup 
-#[[ -s "$HOME/.gvm/scripts/gvm" ]] && source "$HOME/.gvm/scripts/gvm"
-
-# Load Angular CLI autocompletion.
-# source <(ng completion script)
-
-#-----------------------------------------------------------------------------------------------------------
-
 ## Keybindings
 bindkey -e
 bindkey '^p' history-search-backward
@@ -151,7 +133,7 @@ zstyle ':fzf-tab:complete:chezmoi:*' fzf-preview 'ls --color $realpath'
 export CARAPACE_BRIDGES='zsh' # optional
 zstyle ':completion:*' format $'\e[2;37mCompleting %d\e[m'
 # Define the list of command exceptions
-CARAPACE_EXCEPTIONS=(nvim ls la exa eza rm rem rip cd mv cp mkdir md vscode)
+CARAPACE_EXCEPTIONS=(nvim ls la exa eza rm rem rip cat bat cd mv cp mkdir md vscode)
 # Join the list into a regex pattern: (nvim|ls|la|...)
 CARAPACE_PATTERN="($(printf '%s|' "${CARAPACE_EXCEPTIONS[@]}" | sed 's/|$//'))"
 # Run carapace and apply the regex pattern via sed
