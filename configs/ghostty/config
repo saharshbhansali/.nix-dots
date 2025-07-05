@@ -18,5 +18,6 @@ window-save-state = always
 clipboard-paste-protection = true
 confirm-close-surface = false
 
-initial-command = tmux -u attach || tmux -u
+# initial-command = tmux -u attach || tmux -u
+# initial-command = zellij attach -c || zellij
 

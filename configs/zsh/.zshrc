@@ -71,6 +71,8 @@ else
 fi
 VISUAL="emacs" ; export VISUAL
 EDITOR="nvim" ; export EDITOR
+ZELLIJ_AUTO_ATTACH="true"; export ZELLIJ_AUTO_ATTACH
+ZELLIJ_AUTO_EXIT="true"; export ZELLIJ_AUTO_EXIT
 
 #-----------------------------------------------------------------------------------------------------------
 
@@ -163,6 +165,7 @@ eval "$(zoxide init --cmd cd zsh)"
 # eval "$(thefuck --alias)"
 eval "$(pay-respects zsh --alias)"
 eval "$(atuin init zsh)"
+eval "$(zellij setup --generate-auto-start zsh)"
 
 #-----------------------------------------------------------------------------------------------------------
 
