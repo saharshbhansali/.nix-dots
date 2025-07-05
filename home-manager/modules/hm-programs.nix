@@ -12,6 +12,7 @@
   ## Enable other programs
   programs.browserpass.enable = true;
   programs.ghostty.enable = true;
+  programs.zellij.enable = true;
   programs.git.enable = true;
 
 }

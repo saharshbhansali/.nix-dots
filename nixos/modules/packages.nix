@@ -26,10 +26,12 @@
     zsh
     git
     tmux
+    zellij
     # neovim
     # vimPlugins.nvim-treesitter.withPlugins
 
     ## Terminal software
+    ghostty
     kitty
     yazi
 

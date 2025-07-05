@@ -27,6 +27,11 @@
     recursive = true;
   };
 
+  home.file.".config/zellij" = {
+    source = ../../configs/zellij;
+    recursive = true;
+  };
+
   home.file.".config/atuin/config.toml".source = ../../configs/atuin/config.toml;
   home.file.".config/pay-respects/config.toml".source = ../../configs/pay-respects/config.toml;
 
