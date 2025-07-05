@@ -36,7 +36,7 @@
     ## Terminal utils
     gzip
     zip
-    # unzip
+    unzip
 
     ## Networking utils
     wget
@@ -61,6 +61,7 @@
     eza
     bat
     fzf
+    ripgrep
     ripgrep-all
     fd
     jq
@@ -111,6 +112,7 @@
 
     ## Development utils
     devenv                          # development environment manager
+    devbox                          # development environment manager
     direnv                          # environment variable manager
     bintools                        # tools for manipulating binaries
     gcc                             # gcc compiler

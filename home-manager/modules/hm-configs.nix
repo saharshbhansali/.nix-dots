@@ -23,6 +23,7 @@
   };
 
   home.file.".config/atuin/config.toml".source = ../../configs/atuin/config.toml;
+  home.file.".config/pay-respects/config.toml".source = ../../configs/pay-respects/config.toml;
 
   home.file.".config/libinput-gestures.conf".source = ../../configs/libinput-gestures.conf;
 

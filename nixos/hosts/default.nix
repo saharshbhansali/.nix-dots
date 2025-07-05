@@ -11,7 +11,7 @@
   nix.settings.download-buffer-size = 524288000;
 
   # # Trusted-users list
-  # nix.settings.trusted-users = [ "root" "saharsh" ];
+  nix.settings.trusted-users = [ "root" "saharsh" ];
 
   # Extra options
   nix.extraOptions = ''
@@ -32,8 +32,10 @@
     ## Application installation
     ../modules/packages.nix
     ../modules/programs.nix
+    ../modules/services.nix
     ## Application configurations
-    ../modules/nixvim.nix
+    # ../modules/nixvim.nix
+    ../modules/neovim.nix
     ## Service configurations
     ../modules/gestures.nix
     ## Desktop Environment configurations
