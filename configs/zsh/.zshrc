@@ -165,7 +165,7 @@ eval "$(zoxide init --cmd cd zsh)"
 # eval "$(thefuck --alias)"
 eval "$(pay-respects zsh --alias)"
 eval "$(atuin init zsh)"
-eval "$(zellij setup --generate-auto-start zsh)"
+# eval "$(zellij setup --generate-auto-start zsh)"
 
 #-----------------------------------------------------------------------------------------------------------
 

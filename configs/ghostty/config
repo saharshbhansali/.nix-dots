@@ -19,5 +19,5 @@ clipboard-paste-protection = true
 confirm-close-surface = false
 
 # initial-command = tmux -u attach || tmux -u
-# initial-command = zellij attach -c || zellij
+initial-command = zellij attach -c 'default' || zellij
 
