@@ -43,6 +43,9 @@
     gnomeExtensions.vitals
     # gnomeExtensions.cmud
     gnomeExtensions.forge
+    gnomeExtensions.tiling-shell
+    gnomeExtensions.tilingnome
+    gnomeExtensions.paperwm
     gnomeExtensions.focus
     # gnomeExtensions.freon
     gnomeExtensions.gmeet
