@@ -35,7 +35,7 @@ zinit light akash329d/zsh-alias-finder
 ## Add in snippets
 # OMZ plugins
 # source "$ZINIT_CUSTOM/plugins/plugins.zsh"
-plugins="common-aliases git asdf aliases archlinux colored-man-pages colorize ssh-agent timer"
+plugins="common-aliases git asdf aliases colored-man-pages colorize ssh-agent timer"
 for plugin in $(echo "$plugins"); do 
   zinit snippet OMZP::${plugin}
 done
@@ -69,7 +69,7 @@ if [[ -n $SSH_CONNECTION ]]; then
 else
   export EDITOR=nvim
 fi
-VISUAL="emacs" ; export VISUAL
+VISUAL="nvim" ; export VISUAL
 EDITOR="nvim" ; export EDITOR
 ZELLIJ_AUTO_ATTACH="true"; export ZELLIJ_AUTO_ATTACH
 ZELLIJ_AUTO_EXIT="true"; export ZELLIJ_AUTO_EXIT
