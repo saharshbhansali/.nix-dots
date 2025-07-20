@@ -84,6 +84,10 @@
       ];
     })
     vimPlugins.supermaven-nvim
+    # ## Helix editor
+    helix
+    # evil-helix
+    # helix-gpt
 
     ## Other Programs
     stremio
