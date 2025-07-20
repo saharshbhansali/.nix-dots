@@ -137,7 +137,8 @@ keybinds clear-defaults=true {
             SwitchToMode "locked"
         }
     }
-    shared_among "normal" "locked" {
+    // shared_among "normal" "locked" {
+    shared_among "normal" {
         bind "Alt left" { MoveFocusOrTab "left"; }
         bind "Alt down" { MoveFocus "down"; }
         bind "Alt up" { MoveFocus "up"; }
@@ -405,7 +406,7 @@ attach_to_session true
  
 // How often in seconds sessions are serialized
 // 
-// serialization_interval 10000
+serialization_interval 100000
  
 // Enable or disable writing of session metadata to disk (if disabled, other sessions might not know
 // metadata info on this session)
