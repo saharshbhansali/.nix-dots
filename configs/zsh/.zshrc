@@ -31,13 +31,14 @@ source "${ZINIT_HOME}/zinit.zsh"
 # [[ ! -f $HOME/.p10k.zsh ]] || source $HOME/.p10k.zsh
 
 ## Add in Starship
-zinit ice as"command" from"gh-r" \
-          atclone"./starship init zsh > init.zsh; ./starship completions zsh > _starship" \
-          atpull"%atclone" src"init.zsh"
+eval "$(starship init zsh)"
 
-zinit light starship/starship
+# zinit ice as"command" from"gh-r" \
+#           atclone"./starship init zsh > init.zsh; ./starship completions zsh > _starship" \
+#           atpull"%atclone" src"init.zsh"
+#
+# zinit light starship/starship
 
-# eval "$(starship init zsh)"
 
 #-----------------------------------------------------------------------------------------------------------
 
