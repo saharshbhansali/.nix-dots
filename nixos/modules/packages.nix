@@ -136,6 +136,7 @@
     rustc                           # rust compiler
     rustup                          # rust toolchain installer
     cargo                           # rust package manager
+    texliveFull                     # latex support
 
     ## KDE Wallet utils
     # kwalletcli
