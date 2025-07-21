@@ -135,13 +135,13 @@ setopt hist_find_no_dups
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 zstyle ':completion:*' menu no
-zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
-zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
-zstyle ':fzf-tab:complete:ls:*' fzf-preview 'ls --color $realpath'
-zstyle ':fzf-tab:complete:nvim:*' fzf-preview 'ls --color $realpath'
-zstyle ':fzf-tab:complete:bat:*' fzf-preview 'ls --color $realpath'
-zstyle ':fzf-tab:complete:cat:*' fzf-preview 'ls --color $realpath'
-zstyle ':fzf-tab:complete:chezmoi:*' fzf-preview 'ls --color $realpath'
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --almost-all --group-directories-first --color $realpath'
+zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --almost-all --group-directories-first --color $realpath'
+zstyle ':fzf-tab:complete:ls:*' fzf-preview 'ls --almost-all --group-directories-first --color $realpath'
+zstyle ':fzf-tab:complete:nvim:*' fzf-preview 'ls --almost-all --group-directories-first --color $realpath'
+zstyle ':fzf-tab:complete:bat:*' fzf-preview 'ls --almost-all --group-directories-first --color $realpath'
+zstyle ':fzf-tab:complete:cat:*' fzf-preview 'ls --almost-all --group-directories-first --color $realpath'
+zstyle ':fzf-tab:complete:chezmoi:*' fzf-preview 'ls --almost-all --group-directories-first --color $realpath'
 
 # Carapace completions
 export CARAPACE_BRIDGES='zsh' # optional
