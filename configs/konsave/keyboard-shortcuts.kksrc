@@ -8,8 +8,8 @@ Switch to Next Keyboard Layout=
 [StandardShortcuts]
 AboutApp=
 AboutKDE=
-Activate Next Tab=Ctrl+]; Ctrl+PgDown
-Activate Previous Tab=Ctrl+PgUp; Ctrl+[
+Activate Next Tab=Ctrl+PgDown; Ctrl+]
+Activate Previous Tab=Ctrl+[; Ctrl+PgUp
 ActualSize=Ctrl+0
 AddBookmark=Ctrl+B
 Back=Alt+Left; Back
@@ -46,7 +46,7 @@ Goto=
 GotoLine=Ctrl+G
 GotoPage=
 Help=F1
-Home=Home Page; Alt+Home
+Home=Alt+Home; Home Page
 KeyBindings=Ctrl+Alt+,; Meta+/
 Mail=
 MoveToTrash=Del
@@ -54,7 +54,7 @@ New=Ctrl+N
 Next=PgDown
 NextCompletion=Ctrl+Down
 Open=Ctrl+O
-OpenContextMenu=Menu; Shift+F10
+OpenContextMenu=Shift+F10; Menu
 OpenMainMenu=F10
 OpenRecent=
 Paste=Ctrl+V; Shift+Ins
@@ -97,7 +97,7 @@ Toggle Screen Reader On and Off=Meta+Alt+S
 [kcm_touchpad][Global Shortcuts]
 Disable Touchpad=Touchpad Off
 Enable Touchpad=Touchpad On
-Toggle Touchpad=Meta+Ctrl+Touchpad Toggle; Touchpad Toggle; Meta+Ctrl+Zenkaku Hankaku
+Toggle Touchpad=Touchpad Toggle; Meta+Ctrl+Zenkaku Hankaku; Meta+Ctrl+Touchpad Toggle
 
 [kitty.desktop][Global Shortcuts]
 _launch=Meta+T
@@ -114,8 +114,8 @@ mute=Volume Mute
 
 [ksmserver][Global Shortcuts]
 Halt Without Confirmation=
-Lock Session=Screensaver
-Log Out=Meta+Backspace; Ctrl+Alt+Del
+Lock Session=Meta+L; Screensaver
+Log Out=Ctrl+Alt+Del; Meta+Backspace
 Log Out Without Confirmation=
 LogOut=
 Reboot=
@@ -228,8 +228,8 @@ Switch to Screen to the Right=
 Toggle Night Color=
 Toggle Window Raise/Lower=
 TrackMouse=
-Walk Through Windows=Meta+Tab; Alt+Tab
-Walk Through Windows (Reverse)=Alt+Shift+Tab; Meta+Shift+Tab
+Walk Through Windows=Alt+Tab; Meta+Tab
+Walk Through Windows (Reverse)=Alt+Shift+Tab
 Walk Through Windows Alternative=
 Walk Through Windows Alternative (Reverse)=
 Walk Through Windows of Current Application=Alt+`
@@ -338,7 +338,7 @@ _launch=
 
 [org.kde.krunner.desktop][Global Shortcuts]
 RunClipboard=Alt+Shift+F2
-_launch=Search; Alt+F2; Alt+Space
+_launch=Alt+Space; Alt+F2; Search
 
 [org.kde.kscreen.desktop][Global Shortcuts]
 ShowOSD=Meta+P; Display
@@ -354,7 +354,7 @@ ActiveWindowScreenShot=Meta+Print
 CurrentMonitorScreenShot=
 FullScreenScreenShot=Shift+Print
 OpenWithoutScreenshot=
-RecordRegion=Meta+Shift+R; Meta+R
+RecordRegion=Meta+Shift+R
 RecordScreen=Meta+Alt+R
 RecordWindow=Meta+Ctrl+R
 RectangularRegionScreenShot=Meta+Shift+Print
@@ -393,8 +393,8 @@ clipboard_action=Meta+Ctrl+X
 cycle-panels=Meta+Alt+P
 cycleNextAction=
 cyclePrevAction=
-manage activities=Meta+A
-next activity=Meta+Shift+A
+manage activities=
+next activity=
 previous activity=
 repeat_action=
 show dashboard=Ctrl+F12
