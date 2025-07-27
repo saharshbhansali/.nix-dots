@@ -11,6 +11,7 @@
     ## Terminal programs
     chezmoi
     grc
+    tdf
 
     ## Fish plugins
     fishPlugins.z
@@ -93,6 +94,7 @@
     stremio
     obsidian
     wox
+    zathura
 
     ## VPN software
     protonvpn-cli
