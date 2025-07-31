@@ -97,6 +97,8 @@
 
     ## Launcher
     wox
+    albert
+    ulauncher
 
     ## VPN software
     protonvpn-cli
