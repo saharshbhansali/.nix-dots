@@ -97,7 +97,6 @@
 
     ## Launcher
     wox
-    raycast
 
     ## VPN software
     protonvpn-cli
