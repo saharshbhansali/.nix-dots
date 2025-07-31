@@ -6,7 +6,7 @@
 
   environment.systemPackages = with pkgs; [
 
-    ## Nix utils
+    ## Nix utils and compatibility layers
     cachix
     steam-run
     appimage-run
@@ -14,6 +14,7 @@
     nix-index
     nh
     nix-output-monitor
+    darling-dmg
 
     ## Hypr utils
     hyprlock
