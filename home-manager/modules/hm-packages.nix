@@ -93,13 +93,17 @@
     ## Other Programs
     stremio
     obsidian
-    wox
     zathura
+
+    ## Launcher
+    wox
+    raycast
 
     ## VPN software
     protonvpn-cli
     protonvpn-gui
     cloudflare-warp
+    cloudflare-cli
     wgcf
 
     ## KDE Utils
