@@ -25,7 +25,7 @@
     nwg-look
     gnome-shell
     gnome-tweaks
-    gnomeExtensions.apps
+    # gnomeExtensions.apps
     gnomeExtensions.arcmenu
     # gnomeExtensions.window-gestures
     gnomeExtensions.touchpad-gesture-customization
