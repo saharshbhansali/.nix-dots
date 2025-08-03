@@ -6,7 +6,7 @@
 
   environment.systemPackages = with pkgs; [
 
-    ## Nix utils
+    ## Nix utils and compatibility layers
     cachix
     steam-run
     appimage-run
@@ -14,6 +14,7 @@
     nix-index
     nh
     nix-output-monitor
+    darling-dmg
 
     ## Hypr utils
     hyprlock
@@ -26,10 +27,12 @@
     zsh
     git
     tmux
+    zellij
     # neovim
     # vimPlugins.nvim-treesitter.withPlugins
 
     ## Terminal software
+    ghostty
     kitty
     yazi
 
@@ -134,6 +137,7 @@
     rustc                           # rust compiler
     rustup                          # rust toolchain installer
     cargo                           # rust package manager
+    texliveFull                     # latex support
 
     ## KDE Wallet utils
     # kwalletcli

@@ -3,9 +3,9 @@
 {
 
   programs = {
-    zsh.enable = true;
+    # zsh.enable = true;
     # fish.enable = true;
-    starship.enable = true;
+    # starship.enable = true;
     direnv = {
       enable = true;
       # enableBashIntegration = true; # see note on other shells below

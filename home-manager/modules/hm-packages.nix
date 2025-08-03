@@ -11,6 +11,7 @@
     ## Terminal programs
     chezmoi
     grc
+    tdf
 
     ## Fish plugins
     fishPlugins.z
@@ -26,13 +27,11 @@
     ## Official nushell plugins available in nixpkgs-unstable
     nushellPlugins.semver
     nushellPlugins.query        # SQL-like query support
-    nushellPlugins.net
     nushellPlugins.highlight    # syntax highlighting
     nushellPlugins.units
     nushellPlugins.polars       # DataFrame support via Polars (super powerful)
     nushellPlugins.gstat        # git plugin
     nushellPlugins.formats
-    nushellPlugins.dbus
 
     # ## Disk utils
     # ventoy-full
@@ -84,16 +83,25 @@
       ];
     })
     vimPlugins.supermaven-nvim
+    # ## Helix editor
+    helix
+    # evil-helix
+    # helix-gpt
 
     ## Other Programs
     stremio
     obsidian
+    zathura
+
+    ## Launcher
     wox
+    albert
 
     ## VPN software
     protonvpn-cli
     protonvpn-gui
     cloudflare-warp
+    cloudflare-cli
     wgcf
 
     ## KDE Utils

@@ -25,7 +25,7 @@
     nwg-look
     gnome-shell
     gnome-tweaks
-    gnomeExtensions.apps
+    # gnomeExtensions.apps
     gnomeExtensions.arcmenu
     # gnomeExtensions.window-gestures
     gnomeExtensions.touchpad-gesture-customization
@@ -43,6 +43,9 @@
     gnomeExtensions.vitals
     # gnomeExtensions.cmud
     gnomeExtensions.forge
+    gnomeExtensions.tiling-shell
+    gnomeExtensions.tilingnome
+    gnomeExtensions.paperwm
     gnomeExtensions.focus
     # gnomeExtensions.freon
     gnomeExtensions.gmeet
@@ -53,7 +56,7 @@
     gnomeExtensions.docker
     # gnomeExtensions.copier
     # gnomeExtensions.clipqr
-    # gnomeExtensions.volume-boost
+    gnomeExtensions.volume-boost
     gnomeExtensions.boost-volume
     gnomeExtensions.yakuake
     gnomeExtensions.zilence

@@ -1,0 +1,23 @@
+font-size = 15
+font-family = "Geist Mono"
+# font-feature = -liga
+bold-is-bright = true
+
+theme = catppuccin-mocha
+background-opacity = 0.75
+# background-blur-radius = 1
+
+window-padding-color = extend
+window-padding-x = 1
+window-padding-y = 1
+window-padding-balance = true
+window-decoration = false
+window-theme = auto
+window-save-state = always
+
+clipboard-paste-protection = true
+confirm-close-surface = false
+
+# initial-command = tmux -u attach || tmux -u
+initial-command = zellij attach -c 'default' || zellij
+
