@@ -40,9 +40,9 @@
     ../modules/gestures.nix
     ## Desktop Environment configurations
     ../modules/gnome-desktop.nix
-    ../modules/gdm.nix
+    # ../modules/gdm.nix
     ../modules/kde-desktop.nix
-    # ../modules/sddm.nix
+    ../modules/sddm.nix
     # ../modules/cosmic-desktop.nix
   ];
 
