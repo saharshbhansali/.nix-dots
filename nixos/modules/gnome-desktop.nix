@@ -21,6 +21,7 @@
 
   # GNOME Tweaks
   environment.systemPackages = with pkgs; [
+    gdm-settings
     # gsettings
     nwg-look
     gnome-shell
@@ -56,12 +57,13 @@
     gnomeExtensions.docker
     # gnomeExtensions.copier
     # gnomeExtensions.clipqr
-    gnomeExtensions.volume-boost
+    # gnomeExtensions.volume-boost
     gnomeExtensions.boost-volume
     gnomeExtensions.yakuake
     gnomeExtensions.zilence
     gnomeExtensions.wallhub
     gnomeExtensions.dev-container-manager
+    gnomeExtensions.unblank
 
   ];
 }
