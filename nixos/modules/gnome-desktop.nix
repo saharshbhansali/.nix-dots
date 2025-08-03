@@ -56,7 +56,7 @@
     gnomeExtensions.docker
     # gnomeExtensions.copier
     # gnomeExtensions.clipqr
-    # gnomeExtensions.volume-boost
+    gnomeExtensions.volume-boost
     gnomeExtensions.boost-volume
     gnomeExtensions.yakuake
     gnomeExtensions.zilence
