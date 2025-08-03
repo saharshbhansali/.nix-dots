@@ -115,6 +115,10 @@
     oterm
     litellm
 
+    opencode
+    claude-code
+    gpt-cli
+
   ];
 
 }
