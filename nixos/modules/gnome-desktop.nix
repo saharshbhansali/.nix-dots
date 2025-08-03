@@ -21,6 +21,7 @@
 
   # GNOME Tweaks
   environment.systemPackages = with pkgs; [
+
     gdm-settings
     # gsettings
     nwg-look
