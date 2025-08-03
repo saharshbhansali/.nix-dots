@@ -24,6 +24,7 @@
     ../modules/hm-nushell.nix
     ../modules/hm-cursor.nix
     ../modules/hm-gdm.nix
+    ../modules/hm-lockscreen.nix
   ];
 
 
