@@ -13,26 +13,6 @@
     grc
     tdf
 
-    ## Fish plugins
-    fishPlugins.z
-    fishPlugins.plugin-git
-    fishPlugins.git-abbr
-    # fishPlugins.fzf
-    fishPlugins.fzf-fish
-    fishPlugins.transient-fish
-    fishPlugins.grc
-    fishPlugins.colored-man-pages
-    fishPlugins.bass
-
-    ## Official nushell plugins available in nixpkgs-unstable
-    nushellPlugins.semver
-    nushellPlugins.query        # SQL-like query support
-    nushellPlugins.highlight    # syntax highlighting
-    nushellPlugins.units
-    nushellPlugins.polars       # DataFrame support via Polars (super powerful)
-    nushellPlugins.gstat        # git plugin
-    nushellPlugins.formats
-
     # ## Disk utils
     # ventoy-full
 
@@ -63,31 +43,6 @@
     firefox
     chromium
 
-    # ## VS Code
-    # vscode-fhs
-    # vscodium
-    (vscode-with-extensions.override {
-      vscodeExtensions = with vscode-extensions; [
-        github.copilot
-        github.copilot-chat
-        supermaven.supermaven
-        tabnine.tabnine-vscode
-
-        ms-azuretools.vscode-docker
-
-        bbenoist.nix
-        ms-python.python
-        ms-python.debugpy
-
-        # catppuccin.cattppuccin-vscode
-      ];
-    })
-    vimPlugins.supermaven-nvim
-    # ## Helix editor
-    helix
-    # evil-helix
-    # helix-gpt
-
     ## Other Programs
     stremio
     obsidian
@@ -114,10 +69,6 @@
     alpaca
     oterm
     litellm
-
-    opencode
-    claude-code
-    gpt-cli
 
   ];
 
