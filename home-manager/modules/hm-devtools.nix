@@ -43,7 +43,7 @@
     opencode
     claude-code
     gpt-cli
-    aider-chat
+    # aider-chat
     aider-chat-full
 
   ];
