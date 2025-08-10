@@ -33,27 +33,25 @@
     #   append /usr/bin/env
     #   )
     # '';
-    shellAliases = {
-      vi = "hx";
-      vim = "hx";
-      nano = "hx";
-    };
-  };
-  programs.carapace.enable = true;
-  programs.carapace.enableNushellIntegration = true;
-
-  programs.starship = {
-    enable = true;
-    enableFishIntegration = true;
-    enableBashIntegration = true;
-    enableZshIntegration = true;
-    # settings = {
-    #   add_newline = true;
-    #   character = {
-    #     success_symbol = "[➜](bold green)";
-    #     error_symbol = "[➜](bold red)";
-    #   };
+    # shellAliases = {
+    #   vi = "hx";
+    #   vim = "hx";
+    #   nano = "hx";
     # };
   };
+    
+  programs.carapace.enableNushellIntegration = true;
+
+  home.packages = with pkgs; [
+
+    ## Official nushell plugins available in nixpkgs-unstable
+    nushellPlugins.semver
+    nushellPlugins.query        # SQL-like query support
+    nushellPlugins.highlight    # syntax highlighting
+    nushellPlugins.units
+    nushellPlugins.polars       # DataFrame support via Polars (super powerful)
+    nushellPlugins.gstat        # git plugin
+    nushellPlugins.formats
+  ];
 
 }
