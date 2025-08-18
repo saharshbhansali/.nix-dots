@@ -111,6 +111,11 @@ index 0366cef..f83d649 100644
 +bind -n M-2 resize-pane -D 
 +bind -n M-6 resize-pane -R 
 +bind -n M-4 resize-pane -L 
++
++# Preserve scrollback history on ctrl+l
++unbind -n C-l
++
++
  
  
  # -- custom variables ----------------------------------------------------------
