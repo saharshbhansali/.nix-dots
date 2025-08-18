@@ -1,0 +1,47 @@
+set -g @plugin 'tmux-plugins/tmux-sensible'
+set -g @plugin 'tmux-plugins/tmux-copycat'
+set -g @plugin 'tmux-plugins/tmux-yank'
+set -g @plugin 'tmux-plugins/tmux-cpu'
+#set -g @plugin 'christoomey/vim-tmux-navigator'
+set -g @plugin 'tmux-plugins/tmux-resurrect'
+set -g @plugin 'tmux-plugins/tmux-continuum'
+set -g @continuum-restore 'on'
+
+
+# -- saharsh customizations ----------------------------------------------------
+
+# Set <prefix> to Ctrl + Space
+
+unbind C-b
+unbind C-a
+set -g prefix C-Space
+bind C-Space send-prefix
+set -g prefix2 M-a                        # GNU-Screen compatible prefix
+bind M-a send-prefix -2
+
+# Start windows and panes at 1, not 0
+set -g base-index 1
+set -g pane-base-index 1
+set-window-option -g pane-base-index 1
+set-option -g renumber-windows on
+
+# Use Alt-arrow keys without prefix key to switch panes
+bind -n M-Left select-pane -L
+bind -n M-Right select-pane -R
+bind -n M-Up select-pane -U
+bind -n M-Down select-pane -D
+
+# Shift-arrow to switch windows
+bind -n S-Left  previous-window
+bind -n S-Right next-window
+
+# Shift-alt vim keys to switch windows
+bind -n M-H previous-window
+bind -n M-L next-window
+
+# Alt-numbers to resize panes 
+bind -n M-8 resize-pane -U 
+bind -n M-2 resize-pane -D 
+bind -n M-6 resize-pane -R 
+bind -n M-4 resize-pane -L 
+
