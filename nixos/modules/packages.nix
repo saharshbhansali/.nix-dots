@@ -26,7 +26,7 @@
     fish
     zsh
     git
-    tmux
+    # tmux
     zellij
     # neovim
     # vimPlugins.nvim-treesitter.withPlugins

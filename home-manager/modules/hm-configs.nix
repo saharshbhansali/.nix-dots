@@ -17,6 +17,16 @@
     recursive = true;
   };
 
+  home.file.".config/tmux" = {
+    source = ../../configs/tmux;
+    recursive = true;
+  };
+
+  home.file.".config/oh-my-tmux" = {
+    source = ../../configs/oh-my-tmux;
+    recursive = true;
+  };
+
   home.file.".config/kitty" = {
     source = ../../configs/kitty;
     recursive = true;
