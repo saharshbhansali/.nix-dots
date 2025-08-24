@@ -1,7 +1,7 @@
 {
   description = "Modular NixOS + Home Manager setup";
 
-  submodules = true;
+  inputs.self.submodules = true;
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
