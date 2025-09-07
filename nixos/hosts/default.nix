@@ -62,6 +62,7 @@
 
   # Networking services
   networking.networkmanager.enable = true;
+  networking.wireless.enable = false;
   networking.hostName = "nixos";
 
   # Flatpak
@@ -81,5 +82,8 @@
   hardware.enableRedistributableFirmware = true;
   boot.kernelModules = [ "rtw89" ];
   hardware.usb-modeswitch.enable = true;
+  hardware.enableAllFirmware = true;
+  # Optional: Use latest kernel for better Realtek driver support
+  boot.kernelPackages = pkgs.linuxPackages_latest;
 
 }
