@@ -77,4 +77,9 @@
 
   ## Miscellaneous settings
 
+  # Wi-Fi support
+  hardware.enableRedistributableFirmware = true;
+  boot.kernelModules = [ "rtw89" ];
+  hardware.usb-modeswitch.enable = true;
+
 }
