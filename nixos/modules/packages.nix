@@ -55,6 +55,7 @@
     tealdeer
     tree
     pciutils
+    lshw
     procs
     dust
     strace
@@ -84,6 +85,9 @@
     pfetch
     fastfetch
     neofetch
+
+    ## Wi-Fi utils
+    iw
 
     ## Keyboard and Clipboard utils
     wl-clipboard
