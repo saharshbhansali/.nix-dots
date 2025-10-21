@@ -35,6 +35,7 @@
     ghostty
     kitty
     yazi
+    gh # GitHub CLI
 
     ## Terminal utils
     gzip
