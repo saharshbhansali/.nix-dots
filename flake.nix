@@ -65,7 +65,13 @@
         inherit system;
         specialArgs = { inherit inputs pkgs; };
         modules = [
+          # prevents warning about specialArgs.pkgs
+          nixpkgs.nixosModules.readOnlyPkgs
+
+          # hardware configuration
           ./hardware-configuration.nix
+
+          # User configuration
           ./nixos/hosts/default.nix
 
           # Home Manager as NixOS module
