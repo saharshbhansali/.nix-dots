@@ -44,7 +44,7 @@
     chromium
 
     ## Other Programs
-    stremio
+    # stremio
     obsidian
     zathura
 
