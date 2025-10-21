@@ -18,6 +18,7 @@
   imports = [
     ../modules/hm-packages.nix
     ../modules/hm-programs.nix
+    ../modules/hm-flatpaks.nix
     ../modules/hm-nixvim.nix
     ../modules/hm-shell.nix
     ../modules/hm-configs.nix

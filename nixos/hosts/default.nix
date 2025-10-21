@@ -33,6 +33,7 @@
     ../modules/packages.nix
     ../modules/programs.nix
     ../modules/services.nix
+    ../modules/flatpaks.nix
     ## Application configurations
     # ../modules/nixvim.nix
     ../modules/neovim.nix
