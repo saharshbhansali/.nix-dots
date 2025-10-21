@@ -3,4 +3,7 @@
 *.bak
 
 # Nix evaluation files
- result/
+result/
+
+# Log files:
+**.log
