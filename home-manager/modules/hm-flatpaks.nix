@@ -4,6 +4,9 @@
 
   imports = [ inputs.nix-flatpak.homeManagerModules.nix-flatpak ];
 
+  # Enable flatpak
+  services.flatpak.enable = true;
+
   # Append additional remotes to default remote 'flathub'
   services.flatpak.remotes = lib.mkOptionDefault [{
     name = "flathub-beta";
