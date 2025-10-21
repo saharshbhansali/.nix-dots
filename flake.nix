@@ -1,6 +1,8 @@
 {
   description = "Modular NixOS + Home Manager setup";
 
+  inputs.self.submodules = true;
+
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
@@ -12,6 +14,11 @@
     nur = {
       url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    nix-flatpak = { 
+      url = "github:gmodena/nix-flatpak/?ref=latest";
+      # inputs.nixpkgs.follows = "nixpkgs";
     };
 
     nixvim = {

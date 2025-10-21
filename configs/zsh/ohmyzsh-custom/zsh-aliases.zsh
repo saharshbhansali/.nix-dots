@@ -35,6 +35,9 @@ alias 'cf-off'='warp-cli disconnect'
 # alias 'cf-on'='~/login-vit-wifi.sh && wg-quick up cloudflare && ping 8.8.8.8 -c 5'
 # alias 'cf-off'='wg-quick down cloudflare'
 
+## Git Aliases
+alias 'uncommit'='git reset --soft HEAD~1'
+
 # Confirmations
 
 ## File manipulation
@@ -50,7 +53,6 @@ alias 'ip'='ip -c'
 alias 'pkill'='pkill -e'
 
 # Diff 
-
 alias 'vdiff'="diff --color -EZy"
 
 diff_so_fancy() { 
@@ -84,7 +86,7 @@ alias 'effects'='picom --experimental-backends -b'
 
 # Rofi
 
-#alias 'menu'='rofi -show run'
+# alias 'menu'='rofi -show run'
 alias 'menu'='rofi -combi-modi window,drun,ssh -theme Arc-Dark -font "hack 12" -show combi 2>&1 /dev/null &'
 
 # Brightness

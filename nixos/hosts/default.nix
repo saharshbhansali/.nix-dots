@@ -33,9 +33,11 @@
     ../modules/packages.nix
     ../modules/programs.nix
     ../modules/services.nix
+    ../modules/flatpaks.nix
     ## Application configurations
     # ../modules/nixvim.nix
     ../modules/neovim.nix
+    ../modules/tmux.nix
     ## Service configurations
     ../modules/gestures.nix
     ## Desktop Environment configurations
@@ -61,6 +63,7 @@
 
   # Networking services
   networking.networkmanager.enable = true;
+  networking.wireless.enable = false;
   networking.hostName = "nixos";
 
   # Flatpak
@@ -75,5 +78,13 @@
   };
 
   ## Miscellaneous settings
+
+  # Wi-Fi support
+  hardware.enableRedistributableFirmware = true;
+  boot.kernelModules = [ "rtw89" ];
+  hardware.usb-modeswitch.enable = true;
+  hardware.enableAllFirmware = true;
+  # Optional: Use latest kernel for better Realtek driver support
+  boot.kernelPackages = pkgs.linuxPackages_latest;
 
 }

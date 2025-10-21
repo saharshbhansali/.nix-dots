@@ -26,7 +26,7 @@
     fish
     zsh
     git
-    tmux
+    # tmux
     zellij
     # neovim
     # vimPlugins.nvim-treesitter.withPlugins
@@ -35,6 +35,7 @@
     ghostty
     kitty
     yazi
+    gh # GitHub CLI
 
     ## Terminal utils
     gzip
@@ -55,6 +56,7 @@
     tealdeer
     tree
     pciutils
+    lshw
     procs
     dust
     strace
@@ -84,6 +86,9 @@
     pfetch
     fastfetch
     neofetch
+
+    ## Wi-Fi utils
+    iw
 
     ## Keyboard and Clipboard utils
     wl-clipboard
