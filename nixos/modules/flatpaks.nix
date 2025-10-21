@@ -2,6 +2,6 @@
 
 {
 
-  imports = [ inputs.flatpaks.nixosModules.default ];
+  imports = [ inputs.nix-flatpak.nixosModules.nix-flatpak ];
 
 }

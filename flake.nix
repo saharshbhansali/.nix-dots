@@ -16,12 +16,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # nix-flatpak = { 
-    #   url = "github:gmodena/nix-flatpak/?ref=latest";
-    #   # inputs.nixpkgs.follows = "nixpkgs";
-    # };
-    flatpaks = {
-      url = "github:in-a-dil-emma/declarative-flatpak/latest";
+    nix-flatpak = { 
+      url = "github:gmodena/nix-flatpak/?ref=latest";
       # inputs.nixpkgs.follows = "nixpkgs";
     };
 
