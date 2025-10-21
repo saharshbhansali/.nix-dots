@@ -16,6 +16,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    nix-flatpak = { 
+      url = "github:gmodena/nix-flatpak/?ref=latest";
+      # inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     nixvim = {
       url = "github:nix-community/nixvim";
       # inputs.nixpkgs.follows = "nixpkgs";
