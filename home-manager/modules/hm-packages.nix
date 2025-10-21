@@ -44,12 +44,16 @@
     chromium
 
     ## Other Programs
+    # Media
+    vlc
     # stremio
     obsidian
+
+    # Document viewers
     zathura
 
-    ## Launcher
-    wox
+    # ## Launcher
+    # wox
     albert
 
     ## VPN software
