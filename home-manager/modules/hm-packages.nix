@@ -49,6 +49,9 @@
     # stremio
     obsidian
 
+    # Torrent
+    qbittorrent
+
     # Document viewers
     zathura
 
