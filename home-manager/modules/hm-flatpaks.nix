@@ -21,8 +21,9 @@
 
   # List of flatpaks to install
   services.flatpak.packages = [
-    { appId = "com.stremio.Stremio"; origin = "flathub-beta"; }
-    { appId = "com.stremio.Service"; origin = "flathub-beta"; }
+    # { appId = "com.stremio.Stremio"; origin = "flathub-beta"; }
+    "com.stremio.Stremio"
+    "com.stremio.Service"
     # "com.obsproject.Studio"
     # "im.riot.Riot"
   ];
