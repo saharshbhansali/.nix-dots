@@ -9,7 +9,7 @@ let
   # Apply your patch to the git submodule source
   patchedOhMyTmux = pkgs.runCommandLocal "oh-my-tmux-patched" {} ''
     mkdir -p $out
-    cp -r ${ohMyTmuxSrc}/* $out/
+    cp -rT ${ohMyTmuxSrc} $out
     patch -d $out -p1 < ${tmuxDir}/customize-omt.patch
   '';
 in
