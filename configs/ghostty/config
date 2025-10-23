@@ -3,7 +3,7 @@ font-family = "Geist Mono"
 # font-feature = -liga
 bold-is-bright = true
 
-theme = catppuccin-mocha
+theme = "Catppuccin Mocha"
 background-opacity = 0.75
 # background-blur-radius = 1
 
