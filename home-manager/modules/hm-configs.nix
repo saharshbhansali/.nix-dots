@@ -1,5 +1,18 @@
 { config, lib, pkgs, inputs, ... }:
+let
+  # Apply the customization patch to oh-my-tmux's tmux.conf.local using tmux/customize-omt.patch and tmux/tmux.conf.local symlink
 
+  # Directory paths relative to this Nix file
+  tmuxDir = ../../configs/tmux;
+  ohMyTmuxSrc = ../../configs/oh-my-tmux;
+
+  # Apply your patch to the git submodule source
+  patchedOhMyTmux = pkgs.runCommandLocal "oh-my-tmux-patched" {} ''
+    mkdir -p $out
+    cp -r ${ohMyTmuxSrc}/* $out/
+    patch -d $out -p1 < ${tmuxDir}/customize-omt.patch
+  '';
+in
 {
 
   # Configure programs
@@ -17,13 +30,15 @@
     recursive = true;
   };
 
+  # Your tmux directory (contains patch + symlink)
   home.file.".config/tmux" = {
-    source = ../../configs/tmux;
+    source = tmuxDir;
     recursive = true;
   };
 
+  # Use patched oh-my-tmux as the source
   home.file.".config/oh-my-tmux" = {
-    source = ../../configs/oh-my-tmux;
+    source = patchedOhMyTmux;
     recursive = true;
   };
 
