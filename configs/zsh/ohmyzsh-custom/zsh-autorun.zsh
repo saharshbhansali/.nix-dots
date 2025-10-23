@@ -15,8 +15,10 @@
 # eval "$(rbenv init -)"
 
 # GoLang Setup 
+# export GOROOT="$(go env GOROOT)"
+# export GOPATH="$(go env GOPATH)"
 export GOROOT="$(go env GOROOT)"
-export GOPATH="$(go env GOPATH)"
+export GOPATH="$HOME/go/"
 export GO_BIN="$GOPATH/bin/"
 GO_ALL="$GOPATH:$GO_BIN"
 
