@@ -1,7 +1,7 @@
 diff --git a/../oh-my-tmux/.tmux.conf.local b/./tmux.conf.local.bak
 index 0366cef..f83d649 100644
---- a/../oh-my-tmux/.tmux.conf.local
-+++ b/./tmux.conf.local.bak
+--- a/.tmux.conf.local
++++ b/.tmux.conf.local
 @@ -38,7 +38,7 @@ tmux_conf_new_session_retain_current_path=false
  #   - true
  #   - false (default)
