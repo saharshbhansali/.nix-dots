@@ -42,6 +42,11 @@
     # firefox and chromium
     firefox
     chromium
+    # text-based web browser
+    elinks
+    links2
+    lynx
+    w3m
 
     ## VPN software
     protonvpn-cli
