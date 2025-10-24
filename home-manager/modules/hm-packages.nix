@@ -67,6 +67,9 @@
     qbittorrent
 
     ## Other Programs
+    ## RSS Feed
+    newsboat
+
     ## KDE Utils
     konsave
 
