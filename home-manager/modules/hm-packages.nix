@@ -42,7 +42,8 @@
     # firefox and chromium
     firefox
     chromium
-    # text-based web browser
+    # text-based/terminal web browser
+    chawan
     elinks
     links2
     lynx
