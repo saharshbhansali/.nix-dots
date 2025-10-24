@@ -1,7 +1,7 @@
 { config, lib, pkgs, inputs, ... }:
 let
   # dotfilesDir = "/path/to/dotfiles";
-  dotfilesDir = "$HOME/.config/.nix-dots";
+  # dotfilesDir = "$HOME/.config/.nix-dots";
 
   # Apply the customization patch to oh-my-tmux's tmux.conf.local using tmux/customize-omt.patch and tmux/tmux.conf.local symlink
 
@@ -73,20 +73,20 @@ in
     recursive = true;
   };
 
-  # home.file.".links/links.cfg".source = ../../configs/links/links.cfg;
-  # home.file.".config/elinks/elinks.conf".source = ../../configs/elinks/elinks.conf;
+  home.file.".links/links.cfg".source = ../../configs/links/links.cfg;
+  home.file.".config/elinks/elinks.conf".source = ../../configs/elinks/elinks.conf;
 
   # home.file.".links/links.cfg".text = builtins.readFile ../../configs/links/links.cfg;
   # home.file.".config/elinks/elinks.conf".text = builtins.readFile ../../configs/elinks/elinks.conf;
 
-  home.activation.make-symlinks = lib.hm.dag.entryAfter ["writeBoundary"] ''
-    # Create the directories
-    mkdir -p $HOME/.links
-    mkdir -p $HOME/.config/elinks
-
-    # Make symlinks to the dotfiles
-    ln -sf ${dotfilesDir}/configs/links/links.cfg $HOME/.links/links.cfg
-    ln -sf ${dotfilesDir}/configs/elinks/elinks.conf $HOME/.config/elinks/elinks.conf
-  '';
+  # home.activation.make-symlinks = lib.hm.dag.entryAfter ["writeBoundary"] ''
+  #   # Create the directories
+  #   mkdir -p $HOME/.links
+  #   mkdir -p $HOME/.config/elinks
+  #
+  #   # Make symlinks to the dotfiles
+  #   ln -sf ${dotfilesDir}/configs/links/links.cfg $HOME/.links/links.cfg
+  #   ln -sf ${dotfilesDir}/configs/elinks/elinks.conf $HOME/.config/elinks/elinks.conf
+  # '';
 
 }
