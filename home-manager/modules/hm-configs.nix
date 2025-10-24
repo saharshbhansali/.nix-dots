@@ -65,4 +65,6 @@ in
   home.file.".config/konsave/kde-profile.knsv".source = ../../configs/konsave/kde-profile.knsv;
   home.file.".config/konsave/keyboard-shortcuts.kksrc".source = ../../configs/konsave/keyboard-shortcuts.kksrc;
 
+  home.file.".newsboat/urls".source = ../../configs/newsboat/urls;
+
 }
