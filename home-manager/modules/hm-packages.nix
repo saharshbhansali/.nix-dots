@@ -43,31 +43,12 @@
     firefox
     chromium
 
-    ## Other Programs
-    # Media
-    vlc
-    # stremio
-    obsidian
-
-    # Torrent
-    qbittorrent
-
-    # Document viewers
-    zathura
-
-    # ## Launcher
-    # wox
-    albert
-
     ## VPN software
     protonvpn-cli
     protonvpn-gui
     cloudflare-warp
     cloudflare-cli
     wgcf
-
-    ## KDE Utils
-    konsave
 
     ## LLMs
     ollama
@@ -76,6 +57,25 @@
     alpaca
     oterm
     litellm
+
+    ## Media
+    vlc
+    # stremio
+    obsidian
+
+    # Torrent
+    qbittorrent
+
+    ## Other Programs
+    ## KDE Utils
+    konsave
+
+    ## Document viewers
+    zathura
+
+    ## Launcher
+    albert
+    # wox
 
   ];
 
