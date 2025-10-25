@@ -1,8 +1,8 @@
 diff --git a/.tmux.conf.local b/.tmux.conf.local
-index 0366cef..d873b1c 100644
+index 0366cef..49d9755 100644
 --- a/.tmux.conf.local
 +++ b/.tmux.conf.local
-@@ -446,12 +446,76 @@ tmux_conf_uninstall_plugins_on_reload=true
+@@ -446,11 +446,78 @@ tmux_conf_uninstall_plugins_on_reload=true
  
  # to enable a plugin, use the 'set -g @plugin' syntax:
  # visit https://github.com/tmux-plugins for available plugins
@@ -11,7 +11,6 @@ index 0366cef..d873b1c 100644
 -#set -g @plugin 'tmux-plugins/tmux-resurrect'
 -#set -g @plugin 'tmux-plugins/tmux-continuum'
 -#set -g @continuum-restore 'on'
--
 +set -g @plugin 'tmux-plugins/tmux-sensible'
 +set -g @plugin 'tmux-plugins/tmux-copycat'
 +set -g @plugin 'tmux-plugins/tmux-yank'
@@ -84,6 +83,6 @@ index 0366cef..d873b1c 100644
 +
 +## Clipboard
 +tmux_conf_copy_to_os_clipboard=true
-
-
-# -- custom variables ----------------------------------------------------------
+ 
+ 
+ # -- custom variables ----------------------------------------------------------
