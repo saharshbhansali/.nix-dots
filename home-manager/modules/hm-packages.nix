@@ -52,6 +52,7 @@
     chromium
     # text-based/terminal web browser
     chawan
+    browsh
     elinks
     links2
     lynx
