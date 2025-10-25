@@ -13,7 +13,9 @@ let
   patchedOhMyTmux = pkgs.runCommandLocal "oh-my-tmux-patched" {} ''
     mkdir -p $out
     cp -rT ${ohMyTmuxSrc} $out
+    chmod a+w $out/.tmux.conf.local
     patch -d $out -p1 < ${tmuxDir}/customize-omt.patch
+    chmod a-w $out/.tmux.conf.local
   '';
 in
 {
