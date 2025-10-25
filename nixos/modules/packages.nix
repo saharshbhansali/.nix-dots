@@ -137,6 +137,7 @@
     python312Packages.pip           # python 3.12 package manager
     python312Packages.virtualenv    # python 3.12 virtual environment
     asdf-vm                         # asdf version manager
+    mise                            # mise version manager
     volta                           # node version manager
     go                              # go programming language
     rustc                           # rust compiler
