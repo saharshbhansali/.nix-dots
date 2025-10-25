@@ -60,6 +60,8 @@ index 0366cef..d873b1c 100644
 +bind -n M-4 resize-pane -L 
 +
 +# Other tmux customizations to override prevoius options in a single patch
++## Preserve scrollback history on ctrl+l
++unbind -n C-l
 +
 +## increase history size
 +set -g history-limit 10000
@@ -82,6 +84,6 @@ index 0366cef..d873b1c 100644
 +
 +## Clipboard
 +tmux_conf_copy_to_os_clipboard=true
- 
- # -- custom variables ----------------------------------------------------------
- 
+
+
+# -- custom variables ----------------------------------------------------------
