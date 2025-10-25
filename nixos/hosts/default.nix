@@ -84,7 +84,7 @@
     "pcie_aspm.policy=performance"
     "rtw89_pci.disable_ps_mode=1"
   ];
-  # hardware.firmware = [ pkgs.linux-firmware ];
+  hardware.firmware = [ pkgs.linux-firmware ];
   # boot.kernelModules = [ "rtw89" ];
   boot.kernelModules = [ "rtw89pci" ];
   hardware.enableRedistributableFirmware = true;
