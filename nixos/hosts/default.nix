@@ -80,11 +80,19 @@
   ## Miscellaneous settings
 
   # Wi-Fi support
+  boot.kernelParams = [
+    "pcie_aspm.policy=performance"
+    "rtw89_pci.disable_ps_mode=1"
+  ];
+  # hardware.firmware = [ pkgs.linux-firmware ];
+  # boot.kernelModules = [ "rtw89" ];
+  boot.kernelModules = [ "rtw89pci" ];
   hardware.enableRedistributableFirmware = true;
-  boot.kernelModules = [ "rtw89" ];
+  # boot.extraModulePackages = with config.boot.kernelPackages; [ rtw89 ];
   hardware.usb-modeswitch.enable = true;
   hardware.enableAllFirmware = true;
   # Optional: Use latest kernel for better Realtek driver support
   boot.kernelPackages = pkgs.linuxPackages_latest;
+  # boot.kernelPackages = pkgs.linuxPackages_6_10;
 
 }
