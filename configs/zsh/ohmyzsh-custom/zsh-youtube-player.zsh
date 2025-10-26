@@ -213,8 +213,20 @@ build_playlist_file() {
   # Normalize URLs and only include non-empty ones
   awk -F'|' '
     $2 != "" && $2 !~ /^$/ {
-      url=$2;
-      gsub("^https://music.youtube.com/watch\\?v=", "https://www.youtube.com/watch?v=", url);
+      url=$2
+
+      # Convert music.youtube.com links to www.youtube.com/watch?v=
+      gsub("^https?://music.youtube.com/watch\\?v=", "https://www.youtube.com/watch?v=", url)
+
+      # Convert music.youtube.com playlist links to empty (skip them)
+      if (url ~ "^https?://music.youtube.com/playlist") next
+
+      # Strip unnecessary query params except "v" if present
+      if (url ~ "^https?://www.youtube.com/watch\\?v=") {
+        split(url, parts, "&")
+        url=parts[1]
+      }
+
       print url
     }
   ' "$YTPL_QUEUE" > "$YTPL_PLAYLIST"
