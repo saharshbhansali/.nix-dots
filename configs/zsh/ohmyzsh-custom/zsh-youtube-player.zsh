@@ -4,11 +4,12 @@ pipx ensurepath &> /dev/null
 
 pipx install yt-dlp &> /dev/null
 
-# YouTube playlist player (background, silent)
+# YouTube playlist player (mpv + yt-dlp backend, background, logs)
 ytpl() {
   local action=$1
   local url=$2
   local pidfile="/tmp/ytpl.pid"
+  local logfile="/tmp/ytpl.log"
 
   case "$action" in
     start)
@@ -16,12 +17,24 @@ ytpl() {
         echo "Usage: ytpl start <playlist_url>"
         return 1
       fi
+
       if [[ -f "$pidfile" ]] && kill -0 "$(cat "$pidfile")" 2>/dev/null; then
         echo "ytpl is already running (PID $(cat "$pidfile"))"
         return 1
       fi
-      ( yt-dlp -o - "$url" 2>/dev/null | mpv --no-video -  >/dev/null 2>&1 & echo $! > "$pidfile" )
+
+      # Use system yt-dlp as mpv’s backend
+      ( mpv \
+          --no-video \
+          --ytdl=yes \
+          --script-opts="ytdl_hook-ytdl_path=$(which yt-dlp)" \
+          --ytdl-format="bestaudio/best" \
+          --loop-playlist=no \
+          --msg-level=ffmpeg=warn \
+          "$url" >"$logfile" 2>&1 & echo $! >"$pidfile" )
+
       echo "ytpl started (PID $(cat "$pidfile"))"
+      echo "Logs: $logfile"
       ;;
     stop)
       if [[ -f "$pidfile" ]]; then
@@ -38,8 +51,16 @@ ytpl() {
         echo "ytpl is not running"
       fi
       ;;
+    logs)
+      if [[ -f "$logfile" ]]; then
+        echo "--- ytpl logs ---"
+        tail -n 30 "$logfile"
+      else
+        echo "No logs found."
+      fi
+      ;;
     *)
-      echo "Usage: ytpl {start|stop|status} [playlist_url]"
+      echo "Usage: ytpl {start|stop|status|logs} [playlist_url]"
       ;;
   esac
 }
