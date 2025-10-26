@@ -119,9 +119,8 @@ EOM
             [[ "$(cat "$YTPL_MODE")" == "audio" ]] && mode_flag="--no-video"
 
             # Start mpv via yt-dlp pipe for logs (subshell to fix zsh & issue)
-            (
-                stdbuf -oL -eL yt-dlp -o - "$url" | \
-                stdbuf -oL -eL mpv $mode_flag \
+            {
+                stdbuf -oL -eL yt-dlp -o - "$url" | stdbuf -oL -eL mpv $mode_flag \
                     --ytdl-format="bestaudio/best" \
                     --loop-playlist=no \
                     --input-ipc-server="$YTPL_IPC" \
@@ -130,9 +129,8 @@ EOM
                     --script="$YTPL_LUA" \
                     --save-position-on-quit=no \
                     --msg-level=all=info \
-                    $shuffle_flag $start_index \
-                    -
-            ) >"$YTPL_LOG" 2>&1 &
+                    $shuffle_flag $start_index -
+            } >"$YTPL_LOG" 2>&1 &
 
             echo $! > "$YTPL_PID"
             echo "ytpl started in $(cat "$YTPL_MODE") mode (PID $(cat "$YTPL_PID"))"
