@@ -1,21 +1,9 @@
 #!/usr/bin/env zsh
-# YTPL - YouTube Playlist Audio/Video Daemon (updated)
-# - checks playlist non-empty before launching mpv
-# - better start diagnostics
-# - 'cleanup' command to forcibly clear locks/pids
-# Requirements: mpv, yt-dlp, jq, socat (shuf optional)
-pipx ensurepath > /dev/null 2>&1
-pipx install yt-dlp > /dev/null 2>&1
+# ytpl - YouTube Playlist Audio/Video Daemon (safe-to-source version)
+# NOTE: sourcing this file will NOT run commands; call `ytpl ...` to use it.
 
-for cmd in mpv yt-dlp jq socat; do
-  command -v "$cmd" >/dev/null 2>&1 || { echo "Required program '$cmd' not found in PATH"; return 1; }
-done
-command -v shuf >/dev/null 2>&1 || SHUF_AVAILABLE=0
-[[ -n "$SHUF_AVAILABLE" ]] || SHUF_AVAILABLE=1
-
+# ---------- config & files (safe assignments only) ----------
 YTPL_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/ytpl"
-mkdir -p "$YTPL_DIR"
-
 YTPL_LOCKDIR="/tmp/ytpl-lock.$USER"
 YTPL_PID="$YTPL_DIR/ytpl.pid"
 YTPL_LOG="/tmp/ytpl.log"
@@ -25,12 +13,16 @@ YTPL_LAST="$YTPL_DIR/last_playlist"
 YTPL_MODE="$YTPL_DIR/mode"
 YTPL_QUEUE="$YTPL_DIR/playlist.queue"
 YTPL_PLAYLIST="$YTPL_DIR/playlist.txt"
-
-[[ ! -f "$YTPL_MODE" ]] && echo "audio" > "$YTPL_MODE"
-
 YTPL_LUA="$YTPL_DIR/mpv_nowplaying.lua"
-if [[ ! -f "$YTPL_LUA" ]]; then
-cat > "$YTPL_LUA" <<'EOF'
+
+# default mode file (only create on demand; not at source time)
+# ensure config dir exists (safe)
+mkdir -p "$YTPL_DIR"
+
+# ---------- embed minimal Lua (created on-demand) ----------
+ensure_lua() {
+  [[ -f "$YTPL_LUA" ]] && return 0
+  cat > "$YTPL_LUA" <<'EOF'
 local nowplaying_file = os.getenv("YTPL_NOWPLAYING") or "/tmp/ytpl.nowplaying"
 mp.register_event("file-loaded", function()
     mp.set_property("time-pos", 0)
@@ -41,9 +33,11 @@ mp.register_event("file-loaded", function()
     end
 end)
 EOF
-fi
+}
+
 export YTPL_NOWPLAYING
 
+# ---------- helpers (no commands executed at source) ----------
 rotate_or_clear_log() {
   local max=$((200 * 1024 * 1024))
   if [[ -f "$YTPL_LOG" ]]; then
@@ -63,7 +57,7 @@ rotate_or_clear_log() {
   fi
 }
 
-# lock helpers (lockdir in /tmp)
+# lock helpers
 acquire_lock() {
   if mkdir "$YTPL_LOCKDIR" 2>/dev/null; then
     printf "%s\n" "$$" > "$YTPL_LOCKDIR/owner_pid"
@@ -105,8 +99,7 @@ force_clear_lock_and_kill() {
     rm -rf "$YTPL_LOCKDIR"
   fi
   if [[ -f "$YTPL_PID" ]]; then
-    local pid
-    pid=$(cat "$YTPL_PID" 2>/dev/null || echo "")
+    local pid; pid=$(cat "$YTPL_PID" 2>/dev/null || echo "")
     if [[ -n "$pid" ]] && kill -0 "$pid" 2>/dev/null; then
       kill "$pid" 2>/dev/null || true
       sleep 0.15
@@ -132,7 +125,6 @@ build_playlist_file() {
   local url="$1" shuffle_flag="$2" ytdlp_verbose="$3"
   [[ -f "$YTPL_QUEUE" ]] && rm -f "$YTPL_QUEUE"
   [[ -f "$YTPL_PLAYLIST" ]] && rm -f "$YTPL_PLAYLIST"
-
   if yt-dlp $ytdlp_verbose -j --flat-playlist "$url" 2>>"$YTPL_LOG" | jq -r '.title + "|" + .url' > "${YTPL_QUEUE}.tmp" 2>>"$YTPL_LOG"; then
     if [[ -n "$shuffle_flag" ]]; then
       if command -v shuf >/dev/null 2>&1; then shuf "${YTPL_QUEUE}.tmp" > "$YTPL_QUEUE"; else mv "${YTPL_QUEUE}.tmp" "$YTPL_QUEUE"; echo "Warning: shuf not available; cannot shuffle." >> "$YTPL_LOG"; fi
@@ -144,47 +136,57 @@ build_playlist_file() {
     echo "Fallback|$url" > "$YTPL_QUEUE"
     [[ -f "${YTPL_QUEUE}.tmp" ]] && rm -f "${YTPL_QUEUE}.tmp"
   fi
-
   cut -d'|' -f2 "$YTPL_QUEUE" > "$YTPL_PLAYLIST"
 }
 
 is_running() {
   if [[ -f "$YTPL_PID" ]]; then
     local pid; pid=$(cat "$YTPL_PID" 2>/dev/null || echo "")
-    if [[ -n "$pid" ]] && kill -0 "$pid" 2>/dev/null; then echo "$pid"; return 0; else rm -f "$YTPL_PID"; return 1; fi
-  fi
-  return 1
-}
-
-# new helper: ensure playlist file has at least one non-empty URL line
-playlist_nonempty() {
-  [[ -f "$YTPL_PLAYLIST" ]] || return 1
-  # check for a line that is not purely whitespace
-  if grep -q '[^[:space:]]' "$YTPL_PLAYLIST"; then
-    # ensure at least one line contains something that looks like a URL (very loose check)
-    if grep -E -q 'https?://|^ytsearch:' "$YTPL_PLAYLIST"; then
-      return 0
+    if [[ -n "$pid" ]] && kill -0 "$pid" 2>/dev/null; then
+      echo "$pid"; return 0
     else
-      # if there is a non-empty line but no URL-like content, still treat as empty/invalid
-      return 2
+      rm -f "$YTPL_PID"; return 1
     fi
   fi
   return 1
 }
 
+playlist_nonempty() {
+  [[ -f "$YTPL_PLAYLIST" ]] || return 1
+  if grep -q '[^[:space:]]' "$YTPL_PLAYLIST"; then
+    if grep -E -q 'https?://|^ytsearch:' "$YTPL_PLAYLIST"; then return 0; else return 2; fi
+  fi
+  return 1
+}
+
+# ---------- lazy prerequisite check (runs when you call ytpl) ----------
+_check_prereqs() {
+  for c in mpv yt-dlp jq socat; do
+    if ! command -v "$c" >/dev/null 2>&1; then
+      echo "Required program '$c' not found in PATH"
+      return 1
+    fi
+  done
+  return 0
+}
+
+# ---------- main ytpl function (call this) ----------
 ytpl() {
+  ensure_lua           # create Lua script if missing
+  _check_prereqs || return 1
+
   local sub=$1; shift
   if [[ -z "$sub" ]]; then
     cat <<'USAGE'
 Usage: ytpl <command>
 
 Commands:
-  start <playlist_url> [--shuffle] [--start N] [-v|-vv] [--force]   Start playback
-  stop                                                             Stop playback
-  status                                                           Show daemon status
-  logs                                                             Show last 30 lines of logs
-  cleanup                                                          Kill and clear lock/pid (forceful)
-  player <command>                                                 Control playback (run 'ytpl player' for help)
+  start <playlist_url> [--shuffle] [--start N] [-v|-vv] [--force]
+  stop
+  status
+  logs
+  cleanup
+  player <command>
 USAGE
     return
   fi
@@ -197,9 +199,7 @@ USAGE
           --shuffle) shuffle_flag=1; shift ;;
           --start)
             if [[ $# -le 1 ]]; then echo "Error: --start requires an argument"; return 1; fi
-            start_index="$2"
-            if [[ ! "$start_index" =~ ^[0-9]+$ ]]; then echo "Error: --start requires a non-negative integer"; return 1; fi
-            shift 2
+            start_index="$2"; [[ ! "$start_index" =~ ^[0-9]+$ ]] && { echo "Error: start must be non-negative integer"; return 1; }; shift 2
             ;;
           -v) ytdlp_verbose="-v"; shift ;;
           -vv) ytdlp_verbose="-vv"; shift ;;
@@ -218,71 +218,39 @@ USAGE
       fi
 
       if ! acquire_lock; then
-        if [[ -d "$YTPL_LOCKDIR" ]]; then
-          local ownerpid; ownerpid=$(cat "$YTPL_LOCKDIR/owner_pid" 2>/dev/null || echo "unknown")
-          echo "ytpl is already starting/started by PID $ownerpid. Use --force to override."
-        else
-          echo "Unable to acquire lock; try again."
-        fi
+        if [[ -d "$YTPL_LOCKDIR" ]]; then local ownerpid; ownerpid=$(cat "$YTPL_LOCKDIR/owner_pid" 2>/dev/null || echo "unknown"); echo "ytpl already started by PID $ownerpid. Use --force to override."; else echo "Unable to acquire lock"; fi
         return 1
       fi
 
-      if is_running >/dev/null; then
-        echo "ytpl is already running (PID $(cat "$YTPL_PID"))"
-        release_lock
-        return 1
-      fi
+      if is_running >/dev/null; then echo "ytpl is already running (PID $(cat "$YTPL_PID"))"; release_lock; return 1; fi
 
       rotate_or_clear_log
       build_playlist_file "$url" "$shuffle_flag" "$ytdlp_verbose"
       echo "$url" > "$YTPL_LAST"
 
-      # ensure playlist has something usable
       playlist_nonempty
       local p_ok=$?
       if [[ $p_ok -ne 0 ]]; then
-        echo "ERROR: built playlist seems empty or invalid (exit code $p_ok). See logs for details."
-        echo "Tail of $YTPL_LOG:"
-        tail -n 200 "$YTPL_LOG"
-        [[ -f "$YTPL_PLAYLIST" ]] && echo "Contents of $YTPL_PLAYLIST:" && sed -n '1,60p' "$YTPL_PLAYLIST"
-        [[ -f "$YTPL_QUEUE" ]] && echo "Contents of $YTPL_QUEUE:" && sed -n '1,60p' "$YTPL_QUEUE"
+        echo "ERROR: built playlist seems empty or invalid (code $p_ok). See logs:"; tail -n 200 "$YTPL_LOG"
+        [[ -f "$YTPL_PLAYLIST" ]] && echo "Playlist contents:" && sed -n '1,60p' "$YTPL_PLAYLIST"
         [[ -f "$YTPL_PID" ]] && rm -f "$YTPL_PID"
         release_lock
         return 1
       fi
 
-      [[ -e "$YTPL_IPC" ]] && rm -f "$YTPL_IPC"
-      [[ -f "$YTPL_NOWPLAYING" ]] && rm -f "$YTPL_NOWPLAYING"
-
-      local mode_flag=""
-      [[ "$(cat "$YTPL_MODE")" == "audio" ]] && mode_flag="--no-video"
-
-      local mpv_args=(
-        $mode_flag
-        --ytdl=yes
-        --ytdl-format="bestaudio/best"
-        --loop-playlist=no
-        --input-ipc-server="$YTPL_IPC"
-        --idle=no
-        --no-terminal
-        --script="$YTPL_LUA"
-        --save-position-on-quit=no
-        --msg-level=all=info
-        --log-file="$YTPL_LOG"
-      )
-      if [[ -n "$start_index" ]]; then mpv_args+=( "--playlist-start=$start_index" ); fi
+      [[ -e "$YTPL_IPC" ]] && rm -f "$YTPL_IPC"; [[ -f "$YTPL_NOWPLAYING" ]] && rm -f "$YTPL_NOWPLAYING"
+      local mode_flag=""; [[ "$(cat "$YTPL_MODE")" == "audio" ]] && mode_flag="--no-video"
+      local mpv_args=( $mode_flag --ytdl=yes --ytdl-format="bestaudio/best" --loop-playlist=no --input-ipc-server="$YTPL_IPC" --idle=no --no-terminal --script="$YTPL_LUA" --save-position-on-quit=no --msg-level=all=info --log-file="$YTPL_LOG" )
+      [[ -n "$start_index" ]] && mpv_args+=( "--playlist-start=$start_index" )
       mpv_args+=( "--playlist=$YTPL_PLAYLIST" )
 
-      # launch mpv (no setsid) and capture pid
       mpv "${(q)mpv_args[@]}" >/dev/null 2>&1 &
-      local mpv_pid=$!
-      echo "$mpv_pid" > "$YTPL_PID"
+      local mpv_pid=$!; echo "$mpv_pid" > "$YTPL_PID"
 
-      # wait up to 3s for IPC socket and mpv to stay alive
       local waited=0 ipc_ok=0
       while [[ $waited -lt 30 ]]; do
         if kill -0 "$mpv_pid" 2>/dev/null; then
-          if [[ -S "$YTPL_IPC" ]]; then ipc_ok=1; break; fi
+          [[ -S "$YTPL_IPC" ]] && { ipc_ok=1; break; }
         else
           break
         fi
@@ -290,23 +258,15 @@ USAGE
       done
 
       if [[ $ipc_ok -ne 1 ]]; then
-        echo "mpv failed to start (or IPC not created). Tail logs for clues:"
-        tail -n 200 "$YTPL_LOG"
-        echo "--- end of log tail ---"
+        echo "mpv failed to start or did not create IPC. Tail logs:"; tail -n 200 "$YTPL_LOG"
         [[ -f "$YTPL_PID" ]] && rm -f "$YTPL_PID"
         release_lock
         return 1
       fi
 
-      # record mpv pid in lockdir for --force/cleanup
-      if [[ -d "$YTPL_LOCKDIR" ]]; then printf "%s\n" "$mpv_pid" > "$YTPL_LOCKDIR/mpv_pid"; fi
-
+      [[ -d "$YTPL_LOCKDIR" ]] && printf "%s\n" "$mpv_pid" > "$YTPL_LOCKDIR/mpv_pid"
       printf "\n--- ytpl START %s (PID %s) ---\n" "$(date -u +"%Y-%m-%dT%H:%M:%SZ")" "$mpv_pid" >> "$YTPL_LOG"
-      if [[ -f "$YTPL_QUEUE" ]]; then
-        printf "Playlist (title|url):\n" >> "$YTPL_LOG"
-        sed -n '1,200p' "$YTPL_QUEUE" >> "$YTPL_LOG"
-        printf "\n" >> "$YTPL_LOG"
-      fi
+      [[ -f "$YTPL_QUEUE" ]] && { printf "Playlist (title|url):\n" >> "$YTPL_LOG"; sed -n '1,200p' "$YTPL_QUEUE" >> "$YTPL_LOG"; printf "\n" >> "$YTPL_LOG"; }
 
       echo "ytpl started in $(cat "$YTPL_MODE") mode (PID $mpv_pid)"
       echo "Logs: $YTPL_LOG"
@@ -315,106 +275,50 @@ USAGE
       ;;
 
     stop)
-      if is_running >/dev/null; then
-        local pid; pid=$(cat "$YTPL_PID")
-        kill "$pid" 2>/dev/null && echo "ytpl stopped" || echo "ytpl not running"
-        rm -f "$YTPL_PID"
-        [[ -e "$YTPL_IPC" ]] && rm -f "$YTPL_IPC"
-        [[ -f "$YTPL_NOWPLAYING" ]] && rm -f "$YTPL_NOWPLAYING"
-        [[ -f "$YTPL_PLAYLIST" ]] && rm -f "$YTPL_PLAYLIST"
-        [[ -f "$YTPL_QUEUE" ]] && rm -f "$YTPL_QUEUE"
-      else
-        echo "ytpl is not running"
-      fi
+      if is_running >/dev/null; then local pid; pid=$(cat "$YTPL_PID"); kill "$pid" 2>/dev/null && echo "ytpl stopped" || echo "ytpl not running"; rm -f "$YTPL_PID"; [[ -e "$YTPL_IPC" ]] && rm -f "$YTPL_IPC"; [[ -f "$YTPL_NOWPLAYING" ]] && rm -f "$YTPL_NOWPLAYING"; [[ -f "$YTPL_PLAYLIST" ]] && rm -f "$YTPL_PLAYLIST"; [[ -f "$YTPL_QUEUE" ]] && rm -f "$YTPL_QUEUE"; else echo "ytpl is not running"; fi
       release_lock
       ;;
 
     status)
-      if is_running >/dev/null; then
-        echo "ytpl is running (PID $(cat "$YTPL_PID")) in $(cat "$YTPL_MODE") mode"
-      else
-        echo "ytpl is not running"
-      fi
+      if is_running >/dev/null; then echo "ytpl is running (PID $(cat "$YTPL_PID")) in $(cat "$YTPL_MODE") mode"; else echo "ytpl is not running"; fi
       ;;
 
-    logs)
-      [[ -f "$YTPL_LOG" ]] && tail -n 30 "$YTPL_LOG" || echo "No logs found."
-      ;;
+    logs) [[ -f "$YTPL_LOG" ]] && tail -n 30 "$YTPL_LOG" || echo "No logs found." ;;
 
-    cleanup)
-      echo "Running cleanup: will attempt to kill any recorded mpv and remove lock/pid files."
-      force_clear_lock_and_kill
-      echo "Cleanup done."
-      ;;
+    cleanup) echo "Cleanup: killing mpv if recorded and clearing lock/pid"; force_clear_lock_and_kill; echo "Cleanup done." ;;
 
     player)
-      if [[ $# -eq 0 ]]; then
-        cat <<'PHELP'
+      if [[ $# -eq 0 ]]; then cat <<'PHELP'
 Usage: ytpl player <command> [options]
-
 Commands:
-  play              Toggle play/pause
-  stop              Stop mpv (quit)
-  next              Skip to next track (ensures start at 0:00)
-  prev              Go to previous track (ensures start at 0:00)
-  volume-up         Increase volume by 5%
-  volume-down       Decrease volume by 5%
-  seek-forward      Seek forward 10s
-  seek-backward     Seek backward 10s
-  mode audio        Switch mode to audio (restart required)
-  mode video        Switch mode to video (restart required)
-  show              Show current track and queue context (prev 2 / current / next 3)
+  play  stop  next  prev  volume-up  volume-down  seek-forward  seek-backward  mode audio|video  show
 PHELP
         return
       fi
-
       if [[ ! -S "$YTPL_IPC" ]]; then echo "ytpl player: IPC socket not found. Is ytpl running?"; return 1; fi
-
       local cmd=$1; shift
       case "$cmd" in
-        play) mpv_ipc '{ "command": ["cycle", "pause"] }' && echo "OK: toggled play/pause" || echo "Error sending command" ;;
-        stop) mpv_ipc '{ "command": ["quit"] }' && echo "OK: quit sent" || echo "Error sending quit" ;;
+        play) mpv_ipc '{ "command": ["cycle", "pause"] }' && echo "OK: toggled play/pause" || echo "Error" ;;
+        stop) mpv_ipc '{ "command": ["quit"] }' && echo "OK: quit sent" || echo "Error" ;;
         next)
           local before pos_after; before=$(mpv_get_prop "playlist-pos" 2>/dev/null || echo "")
           mpv_ipc '{ "command": ["playlist-next", "force"] }'
           local i=0
-          while [[ $i -lt 20 ]]; do
-            sleep 0.05
-            pos_after=$(mpv_get_prop "playlist-pos" 2>/dev/null || echo "")
-            if [[ -n "$pos_after" && "$pos_after" != "$before" ]]; then
-              mpv_ipc '{ "command": ["set_property", "time-pos", 0] }' >/dev/null 2>&1
-              echo "OK: next -> pos=$pos_after"
-              break
-            fi
-            i=$((i+1))
-          done
-          if [[ $i -ge 20 ]]; then echo "Warning: next may not have taken effect; check logs."; fi
-          ;;
+          while [[ $i -lt 20 ]]; do sleep 0.05; pos_after=$(mpv_get_prop "playlist-pos" 2>/dev/null || echo ""); if [[ -n "$pos_after" && "$pos_after" != "$before" ]]; then mpv_ipc '{ "command": ["set_property", "time-pos", 0] }' >/dev/null 2>&1; echo "OK: next -> pos=$pos_after"; break; fi; i=$((i+1)); done
+          [[ $i -ge 20 ]] && echo "Warning: next may not have taken effect; check logs."
+        ;;
         prev)
           local before pos_after; before=$(mpv_get_prop "playlist-pos" 2>/dev/null || echo "")
           mpv_ipc '{ "command": ["playlist-prev", "force"] }'
           local i=0
-          while [[ $i -lt 20 ]]; do
-            sleep 0.05
-            pos_after=$(mpv_get_prop "playlist-pos" 2>/dev/null || echo "")
-            if [[ -n "$pos_after" && "$pos_after" != "$before" ]]; then
-              mpv_ipc '{ "command": ["set_property", "time-pos", 0] }' >/dev/null 2>&1
-              echo "OK: prev -> pos=$pos_after"
-              break
-            fi
-            i=$((i+1))
-          done
-          if [[ $i -ge 20 ]]; then echo "Warning: prev may not have taken effect; check logs."; fi
-          ;;
-        volume-up) mpv_ipc '{ "command": ["add", "volume", 5] }' && echo "OK: volume up" || echo "Error sending volume" ;;
-        volume-down) mpv_ipc '{ "command": ["add", "volume", -5] }' && echo "OK: volume down" || echo "Error sending volume" ;;
-        seek-forward) mpv_ipc '{ "command": ["seek", 10, "relative"] }' && echo "OK: seek forward" || echo "Error sending seek" ;;
-        seek-backward) mpv_ipc '{ "command": ["seek", -10, "relative"] }' && echo "OK: seek backward" || echo "Error sending seek" ;;
-        mode)
-          local newmode=$1
-          if [[ "$newmode" != "audio" && "$newmode" != "video" ]]; then echo "Usage: ytpl player mode {audio|video}"; return 1; fi
-          echo "$newmode" > "$YTPL_MODE"; echo "Mode switched to $newmode. Restart ytpl to apply."
-          ;;
+          while [[ $i -lt 20 ]]; do sleep 0.05; pos_after=$(mpv_get_prop "playlist-pos" 2>/dev/null || echo ""); if [[ -n "$pos_after" && "$pos_after" != "$before" ]]; then mpv_ipc '{ "command": ["set_property", "time-pos", 0] }' >/dev/null 2>&1; echo "OK: prev -> pos=$pos_after"; break; fi; i=$((i+1)); done
+          [[ $i -ge 20 ]] && echo "Warning: prev may not have taken effect; check logs."
+        ;;
+        volume-up) mpv_ipc '{ "command": ["add", "volume", 5] }' && echo "OK: volume up" || echo "Error" ;;
+        volume-down) mpv_ipc '{ "command": ["add", "volume", -5] }' && echo "OK: volume down" || echo "Error" ;;
+        seek-forward) mpv_ipc '{ "command": ["seek", 10, "relative"] }' && echo "OK: seek forward" || echo "Error" ;;
+        seek-backward) mpv_ipc '{ "command": ["seek", -10, "relative"] }' && echo "OK: seek backward" || echo "Error" ;;
+        mode) local newmode=$1; [[ "$newmode" != "audio" && "$newmode" != "video" ]] && { echo "Usage: ytpl player mode {audio|video}"; return 1; }; echo "$newmode" > "$YTPL_MODE"; echo "Mode switched to $newmode. Restart ytpl to apply." ;;
         show)
           local current="Unknown"; [[ -f "$YTPL_NOWPLAYING" ]] && current=$(cat "$YTPL_NOWPLAYING")
           echo "Current track: $current"
@@ -423,12 +327,9 @@ PHELP
           pos=$(printf '{ "command": ["get_property", "playlist-pos"] }' | socat - "$YTPL_IPC" 2>/dev/null | jq -r '.data // empty' 2>/dev/null)
           if [[ -n "$playlist_json" && "$playlist_json" != "{}" ]]; then
             IFS=$'\n' read -r -d '' -A titles < <(echo "$playlist_json" | jq -r '.data[]?.filename' && printf '\0')
-            local start=$(( pos - 2 < 0 ? 0 : pos - 2 ))
-            local end=$(( pos + 3 >= ${#titles[@]} ? ${#titles[@]}-1 : pos + 3 ))
+            local start=$(( pos - 2 < 0 ? 0 : pos - 2 )); local end=$(( pos + 3 >= ${#titles[@]} ? ${#titles[@]}-1 : pos + 3 ))
             echo "Queue context (prev 2 / current / next 3):"
-            for i in $(seq $start $end); do
-              if [[ $i -eq $pos ]]; then echo "▶ ${titles[$i]}"; else echo "  ${titles[$i]}"; fi
-            done
+            for i in $(seq $start $end); do if [[ $i -eq $pos ]]; then echo "▶ ${titles[$i]}"; else echo "  ${titles[$i]}"; fi; done
           else
             if [[ -f "$YTPL_QUEUE" ]]; then
               local -a qtitles urls; local idx=0 found=-1 total
@@ -442,13 +343,18 @@ PHELP
               echo "Queue not available."
             fi
           fi
-          ;;
+        ;;
         *) echo "ytpl player: Unknown command '$cmd'. Run 'ytpl player' for help." ;;
       esac
-      ;;
-
-    *)
-      echo "Unknown subcommand: $sub"; echo "Try 'ytpl -h' or 'ytpl' for usage."; return 1
-      ;;
+    ;;
+    *) echo "Unknown subcommand: $sub"; echo "Try 'ytpl -h' or 'ytpl' for usage."; return 1 ;;
   esac
 }
+
+# Testing steps
+#
+# source ./configs/zsh/ohmyzsh-custom/zsh-youtube-player.zsh
+#
+# ytpl start <playlist_url> -v — check /tmp/ytpl.log and output.
+#
+# ytpl status, ytpl player show, ytpl player next, ytpl stop.
