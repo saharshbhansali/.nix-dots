@@ -5,6 +5,7 @@ pipx ensurepath &> /dev/null
 
 pipx install yt-dlp &> /dev/null
 
+# YTPL - YouTube Playlist Audio/Video Daemon
 YTPL_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/ytpl"
 mkdir -p "$YTPL_DIR"
 
@@ -24,7 +25,7 @@ YTPL_CONFIG="$YTPL_DIR/config"   # optional config file
 YTPL_LUA="$YTPL_DIR/mpv_nowplaying.lua"
 if [[ ! -f "$YTPL_LUA" ]]; then
 cat > "$YTPL_LUA" <<'EOF'
--- writes current track title to file
+-- writes current track title to file and sends desktop notification
 local nowplaying_file = os.getenv("YTPL_NOWPLAYING") or "/tmp/ytpl.nowplaying"
 
 mp.register_event("file-loaded", function()
@@ -35,6 +36,8 @@ mp.register_event("file-loaded", function()
             f:write(title .. "\n")
             f:close()
         end
+        -- send desktop notification
+        os.execute(string.format("notify-send 'Now Playing' '%s'", title:gsub("'", "'\\''")))
     end
 end)
 EOF
@@ -53,6 +56,11 @@ ytpl() {
             if [[ -z "$url" ]]; then
                 echo "Usage: ytpl start <playlist_url>"
                 return 1
+            fi
+
+            # Normalize YouTube Music playlist URLs
+            if [[ "$url" =~ list=([^&]+) ]]; then
+                url="https://music.youtube.com/playlist?list=${BASH_REMATCH[1]}"
             fi
 
             if [[ -f "$YTPL_PID" ]] && kill -0 "$(cat "$YTPL_PID")" 2>/dev/null; then
@@ -77,6 +85,7 @@ ytpl() {
                 mpv $mode_flag \
                     --ytdl=yes \
                     --ytdl-format="bestaudio/best" \
+                    --ytdl-raw-options=yes-playlist=yes \
                     --loop-playlist=no \
                     --input-ipc-server="$YTPL_IPC" \
                     --idle=no \
@@ -193,17 +202,36 @@ ytpl() {
                     fi
                     ;;
                 *)
-                    echo "Usage: ytpl player {play|pause|stop|next|prev|volume-up|volume-down|seek-forward|seek-backward|mode audio|mode video|show}"
+                    cat <<'EOM'
+Usage: ytpl player <command> [options]
+
+Commands:
+  play              Toggle playback (play/pause)
+  pause             Toggle playback (play/pause)
+  stop              Stop playback and quit mpv
+  next              Skip to next song (starts at 0:00)
+  prev              Go to previous song (starts at 0:00)
+  volume-up         Increase volume by 5%
+  volume-down       Decrease volume by 5%
+  seek-forward      Seek forward 10 seconds
+  seek-backward     Seek backward 10 seconds
+  mode audio        Switch to audio-only mode (restart required)
+  mode video        Switch to video mode (restart required)
+  show              Display current track and queue context
+EOM
                     ;;
             esac
             ;;
         *)
-            echo "Usage:"
-            echo "  ytpl start <playlist_url>"
-            echo "  ytpl stop"
-            echo "  ytpl status"
-            echo "  ytpl logs"
-            echo "  ytpl player {play|pause|stop|next|prev|volume-up|volume-down|seek-forward|seek-backward|mode audio|mode video|show}"
+            cat <<'EOM'
+Usage:
+  ytpl start <playlist_url>         Start playing a playlist
+  ytpl stop                         Stop playback
+  ytpl status                       Show daemon status
+  ytpl logs                         Show last 30 lines of logs
+  ytpl player <command> [options]   Control playback and see queue
+
+EOM
             ;;
     esac
 }
