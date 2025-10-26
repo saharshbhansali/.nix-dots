@@ -11,12 +11,12 @@ mkdir -p "$YTPL_DIR"
 
 # Files
 YTPL_PID="$YTPL_DIR/ytpl.pid"
-YTPL_LOG="$YTPL_DIR/ytpl.log"
+YTPL_LOG="/tmp/ytpl.log"             # moved to /tmp to avoid bloating
 YTPL_NOWPLAYING="$YTPL_DIR/ytpl.nowplaying"
 YTPL_IPC="$YTPL_DIR/ytpl.sock"
 YTPL_LAST="$YTPL_DIR/last_playlist"
-YTPL_MODE="$YTPL_DIR/mode"       # audio or video
-YTPL_CONFIG="$YTPL_DIR/config"   # optional config file
+YTPL_MODE="$YTPL_DIR/mode"           # audio or video
+YTPL_CONFIG="$YTPL_DIR/config"       # optional config file
 
 # Default mode
 [[ ! -f "$YTPL_MODE" ]] && echo "audio" > "$YTPL_MODE"
@@ -74,29 +74,30 @@ ytpl() {
             [[ -e "$YTPL_IPC" ]] && rm -f "$YTPL_IPC"
             [[ -f "$YTPL_NOWPLAYING" ]] && rm -f "$YTPL_NOWPLAYING"
 
+            # Clear old log
+            > "$YTPL_LOG"
+
             # Determine mode
             local mode_flag=""
             if [[ "$(cat "$YTPL_MODE")" == "audio" ]]; then
                 mode_flag="--no-video"
             fi
 
-            # Start mpv
-            (
-                mpv $mode_flag \
-                    --ytdl=yes \
-                    --ytdl-format="bestaudio/best" \
-                    --ytdl-raw-options=yes-playlist=yes \
-                    --loop-playlist=no \
-                    --input-ipc-server="$YTPL_IPC" \
-                    --idle=no \
-                    --no-terminal \
-                    --script="$YTPL_LUA" \
-                    --save-position-on-quit=no \
-                    --really-quiet \
-                    "$url" \
-                    >"$YTPL_LOG" 2>&1 &
-                echo $! > "$YTPL_PID"
-            )
+            # Start mpv with proper logging
+            mpv $mode_flag \
+                --ytdl=yes \
+                --ytdl-format="bestaudio/best" \
+                --ytdl-raw-options=yes-playlist=yes \
+                --loop-playlist=no \
+                --input-ipc-server="$YTPL_IPC" \
+                --idle=no \
+                --no-terminal \
+                --script="$YTPL_LUA" \
+                --save-position-on-quit=no \
+                --msg-level=all=info \
+                "$url" \
+                >"$YTPL_LOG" 2>&1 &
+            echo $! > "$YTPL_PID"
 
             echo "ytpl started in $(cat "$YTPL_MODE") mode (PID $(cat "$YTPL_PID"))"
             echo "Logs: $YTPL_LOG"
@@ -175,11 +176,9 @@ ytpl() {
                         return 1
                     fi
 
-                    # Current track
                     local current="Unknown"
                     [[ -f "$YTPL_NOWPLAYING" ]] && current=$(cat "$YTPL_NOWPLAYING")
 
-                    # Queue context
                     local playlist_json pos
                     playlist_json=$(printf '{ "command": ["get_property", "playlist"] }' | socat - "$YTPL_IPC")
                     pos=$(printf '{ "command": ["get_property", "playlist-pos"] }' | socat - "$YTPL_IPC" | jq '.data')
