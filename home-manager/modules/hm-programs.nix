@@ -13,5 +13,6 @@
   programs.browserpass.enable = true;
   programs.ghostty.enable = true;
   programs.zellij.enable = true;
+  programs.mpv.enable = true;
 
 }

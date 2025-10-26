@@ -75,6 +75,7 @@
     litellm
 
     ## Media
+    # mpv
     vlc
     # stremio
     obsidian
