@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
-# ytpl - YouTube Playlist Audio/Video Daemon
-# Merged version: lockdir, stale timeout (30m), --force, doctor, cookies auto-detect,
+# ytpl - YouTube Playlist Audio/Video Daemon (updated drop-in)
+# Supports: lockdir, stale timeout (30m), --force, doctor, cookies auto-detect,
 # mpv IPC player controls, verbose yt-dlp extraction, log rotation, traps for cleanup.
 
 YTPL_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/ytpl"
@@ -16,8 +16,7 @@ YTPL_PLAYLIST="$YTPL_DIR/playlist.txt"
 YTPL_LUA="$YTPL_DIR/mpv_nowplaying.lua"
 YTDLP_COOKIES_PATH="${YTDLP_COOKIES_PATH:-$HOME/.config/yt-dlp/cookies.txt}"
 
-# how old a lock can be before considered stale (in seconds) -- 30 minutes
-LOCK_STALE_SECS=$((30 * 60))
+LOCK_STALE_SECS=$((30*60))  # 30 minutes
 
 mkdir -p "$YTPL_DIR"
 export YTPL_NOWPLAYING
@@ -28,7 +27,7 @@ ensure_lua() {
   cat > "$YTPL_LUA" <<'EOF'
 local nowplaying_file = os.getenv("YTPL_NOWPLAYING") or "/tmp/ytpl.nowplaying"
 mp.register_event("file-loaded", function()
-    mp.set_property("time-pos", 0)  -- force start at 0s
+    mp.set_property("time-pos", 0)
     local title = mp.get_property("media-title")
     if title then
         local f = io.open(nowplaying_file, "w")
@@ -42,13 +41,13 @@ EOF
 rotate_or_clear_log() {
   local max=$((200 * 1024 * 1024))
   if [[ -f "$YTPL_LOG" ]]; then
-    local size
+    local size=0
     if stat --version >/dev/null 2>&1; then
       size=$(stat -c%s "$YTPL_LOG" 2>/dev/null || echo 0)
     else
       size=$(wc -c < "$YTPL_LOG" 2>/dev/null || echo 0)
     fi
-    if [[ -n "$size" && "$size" -ge "$max" ]]; then
+    if [[ "$size" -ge "$max" ]]; then
       mv "$YTPL_LOG" "${YTPL_LOG}.$(date +%s)"
       : > "$YTPL_LOG"
     else
@@ -60,39 +59,23 @@ rotate_or_clear_log() {
 }
 
 # ------------------------- Lockdir helpers -------------------------
-_lock_ts() {
-  # read owner timestamp created at lock time
-  [[ -f "$YTPL_LOCKDIR/owner_ts" ]] || echo 0
-  cat "$YTPL_LOCKDIR/owner_ts" 2>/dev/null || echo 0
-}
-
-_lock_owner() {
-  cat "$YTPL_LOCKDIR/owner_pid" 2>/dev/null || echo ""
-}
-
-_lock_mpvpid() {
-  cat "$YTPL_LOCKDIR/mpv_pid" 2>/dev/null || echo ""
-}
+_lock_ts() { cat "$YTPL_LOCKDIR/owner_ts" 2>/dev/null || echo 0 }
+_lock_owner() { cat "$YTPL_LOCKDIR/owner_pid" 2>/dev/null || echo "" }
+_lock_mpvpid() { cat "$YTPL_LOCKDIR/mpv_pid" 2>/dev/null || echo "" }
 
 _acquire_lock_force_if_stale() {
-  # Return codes:
-  # 0 acquired
-  # 1 already-held-by-live-owner
-  # 2 failed to acquire (other reason)
   if mkdir "$YTPL_LOCKDIR" 2>/dev/null; then
     echo "$$" > "$YTPL_LOCKDIR/owner_pid"
     date +%s > "$YTPL_LOCKDIR/owner_ts"
     return 0
   fi
 
-  # lock exists; check staleness
   local ownerpid owner_ts now age
   ownerpid=$(_lock_owner)
   owner_ts=$(_lock_ts)
   now=$(date +%s)
   age=$(( now - (owner_ts:-0) ))
 
-  # If age exceeds stale threshold, remove lock and create new
   if [[ $age -ge $LOCK_STALE_SECS ]]; then
     echo "ytpl: found stale lock (age ${age}s) — clearing" >> "$YTPL_LOG"
     rm -rf "$YTPL_LOCKDIR"
@@ -103,12 +86,12 @@ _acquire_lock_force_if_stale() {
     fi
   fi
 
-  # If owner PID exists and is alive -> cannot acquire
-  if [[ -n "$ownerpid" ]] && kill -0 "$ownerpid" 2>/dev/null; then
-    return 1
+  if [[ -n "$ownerpid" ]]; then
+    if kill -0 "$ownerpid" 2>/dev/null; then
+      return 1
+    fi
   fi
 
-  # owner dead but not stale yet; remove and attempt to create
   rm -rf "$YTPL_LOCKDIR"
   if mkdir "$YTPL_LOCKDIR" 2>/dev/null; then
     echo "$$" > "$YTPL_LOCKDIR/owner_pid"
@@ -118,9 +101,7 @@ _acquire_lock_force_if_stale() {
   return 2
 }
 
-acquire_lock() {
-  _acquire_lock_force_if_stale
-}
+acquire_lock() { _acquire_lock_force_if_stale }
 
 release_lock() {
   [[ ! -d "$YTPL_LOCKDIR" ]] && return 0
@@ -128,19 +109,17 @@ release_lock() {
   ownerpid=$(_lock_owner)
   mpvpid=$(_lock_mpvpid)
 
-  # If we are the owner, remove lock
-  if [[ "$ownerpid" == "$$" ]]; then remove=1; fi
-
-  # If owner not present or dead, remove
-  if [[ -z "$ownerpid" ]]; then remove=1; fi
-  if [[ -n "$ownerpid" && ! kill -0 "$ownerpid" 2>/dev/null ]]; then remove=1; fi
-
-  # If mpv not present, remove
-  if [[ -n "$mpvpid" && ! kill -0 "$mpvpid" 2>/dev/null ]]; then remove=1; fi
-
-  if [[ $remove -eq 1 ]]; then
-    rm -rf "$YTPL_LOCKDIR"
+  if [[ "$ownerpid" == "$$" || -z "$ownerpid" ]]; then
+    remove=1
+  elif ! kill -0 "$ownerpid" 2>/dev/null; then
+    remove=1
+  elif [[ -n "$mpvpid" ]]; then
+    if ! kill -0 "$mpvpid" 2>/dev/null; then
+      remove=1
+    fi
   fi
+
+  [[ $remove -eq 1 ]] && rm -rf "$YTPL_LOCKDIR"
 }
 
 force_clear_lock_and_kill() {
@@ -149,38 +128,29 @@ force_clear_lock_and_kill() {
     local mpvpid ownerpid
     mpvpid=$(_lock_mpvpid)
     ownerpid=$(_lock_owner)
-    [[ -n "$mpvpid" ]] && kill "$mpvpid" 2>/dev/null || true
+    [[ -n "$mpvpid" ]] && kill "$mpvpid" 2>/dev/null
     sleep 0.15
-    [[ -n "$mpvpid" ]] && kill -9 "$mpvpid" 2>/dev/null || true
-    [[ -n "$ownerpid" ]] && kill "$ownerpid" 2>/dev/null || true
+    [[ -n "$mpvpid" ]] && kill -9 "$mpvpid" 2>/dev/null
+    [[ -n "$ownerpid" ]] && kill "$ownerpid" 2>/dev/null
     rm -rf "$YTPL_LOCKDIR"
   fi
-
-  if [[ -f "$YTPL_PID" ]]; then
-    local pid; pid=$(cat "$YTPL_PID" 2>/dev/null || echo "")
-    [[ -n "$pid" ]] && kill "$pid" 2>/dev/null || true
-    sleep 0.15
-    [[ -n "$pid" ]] && kill -9 "$pid" 2>/dev/null || true
-    rm -f "$YTPL_PID"
-  fi
+  [[ -f "$YTPL_PID" ]] && local pid=$(cat "$YTPL_PID" 2>/dev/null) && [[ -n "$pid" ]] && kill "$pid" 2>/dev/null; sleep 0.15
+  [[ -f "$YTPL_PID" ]] && rm -f "$YTPL_PID"
 }
 
-# make sure we clean up when shell exits (only remove if this shell owns lock)
-_on_exit() {
-  release_lock
-}
 trap _on_exit EXIT INT TERM
+_on_exit() { release_lock }
 
 # ------------------------- mpv IPC helpers -------------------------
 mpv_ipc() {
-  if [[ ! -S "$YTPL_IPC" ]]; then return 2; fi
+  [[ ! -S "$YTPL_IPC" ]] && return 2
   printf '%s\n' "$1" | socat - "$YTPL_IPC" 2>/dev/null
   return $?
 }
 
 mpv_get_prop() {
   local prop="$1"
-  if [[ ! -S "$YTPL_IPC" ]]; then echo ""; return 1; fi
+  [[ ! -S "$YTPL_IPC" ]] && echo "" && return 1
   printf '{ "command": ["get_property", "%s"] }' "$prop" | socat - "$YTPL_IPC" 2>/dev/null | jq -r '.data // empty' 2>/dev/null
 }
 
@@ -190,7 +160,6 @@ build_playlist_file() {
   [[ -f "$YTPL_QUEUE" ]] && rm -f "$YTPL_QUEUE"
   [[ -f "$YTPL_PLAYLIST" ]] && rm -f "$YTPL_PLAYLIST"
 
-  # 1) forced browser override
   if [[ -n "$cookie_override" ]]; then
     echo "Attempting cookie extraction from browser (forced): $cookie_override" >> "$YTPL_LOG"
     if yt-dlp $ytdlp_verbose --cookies-from-browser "$cookie_override" -j --flat-playlist "$url" 2>>"$YTPL_LOG" | jq -r '.title + "|" + .url' > "${YTPL_QUEUE}.tmp"; then
@@ -203,7 +172,6 @@ build_playlist_file() {
     fi
   fi
 
-  # 2) explicit cookies file
   if [[ -f "$YTDLP_COOKIES_PATH" ]]; then
     echo "Using explicit cookie file: $YTDLP_COOKIES_PATH" >> "$YTPL_LOG"
     if yt-dlp $ytdlp_verbose --cookies "$YTDLP_COOKIES_PATH" -j --flat-playlist "$url" 2>>"$YTPL_LOG" | jq -r '.title + "|" + .url' > "${YTPL_QUEUE}.tmp"; then
@@ -216,7 +184,6 @@ build_playlist_file() {
     fi
   fi
 
-  # 3) try browsers in order
   local -a browsers=(chrome firefox chromium vivaldi zen brave edge opera whale)
   for b in "${browsers[@]}"; do
     echo "Trying cookies from browser: $b" >> "$YTPL_LOG"
@@ -231,7 +198,6 @@ build_playlist_file() {
     fi
   done
 
-  # nothing worked: print friendly instructions
   echo "ERROR: yt-dlp could not extract playlist entries (cookies missing or browser extraction failed)" >> "$YTPL_LOG"
   cat >> "$YTPL_LOG" <<'EOLOG'
 COOKIE EXPORT INSTRUCTIONS (no 3rd-party extensions)
@@ -240,55 +206,38 @@ You need a Netscape-format cookies.txt file for yt-dlp at:
 
 Two safe ways to obtain it without installing an extension:
 A) Use yt-dlp to export cookies from your local browser (preferred):
-   # Example for Chrome (change 'chrome' to 'firefox', 'chromium', etc).
    yt-dlp --cookies-from-browser chrome --cookies "${YTDLP_COOKIES_PATH}"
 
-   This reads your browser profile and writes a cookies.txt file in Netscape format which yt-dlp can reuse.
-
-B) Manually export cookies using your browser Developer Tools:
-   1. Open the browser (Chrome/Chromium/Brave/Edge/Vivaldi/Opera).
-   2. Visit https://www.youtube.com and sign in.
-   3. Open Developer Tools (F12) -> Application (or Storage) tab.
-   4. Under "Cookies", select the cookie store for "https://www.youtube.com".
-   5. For each cookie row, copy name and value. Construct a line in Netscape cookie format:
-      <domain>  <flag>  <path>  <secure>  <expiration>  <name>  <value>
-      Example (use 0 for expiration to mean session):
-      .youtube.com	TRUE	/	FALSE	0	YSC	abcd1234
-   6. Save all cookie lines to the path:
-      ${YTDLP_COOKIES_PATH}
-   7. Secure the file:
-      chmod 600 ${YTDLP_COOKIES_PATH}
+B) Manually export cookies via DevTools as Netscape-format cookies.txt
 EOLOG
 
   cat <<MSG
 yt-dlp needs cookies to access this playlist (YouTube is asking you to sign in).
 I tried auto-reading browser cookies (chrome, firefox, chromium, vivaldi, brave, edge, opera, whale) and none worked.
-
-Two recommended ways to produce the cookies file (no 3rd-party extensions):
-  1) Let yt-dlp export from your browser:
-     yt-dlp --cookies-from-browser chrome --cookies "${YTDLP_COOKIES_PATH}"
-  2) Or manually copy cookies via DevTools and save them in Netscape cookies.txt format at:
-     ${YTDLP_COOKIES_PATH}
-Then protect the file:
-  chmod 600 ${YTDLP_COOKIES_PATH}
-
-After creating the cookies file, re-run:
+Create a cookies.txt at ${YTDLP_COOKIES_PATH}, chmod 600, then re-run:
   ytpl start <playlist_url> -v
-
-(See ${YTPL_LOG} for details.)
+See ${YTPL_LOG} for details.
 MSG
 
   return 1
 }
 
+
 # ------------------------- basic helpers -------------------------
 is_running() {
   if [[ -f "$YTPL_PID" ]]; then
     local pid; pid=$(cat "$YTPL_PID" 2>/dev/null || echo "")
-    if [[ -n "$pid" ]] && kill -0 "$pid" 2>/dev/null; then
-      echo "$pid"; return 0
+    if [[ -n "$pid" ]]; then
+      if kill -0 "$pid" 2>/dev/null; then
+        echo "$pid"
+        return 0
+      else
+        rm -f "$YTPL_PID"
+        return 1
+      fi
     else
-      rm -f "$YTPL_PID"; return 1
+      rm -f "$YTPL_PID"
+      return 1
     fi
   fi
   return 1
@@ -311,6 +260,7 @@ _check_prereqs() {
   done
   return 0
 }
+
 
 # ------------------------- Main CLI -------------------------
 ytpl() {
