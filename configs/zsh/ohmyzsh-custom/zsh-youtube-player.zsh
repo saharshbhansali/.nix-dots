@@ -510,28 +510,60 @@ PHELP
         seek-backward) mpv_ipc '{ "command": ["seek", -10, "relative"] }' && echo "OK: seek backward" || echo "Error" ;;
         mode) local newmode=$1; [[ "$newmode" != "audio" && "$newmode" != "video" ]] && { echo "Usage: ytpl player mode {audio|video}"; return 1; }; echo "$newmode" > "$YTPL_MODE"; echo "Mode switched to $newmode. Restart ytpl to apply." ;;
         show)
-          local current="Unknown"; [[ -f "$YTPL_NOWPLAYING" ]] && current=$(cat "$YTPL_NOWPLAYING")
+          local current="Unknown"
+          [[ -f "$YTPL_NOWPLAYING" ]] && current=$(cat "$YTPL_NOWPLAYING")
+
           echo "Current track: $current"
+
+          # Try mpv IPC first
           local playlist_json pos
           playlist_json=$(printf '{ "command": ["get_property", "playlist"] }' | socat - "$YTPL_IPC" 2>/dev/null)
           pos=$(printf '{ "command": ["get_property", "playlist-pos"] }' | socat - "$YTPL_IPC" 2>/dev/null | jq -r '.data // empty' 2>/dev/null)
+
           if [[ -n "$playlist_json" && "$playlist_json" != "{}" ]]; then
+            # Zsh 1-based array
             IFS=$'\n' read -r -d '' -A titles < <(echo "$playlist_json" | jq -r '.data[]?.filename' && printf '\0')
-            local start=$(( pos - 2 < 0 ? 0 : pos - 2 )); local end=$(( pos + 3 >= ${#titles[@]} ? ${#titles[@]}-1 : pos + 3 ))
+            local start=$(( pos - 1 - 2 < 0 ? 0 : pos - 1 - 2 ))  # prev 2
+            local end=$(( pos - 1 + 3 >= ${#titles[@]} ? ${#titles[@]}-1 : pos - 1 + 3 ))  # next 3
             echo "Queue context (prev 2 / current / next 3):"
-            for i in $(seq $start $end); do if [[ $i -eq $pos ]]; then echo "▶ ${titles[$i]}"; else echo "  ${titles[$i]}"; fi; done
-          else
-            if [[ -f "$YTPL_QUEUE" ]]; then
-              local -a qtitles urls; local idx=0 found=-1 total
-              while IFS='|' read -r t u; do qtitles[idx]="$t"; urls[idx]="$u"; [[ "$t" == "$current" ]] && found=$idx; idx=$((idx+1)); done < "$YTPL_QUEUE"
-              total=${#qtitles[@]}
-              if [[ $found -eq -1 ]]; then echo "Queue available but current track not found in local queue."; return 0; fi
-              local start=$(( found - 2 < 0 ? 0 : found - 2 )); local end=$(( found + 3 >= total ? total - 1 : found + 3 ))
-              echo "Queue context (prev 2 / current / next 3):"
-              for i in $(seq $start $end); do if [[ $i -eq $found ]]; then echo "▶ ${qtitles[$i]}"; else echo "  ${qtitles[$i]}"; fi; done
-            else
-              echo "Queue not available."
+            for i in $(seq $start $end); do
+              if [[ $i -eq $(( pos - 1 )) ]]; then
+                echo "▶ ${titles[$((i+1))]}"  # +1 because titles[] is 1-based
+              else
+                echo "  ${titles[$((i+1))]}"
+              fi
+            done
+          elif [[ -f "$YTPL_QUEUE" ]]; then
+            # fallback: local queue
+            local -a qtitles urls
+            local idx=1 found=-1 total
+            while IFS='|' read -r t u; do
+              qtitles[idx]="$t"
+              urls[idx]="$u"
+              [[ "$t" == "$current" ]] && found=$idx
+              idx=$((idx+1))
+            done < "$YTPL_QUEUE"
+
+            total=${#qtitles[@]}
+
+            if [[ $found -eq -1 ]]; then
+              echo "Queue available but current track not found in local queue."
+              return 0
             fi
+
+            local start=$(( found - 2 < 1 ? 1 : found - 2 ))
+            local end=$(( found + 3 > total ? total : found + 3 ))
+
+            echo "Queue context (prev 2 / current / next 3):"
+            for i in $(seq $start $end); do
+              if [[ $i -eq $found ]]; then
+                echo "▶ ${qtitles[$i]}"
+              else
+                echo "  ${qtitles[$i]}"
+              fi
+            done
+          else
+            echo "Queue not available."
           fi
         ;;
         *) echo "ytpl player: Unknown command '$cmd'. Run 'ytpl player' for help." ;;
