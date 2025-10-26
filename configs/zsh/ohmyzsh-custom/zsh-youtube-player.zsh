@@ -295,21 +295,52 @@ player_cmd() {
       echo "OK: moved to previous track" ;; 
     volume-up) mpv_ipc '{ "command": ["add", "volume", 5] }' && echo "OK: volume up" ;; 
     volume-down) mpv_ipc '{ "command": ["add", "volume", -5] }' && echo "OK: volume down" ;; 
+    set-volume)
+      local vol="$1"
+      if [[ -z "$vol" || ! "$vol" =~ ^[0-9]+$ || "$vol" -lt 0 || "$vol" -gt 100 ]]; then
+        echo "Usage: ytpl player set-volume <0-100>"
+        return 1
+      fi
+      mpv_ipc "{ \"command\": [\"set_property\", \"volume\", $vol] }" && echo "OK: volume set to $vol%" ;;
     seek-forward) mpv_ipc '{ "command": ["seek", 10, "relative"] }' && echo "OK: seek forward" ;; 
     seek-backward) mpv_ipc '{ "command": ["seek", -10, "relative"] }' && echo "OK: seek backward" ;; 
-    mode) local newmode=$1; [[ "$newmode" != "audio" && "$newmode" != "video" ]] && { echo "Usage: ytpl player mode {audio|video}"; return 1; }; echo "$newmode" > "$YTPL_MODE"; echo "Mode switched to $newmode. Restart ytpl to apply." ;; 
+    mode) 
+      local newmode=$1
+      [[ "$newmode" != "audio" && "$newmode" != "video" ]] && { echo "Usage: ytpl player mode {audio|video}"; return 1; }
+      echo "$newmode" > "$YTPL_MODE"
+      echo "Mode switched to $newmode. Restart ytpl to apply." 
+      ;; 
     show)
-      local cur_idx=$(cat "$TMP_QUEUE_IDX" 2>/dev/null || echo 0)
+      [[ ! -S "$YTPL_IPC" ]] && { echo "mpv not running or IPC missing"; return 1; }
+
       local total=$(queue_len)
-      local start=$(( cur_idx - 2 < 0 ? 0 : cur_idx - 2 ))
-      local end=$(( cur_idx + 3 >= total ? total - 1 : cur_idx + 3 ))
+      local cur_idx=$(mpv_get_prop playlist-pos)
+      [[ -z "$cur_idx" ]] && cur_idx=0
+
       echo "Queue context (prev 2 / current / next 3):"
-      for i in $(seq $start $end); do
+
+      # Show previous 2 tracks
+      for offset in 2 1; do
+        local i=$(( cur_idx - offset ))
+        [[ $i -ge 0 ]] || continue
         local entry=$(queue_get $i)
         local title=$(echo "$entry" | cut -d'|' -f1)
-        [[ $i -eq $cur_idx ]] && echo "▶ $title" || echo "  $title"
+        echo "  $title"
       done
-      ;; 
+
+      # Show current track
+      local cur_title=$(mpv_get_prop media-title)
+      echo "▶ ${cur_title:-$(queue_get $cur_idx | cut -d'|' -f1)}"
+
+      # Show next 3 tracks
+      for offset in 1 2 3; do
+        local i=$(( cur_idx + offset ))
+        [[ $i -lt $total ]] || continue
+        local entry=$(queue_get $i)
+        local title=$(echo "$entry" | cut -d'|' -f1)
+        echo "  $title"
+      done
+      ;;
     *) echo "Unknown player command '$cmd'. Run 'ytpl player' for help." ;; 
   esac
 }
@@ -325,17 +356,18 @@ ytpl() {
         cat <<'PHELP'
 Usage: ytpl player <command> [options]
 Commands:
-  play            Toggle play/pause
-  pause           Toggle play/pause
-  stop            Quit mpv
-  next            Skip to next track (ensures start at 0:00)
-  prev            Go to previous track (ensures start at 0:00)
-  volume-up       Increase volume by 5%
-  volume-down     Decrease volume by 5%
-  seek-forward    Seek forward 10s
-  seek-backward   Seek backward 10s
+  play                Toggle play/pause
+  pause               Toggle play/pause
+  stop                Quit mpv
+  next                Skip to next track (ensures start at 0:00)
+  prev                Go to previous track (ensures start at 0:00)
+  volume-up           Increase volume by 5%
+  volume-down         Decrease volume by 5%
+  set-volume <0-100>  Set volume between 0% and 100%
+  seek-forward        Seek forward 10s
+  seek-backward       Seek backward 10s
   mode audio|video
-  show            Show current track and queue context (prev 2 / current / next 3)
+  show                Show current track and queue context (prev 2 / current / next 3)
 PHELP
         return
       fi
