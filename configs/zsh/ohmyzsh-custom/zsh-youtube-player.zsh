@@ -5,7 +5,6 @@ pipx ensurepath &> /dev/null
 
 pipx install yt-dlp &> /dev/null
 
-# YouTube playlist audio daemon with unified command + playback control, live Now Playing & A/V mode
 YTPL_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/ytpl"
 mkdir -p "$YTPL_DIR"
 
@@ -41,7 +40,6 @@ end)
 EOF
 fi
 
-# Export the variable for Lua
 export YTPL_NOWPLAYING
 
 ytpl() {
@@ -84,6 +82,7 @@ ytpl() {
                     --idle=no \
                     --no-terminal \
                     --script="$YTPL_LUA" \
+                    --save-position-on-quit=no \
                     --really-quiet \
                     "$url" \
                     >"$YTPL_LOG" 2>&1 &
@@ -133,9 +132,11 @@ ytpl() {
                     ;;
                 next)
                     echo '{ "command": ["playlist-next", "force"] }' | socat - "$YTPL_IPC"
+                    echo '{ "command": ["set_property", "time-pos", 0] }' | socat - "$YTPL_IPC"
                     ;;
                 prev)
                     echo '{ "command": ["playlist-prev", "force"] }' | socat - "$YTPL_IPC"
+                    echo '{ "command": ["set_property", "time-pos", 0] }' | socat - "$YTPL_IPC"
                     ;;
                 volume-up)
                     echo '{ "command": ["add", "volume", 5] }' | socat - "$YTPL_IPC"
@@ -159,38 +160,37 @@ ytpl() {
                     echo "Mode switched to $newmode. Restart ytpl to apply."
                     ;;
                 show)
+                    # Show now playing + queue context
                     if [[ ! -S "$YTPL_IPC" ]]; then
                         echo "ytpl is not running."
                         return 1
                     fi
 
-                    # Get playlist info via IPC
-                    local playlist_json
-                    local pos
+                    # Current track
+                    local current="Unknown"
+                    [[ -f "$YTPL_NOWPLAYING" ]] && current=$(cat "$YTPL_NOWPLAYING")
+
+                    # Queue context
+                    local playlist_json pos
                     playlist_json=$(printf '{ "command": ["get_property", "playlist"] }' | socat - "$YTPL_IPC")
                     pos=$(printf '{ "command": ["get_property", "playlist-pos"] }' | socat - "$YTPL_IPC" | jq '.data')
 
-                    # Check if playlist JSON is empty
-                    if [[ -z "$playlist_json" || "$playlist_json" == "{}" ]]; then
-                        echo "No playlist loaded."
-                        return 1
+                    if [[ -n "$playlist_json" && "$playlist_json" != "{}" ]]; then
+                        local titles=($(echo "$playlist_json" | jq -r '.data[]?.filename'))
+                        local start=$(( pos - 2 < 0 ? 0 : pos - 2 ))
+                        local end=$(( pos + 5 >= ${#titles[@]} ? ${#titles[@]}-1 : pos + 5 ))
+                        echo "Queue context (prev 2 / current / next 5):"
+                        for i in $(seq $start $end); do
+                            if [[ $i -eq $pos ]]; then
+                                echo "▶ ${titles[$i]}"
+                            else
+                                echo "  ${titles[$i]}"
+                            fi
+                        done
+                    else
+                        echo "Current track: $current"
+                        echo "Queue not available."
                     fi
-
-                    # Extract titles
-                    local titles
-                    titles=($(echo "$playlist_json" | jq -r '.data[]?.filename'))
-
-                    local start=$(( pos - 2 < 0 ? 0 : pos - 2 ))
-                    local end=$(( pos + 5 >= ${#titles[@]} ? ${#titles[@]}-1 : pos + 5 ))
-
-                    echo "Queue context (prev 2 / current / next 5):"
-                    for i in $(seq $start $end); do
-                        if [[ $i -eq $pos ]]; then
-                            echo "▶ ${titles[$i]}"
-                        else
-                            echo "  ${titles[$i]}"
-                        fi
-                    done
                     ;;
                 *)
                     echo "Usage: ytpl player {play|pause|stop|next|prev|volume-up|volume-down|seek-forward|seek-backward|mode audio|mode video|show}"
