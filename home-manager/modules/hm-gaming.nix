@@ -25,7 +25,7 @@
     # Proton & Wine
     protonup-ng
     wine
-    wine64
+    # wine64
 
     # Launchers
     lutris
