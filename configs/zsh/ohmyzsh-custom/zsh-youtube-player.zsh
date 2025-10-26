@@ -135,14 +135,32 @@ Commands:
             fi
             local cmd=$1
             case "$cmd" in
-                play|pause)    echo '{ "command": ["cycle", "pause"] }' | socat - "$YTPL_IPC" ;;
-                stop)          echo '{ "command": ["quit"] }' | socat - "$YTPL_IPC" ;;
-                next)          echo '{ "command": ["playlist-next", "force"] }' | socat - "$YTPL_IPC" ;;
-                prev)          echo '{ "command": ["playlist-prev", "force"] }' | socat - "$YTPL_IPC" ;;
-                volume-up)     echo '{ "command": ["add", "volume", 5] }' | socat - "$YTPL_IPC" ;;
-                volume-down)   echo '{ "command": ["add", "volume", -5] }' | socat - "$YTPL_IPC" ;;
-                seek-forward)  echo '{ "command": ["seek", 10, "relative"] }' | socat - "$YTPL_IPC" ;;
-                seek-backward) echo '{ "command": ["seek", -10, "relative"] }' | socat - "$YTPL_IPC" ;;
+                play|pause)
+                    echo '{ "command": ["cycle", "pause"] }' | socat - "$YTPL_IPC"
+                    ;;
+                stop)
+                    echo '{ "command": ["quit"] }' | socat - "$YTPL_IPC"
+                    ;;
+                next)
+                    echo '{ "command": ["playlist-next", "force"] }' | socat - "$YTPL_IPC"
+                    echo '{ "command": ["set_property", "time-pos", 0] }' | socat - "$YTPL_IPC"
+                    ;;
+                prev)
+                    echo '{ "command": ["playlist-prev", "force"] }' | socat - "$YTPL_IPC"
+                    echo '{ "command": ["set_property", "time-pos", 0] }' | socat - "$YTPL_IPC"
+                    ;;
+                volume-up)
+                    echo '{ "command": ["add", "volume", 5] }' | socat - "$YTPL_IPC"
+                    ;;
+                volume-down)
+                    echo '{ "command": ["add", "volume", -5] }' | socat - "$YTPL_IPC"
+                    ;;
+                seek-forward)
+                    echo '{ "command": ["seek", 10, "relative"] }' | socat - "$YTPL_IPC"
+                    ;;
+                seek-backward)
+                    echo '{ "command": ["seek", -10, "relative"] }' | socat - "$YTPL_IPC"
+                    ;;
                 mode)
                     local newmode=$2
                     if [[ "$newmode" != "audio" && "$newmode" != "video" ]]; then
