@@ -158,6 +158,7 @@ build_playlist_file() {
 
   [[ -f "$YTPL_QUEUE" ]] && rm -f "$YTPL_QUEUE"
   [[ -f "$YTPL_PLAYLIST" ]] && rm -f "$YTPL_PLAYLIST"
+  [[ -f "$YTPL_DIR/playlist_full.txt" ]] && rm -f "$YTPL_DIR/playlist_full.txt"
 
   # Helper: extract playlist into tmp file
   _extract_playlist() {
@@ -209,8 +210,7 @@ build_playlist_file() {
     return 1
   fi
 
-  # ----------------------- Build clean playlist -----------------------
-  # Normalize URLs and only include non-empty ones
+  # ----------------------- Build clean playlist for mpv -----------------------
   awk -F'|' '
     $2 != "" && $2 !~ /^$/ {
       url=$2;
@@ -224,9 +224,17 @@ build_playlist_file() {
     shuf "$YTPL_PLAYLIST" -o "$YTPL_PLAYLIST"
   fi
 
+  # ----------------------- Build full title|URL map -----------------------
+  awk -F'|' '
+    $2 != "" && $2 !~ /^$/ {
+      url=$2;
+      gsub("^https://music.youtube.com/watch\\?v=", "https://www.youtube.com/watch?v=", url);
+      print $1 "|" url
+    }
+  ' "$YTPL_QUEUE" > "$YTPL_DIR/playlist_full.txt"
+
   return 0
 }
-
 
 # ------------------------- basic helpers -------------------------
 is_running() {
@@ -267,16 +275,24 @@ _check_prereqs() {
 }
 
 # ------------------------- Queue helpers (mpv-synced) -------------------------
-# Use $YTPL_PLAYLIST as source, query mpv for current index
-
 queue_len() {
   [[ -f "$YTPL_PLAYLIST" ]] && wc -l < "$YTPL_PLAYLIST" || echo 0
 }
 
 queue_get() {
   local idx=$1
-  [[ -f "$YTPL_PLAYLIST" ]] || return
-  sed -n "$(( idx + 1 ))p" "$YTPL_PLAYLIST"
+  local show_title=${2:-0}  # 0=URL (default), 1=Title
+  [[ -f "$YTPL_DIR/playlist_full.txt" ]] || return
+
+  local line
+  line=$(sed -n "$(( idx + 1 ))p" "$YTPL_DIR/playlist_full.txt")
+  [[ -z "$line" ]] && return
+
+  if [[ "$show_title" -eq 1 ]]; then
+    echo "${line%%|*}"  # title
+  else
+    echo "${line##*|}"  # URL
+  fi
 }
 
 queue_current_idx() {
@@ -285,23 +301,9 @@ queue_current_idx() {
   [[ -n "$idx" && "$idx" =~ ^[0-9]+$ ]] && echo "$idx" || echo 0
 }
 
-queue_current() {
-  local idx=$(queue_current_idx)
-  queue_get "$idx"
-}
-
-queue_prev() {
-  local idx=$(queue_current_idx)
-  [[ $idx -gt 0 ]] && idx=$(( idx - 1 ))
-  queue_get "$idx"
-}
-
-queue_next() {
-  local idx=$(queue_current_idx)
-  local len=$(queue_len)
-  [[ $idx -lt $((len - 1)) ]] && idx=$(( idx + 1 ))
-  queue_get "$idx"
-}
+queue_current() { queue_get $(queue_current_idx) 1 }
+queue_prev() { local i=$(( $(queue_current_idx) - 1 )); [[ $i -lt 0 ]] && i=0; queue_get $i 1 }
+queue_next() { local i=$(( $(queue_current_idx) + 1 )); local len=$(queue_len); [[ $i -ge $len ]] && i=$((len - 1)); queue_get $i 1 }
 
 # ------------------------- Player commands -------------------------
 player_cmd() {
@@ -312,32 +314,21 @@ player_cmd() {
     play|pause) mpv_ipc '{ "command": ["cycle", "pause"] }' && echo "OK: toggled play/pause" ;; 
     stop) mpv_ipc '{ "command": ["quit"] }' && echo "OK: quit sent" ;; 
     next)
-      # get next non-empty track
       local cur_idx=$(queue_current_idx)
       local len=$(queue_len)
       local next_idx=$((cur_idx + 1))
-      while [[ $next_idx -lt $len && -z "$(queue_get $next_idx)" ]]; do
-        next_idx=$((next_idx + 1))
-      done
       [[ $next_idx -ge $len ]] && next_idx=$((len - 1))
-
       mpv_ipc "{ \"command\": [\"playlist-play-index\", $next_idx] }"
       mpv_ipc '{ "command": ["set_property", "time-pos", 0] }' >/dev/null 2>&1
-      echo "OK: moved to next track"
+      echo "OK: moved to next track — $(queue_get $next_idx 1)"
       ;;
-
     prev)
-      # get previous non-empty track
       local cur_idx=$(queue_current_idx)
       local prev_idx=$((cur_idx - 1))
-      while [[ $prev_idx -ge 0 && -z "$(queue_get $prev_idx)" ]]; do
-        prev_idx=$((prev_idx - 1))
-      done
       [[ $prev_idx -lt 0 ]] && prev_idx=0
-
       mpv_ipc "{ \"command\": [\"playlist-play-index\", $prev_idx] }"
       mpv_ipc '{ "command": ["set_property", "time-pos", 0] }' >/dev/null 2>&1
-      echo "OK: moved to previous track"
+      echo "OK: moved to previous track — $(queue_get $prev_idx 1)"
       ;;
     volume-up) mpv_ipc '{ "command": ["add", "volume", 5] }' && echo "OK: volume up" ;; 
     volume-down) mpv_ipc '{ "command": ["add", "volume", -5] }' && echo "OK: volume down" ;; 
@@ -350,12 +341,6 @@ player_cmd() {
       mpv_ipc "{ \"command\": [\"set_property\", \"volume\", $vol] }" && echo "OK: volume set to $vol%" ;;
     seek-forward) mpv_ipc '{ "command": ["seek", 10, "relative"] }' && echo "OK: seek forward" ;; 
     seek-backward) mpv_ipc '{ "command": ["seek", -10, "relative"] }' && echo "OK: seek backward" ;; 
-    mode) 
-      local newmode=$1
-      [[ "$newmode" != "audio" && "$newmode" != "video" ]] && { echo "Usage: ytpl player mode {audio|video}"; return 1; }
-      echo "$newmode" > "$YTPL_MODE"
-      echo "Mode switched to $newmode. Restart ytpl to apply." 
-      ;;
     show)
       [[ ! -S "$YTPL_IPC" ]] && { echo "mpv not running or IPC missing"; return 1; }
 
@@ -369,17 +354,17 @@ player_cmd() {
       for offset in 2 1; do
         local i=$(( cur_idx - offset ))
         [[ $i -ge 0 ]] || continue
-        echo "  $(queue_get $i)"
+        echo "  $(queue_get $i 1)"
       done
 
       # Current track
-      echo "▶ ${cur_title:-$(queue_get $cur_idx)}"
+      echo "▶ ${cur_title:-$(queue_get $cur_idx 1)}"
 
       # Next 3 tracks
       for offset in 1 2 3; do
         local i=$(( cur_idx + offset ))
         [[ $i -lt $total ]] || continue
-        echo "  $(queue_get $i)"
+        echo "  $(queue_get $i 1)"
       done
       ;;
     *) echo "Unknown player command '$cmd'. Run 'ytpl player' for help." ;; 
