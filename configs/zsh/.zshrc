@@ -8,8 +8,8 @@
 #-----------------------------------------------------------------------------------------------------------
 
 # Set the directory we want to store zinit, plugins, and custom scripts
-ZINIT_HOME="${XDG_DATA_HOME:-${HOME}}/.config/zinit"
-ZINIT_CUSTOM="${XDG_DATA_HOME:-${HOME}}/.config/ohmyzsh-custom"
+ZINIT_HOME="${XDG_CONFIG_HOME:-${HOME}/.config}/zinit"
+ZINIT_CUSTOM="${XDG_CONFIG_HOME:-${HOME}/.config}/ohmyzsh-custom"
 
 # Download Zinit, if it's not there yet
 if [ ! -d "$ZINIT_HOME" ]; then
