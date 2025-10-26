@@ -83,7 +83,7 @@
 
   # Wi-Fi support
   hardware.enableRedistributableFirmware = true;
-  boot.kernelModules = [ "rtw89" ];
+  boot.kernelModules = [ "kvm-amd" "rtw89" ];
   hardware.usb-modeswitch.enable = true;
   hardware.enableAllFirmware = true;
   # Optional: Use latest kernel for better Realtek driver support
