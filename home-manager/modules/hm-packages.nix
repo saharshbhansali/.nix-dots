@@ -66,6 +66,7 @@
     wgcf
 
     ## LLMs
+    aichat
     ollama
     # ollama-cuda
     kdePackages.alpaka
