@@ -1,15 +1,7 @@
 #!/usr/bin/env zsh
 # ytpl - YouTube Playlist Audio/Video Daemon
-# Features:
-#  - Start playlists with optional --shuffle and --start N (0-based)
-#  - mpv logging to /tmp/ytpl.log (rotates/truncates at 200MB)
-#  - yt-dlp extraction runs with -v/-vv during playlist build and appends stderr to log
-#  - cookies auto-detection: explicit cookies.txt, then browsers (chrome, firefox, chromium, vivaldi, zen)
-#  - Lua hook ensures tracks start at 0:00 and writes now-playing
-#  - Robust player controls via mpv IPC; next/prev forcibly reset time-pos
-#  - Uses /tmp lockdir; supports --force and cleanup
+# (updated: added more browsers, ytpl doctor, explicit browser override, improved cookie export instructions)
 
-# ---------- prerequisites (no runtime commands at source except mkdir) ----------
 YTPL_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/ytpl"
 YTPL_LOCKDIR="/tmp/ytpl-lock.$USER"
 YTPL_PID="$YTPL_DIR/ytpl.pid"
@@ -26,7 +18,6 @@ YTDLP_COOKIES_PATH="${YTDLP_COOKIES_PATH:-$HOME/.config/yt-dlp/cookies.txt}"
 mkdir -p "$YTPL_DIR"
 export YTPL_NOWPLAYING
 
-# ---------- embed minimal Lua (created on-demand) ----------
 ensure_lua() {
   [[ -f "$YTPL_LUA" ]] && return 0
   cat > "$YTPL_LUA" <<'EOF'
@@ -42,9 +33,8 @@ end)
 EOF
 }
 
-# ---------- logging rotation ----------
 rotate_or_clear_log() {
-  local max=$((200 * 1024 * 1024))  # 200 MB
+  local max=$((200 * 1024 * 1024))
   if [[ -f "$YTPL_LOG" ]]; then
     if stat --version >/dev/null 2>&1; then
       size=$(stat -c%s "$YTPL_LOG" 2>/dev/null || echo 0)
@@ -62,7 +52,7 @@ rotate_or_clear_log() {
   fi
 }
 
-# ---------- simple lockdir (in /tmp) ----------
+# lockdir helpers
 acquire_lock() {
   if mkdir "$YTPL_LOCKDIR" 2>/dev/null; then
     printf "%s\n" "$$" > "$YTPL_LOCKDIR/owner_pid"
@@ -71,13 +61,11 @@ acquire_lock() {
   local ownerpid mpvpid
   if [[ -f "$YTPL_LOCKDIR/owner_pid" ]]; then ownerpid=$(cat "$YTPL_LOCKDIR/owner_pid" 2>/dev/null || echo ""); fi
   if [[ -f "$YTPL_LOCKDIR/mpv_pid" ]]; then mpvpid=$(cat "$YTPL_LOCKDIR/mpv_pid" 2>/dev/null || echo ""); fi
-
   if [[ -n "$ownerpid" ]]; then
     if kill -0 "$ownerpid" 2>/dev/null; then
       return 1
     fi
   fi
-
   rm -rf "$YTPL_LOCKDIR"
   if mkdir "$YTPL_LOCKDIR" 2>/dev/null; then
     printf "%s\n" "$$" > "$YTPL_LOCKDIR/owner_pid"
@@ -91,7 +79,7 @@ release_lock() {
   local ownerpid mpvpid remove=0
   ownerpid=$(cat "$YTPL_LOCKDIR/owner_pid" 2>/dev/null || echo "")
   mpvpid=$(cat "$YTPL_LOCKDIR/mpv_pid" 2>/dev/null || echo "")
-  if [[ "$ownerpid" == "$$" ]] || [[ -z "$ownerpid" ]]; then remove=1; fi
+  if [[ "$ownerpid" == "$$" || -z "$ownerpid" ]]; then remove=1; fi
   if [[ -n "$ownerpid" ]]; then
     if ! kill -0 "$ownerpid" 2>/dev/null; then remove=1; fi
   fi
@@ -127,7 +115,6 @@ force_clear_lock_and_kill() {
   fi
 }
 
-# ---------- mpv IPC helpers ----------
 mpv_ipc() {
   if [[ ! -S "$YTPL_IPC" ]]; then return 2; fi
   printf '%s\n' "$1" | socat - "$YTPL_IPC" 2>/dev/null
@@ -140,11 +127,24 @@ mpv_get_prop() {
   printf '{ "command": ["get_property", "%s"] }' "$prop" | socat - "$YTPL_IPC" 2>/dev/null | jq -r '.data // empty' 2>/dev/null
 }
 
-# ---------- build playlist: cookie autodetect + extraction ----------
+# build playlist: cookie autodetect + extraction
 build_playlist_file() {
-  local url="$1" shuffle_flag="$2" ytdlp_verbose="$3"
+  local url="$1" shuffle_flag="$2" ytdlp_verbose="$3" cookie_override="$4"
   [[ -f "$YTPL_QUEUE" ]] && rm -f "$YTPL_QUEUE"
   [[ -f "$YTPL_PLAYLIST" ]] && rm -f "$YTPL_PLAYLIST"
+
+  # If user forced a particular cookies-from-browser name, try it first
+  if [[ -n "$cookie_override" ]]; then
+    echo "Attempting cookie extraction from browser (forced): $cookie_override" >> "$YTPL_LOG"
+    if yt-dlp $ytdlp_verbose --cookies-from-browser "$cookie_override" -j --flat-playlist "$url" 2>>"$YTPL_LOG" | jq -r '.title + "|" + .url' > "${YTPL_QUEUE}.tmp" 2>>"$YTPL_LOG"; then
+      mv "${YTPL_QUEUE}.tmp" "$YTPL_QUEUE"
+      cut -d'|' -f2 "$YTPL_QUEUE" > "$YTPL_PLAYLIST"
+      return 0
+    else
+      echo "Forced browser cookie extraction failed for '$cookie_override'." >> "$YTPL_LOG"
+      [[ -f "${YTPL_QUEUE}.tmp" ]] && rm -f "${YTPL_QUEUE}.tmp"
+    fi
+  fi
 
   # preferred explicit cookie file first
   if [[ -f "$YTDLP_COOKIES_PATH" ]]; then
@@ -161,64 +161,76 @@ build_playlist_file() {
   fi
 
   # browsers to try (in order requested)
-  local -a browsers=("chrome" "firefox" "chromium" "vivaldi" "zen")
+  local -a browsers=("chrome" "firefox" "chromium" "vivaldi" "brave" "edge" "opera" "whale")
 
   for b in "${browsers[@]}"; do
     echo "Trying cookies from browser: $b" >> "$YTPL_LOG"
-    # Attempt extraction using --cookies-from-browser $b
     if yt-dlp $ytdlp_verbose --cookies-from-browser "$b" -j --flat-playlist "$url" 2>>"$YTPL_LOG" | jq -r '.title + "|" + .url' > "${YTPL_QUEUE}.tmp" 2>>"$YTPL_LOG"; then
       echo "yt-dlp: succeeded with browser '$b' cookies" >> "$YTPL_LOG"
       mv "${YTPL_QUEUE}.tmp" "$YTPL_QUEUE"
       cut -d'|' -f2 "$YTPL_QUEUE" > "$YTPL_PLAYLIST"
       return 0
     else
-      # check for unsupported-browser kind of message (optional debug)
       echo "yt-dlp: browser '$b' failed; trying next candidate" >> "$YTPL_LOG"
       [[ -f "${YTPL_QUEUE}.tmp" ]] && rm -f "${YTPL_QUEUE}.tmp"
       continue
     fi
   done
 
-  # If we reach here, none of the cookie methods worked
+  # none worked — print helpful instructions (no 3rd-party extension)
   echo "ERROR: yt-dlp could not extract playlist entries (cookies missing or browser extraction failed)" >> "$YTPL_LOG"
-  cat >> "$YTPL_LOG" <<EOF
-Hint: For videos that require authentication (YouTube Music / gated content)
-you must provide cookies. Create a cookie file at:
-  $YTDLP_COOKIES_PATH
+  cat >> "$YTPL_LOG" <<'EOLOG'
+COOKIE EXPORT INSTRUCTIONS (no 3rd-party extensions)
+You need a Netscape-format cookies.txt file for yt-dlp at:
+  ${YTDLP_COOKIES_PATH}
 
-You can export cookies using yt-dlp itself (example for Chrome):
-  yt-dlp --cookies-from-browser chrome --cookies "$YTDLP_COOKIES_PATH"
+Two safe ways to obtain it without installing an extension:
+A) Use yt-dlp to export cookies from your local browser (preferred):
+   # Example for Chrome (change 'chrome' to 'firefox', 'chromium', etc).
+   yt-dlp --cookies-from-browser chrome --cookies "${YTDLP_COOKIES_PATH}"
 
-Or use browser extension "cookies.txt" to export cookies and save to the path above.
-Make sure file is readable by your user and protected:
-  chmod 600 $YTDLP_COOKIES_PATH
+   This reads your browser profile and writes a cookies.txt file in Netscape format which yt-dlp can reuse.
 
-After creating cookies file retry:
-  ytpl start <playlist_url> -v
+B) Manually export cookies using your browser Developer Tools:
+   1. Open the browser (Chrome/Chromium/Brave/Edge/Vivaldi/Opera).
+   2. Visit https://www.youtube.com and sign in.
+   3. Open Developer Tools (F12) -> Application (or Storage) tab.
+   4. Under "Cookies", select the cookie store for "https://www.youtube.com".
+   5. For each cookie row, copy name and value. Construct a line in Netscape cookie format:
+      <domain>  <flag>  <path>  <secure>  <expiration>  <name>  <value>
+      Example (use 0 for expiration to mean session):
+      .youtube.com	TRUE	/	FALSE	0	YSC	abcd1234
+   6. Save all cookie lines to the path:
+      ${YTDLP_COOKIES_PATH}
+   7. Secure the file:
+      chmod 600 ${YTDLP_COOKIES_PATH}
 
-EOF
+Notes:
+ - Prefer method A (yt-dlp --cookies-from-browser ...) when possible.
+ - Keep the cookies file private (it represents your logged-in session).
+EOLOG
 
-  # also print a friendly message to user (stdout)
   cat <<MSG
 yt-dlp needs cookies to access this playlist (YouTube is asking you to sign in).
-I tried auto-reading browser cookies (chrome, firefox, chromium, vivaldi, zen) and no method worked.
+I tried auto-reading browser cookies (chrome, firefox, chromium, vivaldi, brave, edge, opera, whale) and none worked.
 
-Please create a cookies file and place it at:
-  $YTDLP_COOKIES_PATH
+Two recommended ways to produce the cookies file (no 3rd-party extensions):
+  1) Let yt-dlp export from your browser:
+     yt-dlp --cookies-from-browser chrome --cookies "${YTDLP_COOKIES_PATH}"
+  2) Or manually copy cookies via DevTools and save them in Netscape cookies.txt format at:
+     ${YTDLP_COOKIES_PATH}
+Then protect the file:
+  chmod 600 ${YTDLP_COOKIES_PATH}
 
-You can export it with yt-dlp:
-  yt-dlp --cookies-from-browser chrome --cookies "$YTDLP_COOKIES_PATH"
-
-Then re-run:
+After creating the cookies file, re-run:
   ytpl start <playlist_url> -v
 
-(See /tmp/ytpl.log for details.)
+(See ${YTPL_LOG} for details.)
 MSG
 
   return 1
 }
 
-# ---------- small helpers ----------
 is_running() {
   if [[ -f "$YTPL_PID" ]]; then
     local pid; pid=$(cat "$YTPL_PID" 2>/dev/null || echo "")
@@ -249,7 +261,6 @@ _check_prereqs() {
   return 0
 }
 
-# ---------- main (call ytpl) ----------
 ytpl() {
   ensure_lua
   _check_prereqs || return 1
@@ -260,11 +271,12 @@ ytpl() {
 Usage: ytpl <command>
 
 Commands:
-  start <playlist_url> [--shuffle] [--start N] [-v|-vv] [--force]
+  start <playlist_url> [--shuffle] [--start N] [-v|-vv] [--force] [--cookies-from-browser NAME]
   stop
   status
   logs
   cleanup
+  doctor       # tests cookie extraction methods
   player <command>
 USAGE
     return
@@ -272,7 +284,7 @@ USAGE
 
   case "$sub" in
     start)
-      local url="" shuffle_flag="" start_index="" ytdlp_verbose="" force_flag=""
+      local url="" shuffle_flag="" start_index="" ytdlp_verbose="" force_flag="" cookie_override=""
       while [[ $# -gt 0 ]]; do
         case "$1" in
           --shuffle) shuffle_flag=1; shift ;;
@@ -283,13 +295,17 @@ USAGE
           -v) ytdlp_verbose="-v"; shift ;;
           -vv) ytdlp_verbose="-vv"; shift ;;
           --force) force_flag=1; shift ;;
+          --cookies-from-browser)
+            if [[ $# -le 1 ]]; then echo "Error: --cookies-from-browser requires a browser name (e.g. chrome)"; return 1; fi
+            cookie_override="$2"; shift 2
+            ;;
           --*) echo "Unknown option: $1 (try 'ytpl -h')"; return 1 ;;
           *) url="$1"; shift ;;
         esac
       done
 
       [[ -z "$url" ]] && [[ -f "$YTPL_LAST" ]] && url=$(cat "$YTPL_LAST")
-      if [[ -z "$url" ]]; then echo "Usage: ytpl start <playlist_url> [--shuffle] [--start N] [-v|-vv] [--force]"; return 1; fi
+      if [[ -z "$url" ]]; then echo "Usage: ytpl start <playlist_url> [--shuffle] [--start N] [-v|-vv] [--force] [--cookies-from-browser NAME]"; return 1; fi
 
       if [[ -d "$YTPL_LOCKDIR" && -n "$force_flag" ]]; then
         echo "Force requested: killing existing ytpl/mpv (if any) and clearing lock..."
@@ -304,7 +320,7 @@ USAGE
       if is_running >/dev/null; then echo "ytpl is already running (PID $(cat "$YTPL_PID"))"; release_lock; return 1; fi
 
       rotate_or_clear_log
-      build_playlist_file "$url" "$shuffle_flag" "$ytdlp_verbose" || { release_lock; return 1; }
+      build_playlist_file "$url" "$shuffle_flag" "$ytdlp_verbose" "$cookie_override" || { release_lock; return 1; }
       echo "$url" > "$YTPL_LAST"
 
       playlist_nonempty
@@ -386,6 +402,24 @@ USAGE
       echo "Cleanup done."
       ;;
 
+    doctor)
+      echo "ytpl doctor: checking cookie extraction methods..."
+      if [[ -f "$YTDLP_COOKIES_PATH" ]]; then
+        echo "Explicit cookie file found: $YTDLP_COOKIES_PATH"
+      else
+        echo "No explicit cookie file at: $YTDLP_COOKIES_PATH"
+      fi
+      for b in chrome firefox chromium vivaldi brave edge opera whale; do
+        echo -n "Trying browser: $b ... "
+        if yt-dlp --cookies-from-browser "$b" -j --flat-playlist "https://www.youtube.com/playlist?list=PL" >/dev/null 2>>"$YTPL_LOG"; then
+          echo "OK (browser: $b)"
+        else
+          echo "failed"
+        fi
+      done
+      echo "Check $YTPL_LOG for details."
+      ;;
+
     player)
       if [[ $# -eq 0 ]]; then
         cat <<'PHELP'
@@ -406,14 +440,32 @@ PHELP
           local before pos_after; before=$(mpv_get_prop "playlist-pos" 2>/dev/null || echo "")
           mpv_ipc '{ "command": ["playlist-next", "force"] }'
           local i=0
-          while [[ $i -lt 20 ]]; do sleep 0.05; pos_after=$(mpv_get_prop "playlist-pos" 2>/dev/null || echo ""); if [[ -n "$pos_after" && "$pos_after" != "$before" ]]; then mpv_ipc '{ "command": ["set_property", "time-pos", 0] }' >/dev/null 2>&1; echo "OK: next -> pos=$pos_after"; break; fi; i=$((i+1)); done
+          while [[ $i -lt 20 ]]; do
+            sleep 0.05
+            pos_after=$(mpv_get_prop "playlist-pos" 2>/dev/null || echo "")
+            if [[ -n "$pos_after" && "$pos_after" != "$before" ]]; then
+              mpv_ipc '{ "command": ["set_property", "time-pos", 0] }' >/dev/null 2>&1
+              echo "OK: next -> pos=$pos_after"
+              break
+            fi
+            i=$((i+1))
+          done
           [[ $i -ge 20 ]] && echo "Warning: next may not have taken effect; check logs."
         ;;
         prev)
           local before pos_after; before=$(mpv_get_prop "playlist-pos" 2>/dev/null || echo "")
           mpv_ipc '{ "command": ["playlist-prev", "force"] }'
           local i=0
-          while [[ $i -lt 20 ]]; do sleep 0.05; pos_after=$(mpv_get_prop "playlist-pos" 2>/dev/null || echo ""); if [[ -n "$pos_after" && "$pos_after" != "$before" ]]; then mpv_ipc '{ "command": ["set_property", "time-pos", 0] }' >/dev/null 2>&1; echo "OK: prev -> pos=$pos_after"; break; fi; i=$((i+1)); done
+          while [[ $i -lt 20 ]]; do
+            sleep 0.05
+            pos_after=$(mpv_get_prop "playlist-pos" 2>/dev/null || echo "")
+            if [[ -n "$pos_after" && "$pos_after" != "$before" ]]; then
+              mpv_ipc '{ "command": ["set_property", "time-pos", 0] }' >/dev/null 2>&1
+              echo "OK: prev -> pos=$pos_after"
+              break
+            fi
+            i=$((i+1))
+          done
           [[ $i -ge 20 ]] && echo "Warning: prev may not have taken effect; check logs."
         ;;
         volume-up) mpv_ipc '{ "command": ["add", "volume", 5] }' && echo "OK: volume up" || echo "Error" ;;
