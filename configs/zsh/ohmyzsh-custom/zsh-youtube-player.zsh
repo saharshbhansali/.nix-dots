@@ -73,8 +73,9 @@ _acquire_lock_force_if_stale() {
   local ownerpid owner_ts now age
   ownerpid=$(_lock_owner)
   owner_ts=$(_lock_ts)
+  owner_ts=${owner_ts:-0}       # <-- fix here
   now=$(date +%s)
-  age=$(( now - (owner_ts:-0) ))
+  age=$(( now - owner_ts ))     # <-- works in zsh now
 
   if [[ $age -ge $LOCK_STALE_SECS ]]; then
     echo "ytpl: found stale lock (age ${age}s) — clearing" >> "$YTPL_LOG"
