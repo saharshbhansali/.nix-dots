@@ -14,7 +14,6 @@ YTPL_PLAYLIST="$YTPL_DIR/playlist.txt"
 YTPL_LUA="$YTPL_DIR/mpv_nowplaying.lua"
 YTDLP_COOKIES_PATH="${YTDLP_COOKIES_PATH:-$HOME/.config/yt-dlp/cookies.txt}"
 TMP_QUEUE_ORDER="$YTPL_DIR/queue_order.tmp"
-TMP_QUEUE_IDX="$YTPL_DIR/queue_idx.tmp"
 
 LOCK_STALE_SECS=$((30*60))
 mkdir -p "$YTPL_DIR"
@@ -268,12 +267,35 @@ _check_prereqs() {
   return 0
 }
 
-# ------------------------- Queue helpers -------------------------
+# ------------------------- Queue helpers (mpv-synced) -------------------------
 queue_len() { [[ -f "$TMP_QUEUE_ORDER" ]] && wc -l < "$TMP_QUEUE_ORDER" || echo 0 }
-queue_get() { [[ -f "$TMP_QUEUE_ORDER" ]] && sed -n "$(( $1 + 1 ))p" "$TMP_QUEUE_ORDER" || echo "" }
-queue_current() { queue_get $(cat "$TMP_QUEUE_IDX" 2>/dev/null || echo 0) }
-queue_prev() { local idx=$(cat "$TMP_QUEUE_IDX" 2>/dev/null || echo 0); idx=$(( idx > 0 ? idx - 1 : 0 )); echo $idx > "$TMP_QUEUE_IDX"; queue_current }
-queue_next() { local idx=$(cat "$TMP_QUEUE_IDX" 2>/dev/null || echo 0); local len=$(queue_len); idx=$(( idx + 1 >= len ? len - 1 : idx + 1 )); echo $idx > "$TMP_QUEUE_IDX"; queue_current }
+
+queue_get() { 
+    [[ -f "$TMP_QUEUE_ORDER" ]] && sed -n "$(( $1 + 1 ))p" "$TMP_QUEUE_ORDER" || echo "" 
+}
+
+queue_current_idx() { 
+    local idx
+    idx=$(mpv_get_prop playlist-pos)
+    echo "${idx:-0}"
+}
+
+queue_current() { 
+    queue_get $(queue_current_idx) 
+}
+
+queue_prev() {
+    local idx=$(queue_current_idx)
+    [[ $idx -gt 0 ]] && idx=$((idx-1))
+    queue_get $idx
+}
+
+queue_next() {
+    local len=$(queue_len)
+    local idx=$(queue_current_idx)
+    [[ $idx -lt $((len-1)) ]] && idx=$((idx+1))
+    queue_get $idx
+}
 
 # ------------------------- Player commands -------------------------
 player_cmd() {
@@ -314,12 +336,12 @@ player_cmd() {
       [[ ! -S "$YTPL_IPC" ]] && { echo "mpv not running or IPC missing"; return 1; }
 
       local total=$(queue_len)
-      local cur_idx=$(mpv_get_prop playlist-pos)
-      [[ -z "$cur_idx" ]] && cur_idx=0
+      local cur_idx=$(queue_current_idx)
+      local cur_title=$(mpv_get_prop media-title)
 
       echo "Queue context (prev 2 / current / next 3):"
 
-      # Show previous 2 tracks
+      # Previous 2 tracks
       for offset in 2 1; do
         local i=$(( cur_idx - offset ))
         [[ $i -ge 0 ]] || continue
@@ -328,11 +350,10 @@ player_cmd() {
         echo "  $title"
       done
 
-      # Show current track
-      local cur_title=$(mpv_get_prop media-title)
+      # Current track
       echo "▶ ${cur_title:-$(queue_get $cur_idx | cut -d'|' -f1)}"
 
-      # Show next 3 tracks
+      # Next 3 tracks
       for offset in 1 2 3; do
         local i=$(( cur_idx + offset ))
         [[ $i -lt $total ]] || continue
@@ -454,7 +475,6 @@ PHELP
 
       # ------------------ Initialize queue ------------------
       awk -F'|' '{print $1 "|" $2}' "$YTPL_QUEUE" > "$TMP_QUEUE_ORDER"
-      echo "$start_index" > "$TMP_QUEUE_IDX"
 
       # ------------------ Validate playlist ------------------
       playlist_nonempty
