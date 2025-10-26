@@ -159,11 +159,38 @@ ytpl() {
                     echo "Mode switched to $newmode. Restart ytpl to apply."
                     ;;
                 show)
-                    if [[ -f "$YTPL_NOWPLAYING" ]]; then
-                        cat "$YTPL_NOWPLAYING"
-                    else
-                        echo "Nothing playing right now."
+                    if [[ ! -S "$YTPL_IPC" ]]; then
+                        echo "ytpl is not running."
+                        return 1
                     fi
+
+                    # Get playlist info via IPC
+                    local playlist_json
+                    local pos
+                    playlist_json=$(printf '{ "command": ["get_property", "playlist"] }' | socat - "$YTPL_IPC")
+                    pos=$(printf '{ "command": ["get_property", "playlist-pos"] }' | socat - "$YTPL_IPC" | jq '.data')
+
+                    # Check if playlist JSON is empty
+                    if [[ -z "$playlist_json" || "$playlist_json" == "{}" ]]; then
+                        echo "No playlist loaded."
+                        return 1
+                    fi
+
+                    # Extract titles
+                    local titles
+                    titles=($(echo "$playlist_json" | jq -r '.data[]?.filename'))
+
+                    local start=$(( pos - 2 < 0 ? 0 : pos - 2 ))
+                    local end=$(( pos + 5 >= ${#titles[@]} ? ${#titles[@]}-1 : pos + 5 ))
+
+                    echo "Queue context (prev 2 / current / next 5):"
+                    for i in $(seq $start $end); do
+                        if [[ $i -eq $pos ]]; then
+                            echo "▶ ${titles[$i]}"
+                        else
+                            echo "  ${titles[$i]}"
+                        fi
+                    done
                     ;;
                 *)
                     echo "Usage: ytpl player {play|pause|stop|next|prev|volume-up|volume-down|seek-forward|seek-backward|mode audio|mode video|show}"
