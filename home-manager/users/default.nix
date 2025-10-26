@@ -25,6 +25,7 @@
     ../modules/hm-devtools.nix
     ../modules/hm-nushell.nix
     ../modules/hm-cursor.nix
+    ../modules/hm-gaming.nix
     ../modules/hm-gdm.nix
   ];
 

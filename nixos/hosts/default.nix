@@ -34,6 +34,8 @@
     ../modules/programs.nix
     ../modules/services.nix
     ../modules/flatpaks.nix
+    ## Feature configurations
+    ../modules/gaming.nix
     ## Application configurations
     # ../modules/nixvim.nix
     ../modules/neovim.nix
