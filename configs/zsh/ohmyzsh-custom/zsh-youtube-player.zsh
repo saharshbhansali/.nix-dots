@@ -86,11 +86,10 @@ ytpl() {
             local mode_flag=""
             [[ "$(cat "$YTPL_MODE")" == "audio" ]] && mode_flag="--no-video"
 
-            # Start mpv
+            # Start mpv via explicit yt-dlp pipe for logs
+            stdbuf -oL -eL yt-dlp -o - "$url" | \
             stdbuf -oL -eL mpv $mode_flag \
-                --ytdl=yes \
                 --ytdl-format="bestaudio/best" \
-                --ytdl-raw-options=yes-playlist=yes \
                 --loop-playlist=no \
                 --input-ipc-server="$YTPL_IPC" \
                 --idle=no \
@@ -99,7 +98,7 @@ ytpl() {
                 --save-position-on-quit=no \
                 --msg-level=all=info \
                 $shuffle_flag $start_index \
-                "$url" >"$YTPL_LOG" 2>&1 &
+                - >"$YTPL_LOG" 2>&1 &
 
             echo $! > "$YTPL_PID"
             echo "ytpl started in $(cat "$YTPL_MODE") mode (PID $(cat "$YTPL_PID"))"
@@ -122,7 +121,7 @@ ytpl() {
             fi
             ;;
         logs)
-            [[ -f "$YTPL_LOG" ]] && tail -n 30 "$YTPL_LOG" || echo "No logs found."
+            [[ -f "$YTPL_LOG" ]] && tail -n 50 -f "$YTPL_LOG" || echo "No logs found."
             ;;
         player)
             [[ -S "$YTPL_IPC" ]] || { echo "ytpl player: IPC socket not found. Is ytpl running?"; return 1; }
@@ -195,7 +194,7 @@ Usage:
       Show current daemon status (running or not, mode).
 
   ytpl logs
-      Show the last 30 lines of mpv logs.
+      Show the last 50 lines of mpv logs (live with -f).
 
   ytpl player <command> [options]
       Control playback and see queue.
