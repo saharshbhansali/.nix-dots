@@ -157,96 +157,75 @@ mpv_get_prop() {
 
 # ------------------------- cookie extraction & playlist build -------------------------
 build_playlist_file() {
-  local url="$1"
-  local shuffle_flag="$2"
-  local ytdlp_verbose="$3"
-  local cookie_override="$4"
+  local url="$1" shuffle_flag="$2" ytdlp_verbose="$3" cookie_override="$4"
 
-  # Clear previous files
   [[ -f "$YTPL_QUEUE" ]] && rm -f "$YTPL_QUEUE"
   [[ -f "$YTPL_PLAYLIST" ]] && rm -f "$YTPL_PLAYLIST"
 
-  local tmp_queue="${YTPL_QUEUE}.tmp"
+  # Helper: extract playlist into tmp file
+  _extract_playlist() {
+    local extra_args=()
+    [[ -n "$1" ]] && extra_args=(--cookies-from-browser "$1")
+    [[ -f "$YTDLP_COOKIES_PATH" ]] && extra_args=(--cookies "$YTDLP_COOKIES_PATH")
 
-  # Helper to run yt-dlp and extract playlist entries
-  _ytpl_extract() {
-    local cookies_arg=("$@")
-    yt-dlp "${ytdlp_verbose}" "${cookies_arg[@]}" -j --flat-playlist "$url" 2>>"$YTPL_LOG" \
-      | jq -r '.title + "|" + .url' > "$tmp_queue"
+    yt-dlp "${extra_args[@]}" $ytdlp_verbose -j --flat-playlist "$url" 2>>"$YTPL_LOG" |
+      jq -r '.title + "|" + .url' > "${YTPL_QUEUE}.tmp"
   }
 
-  # 1. Try forced browser cookie override
   if [[ -n "$cookie_override" ]]; then
     echo "Attempting cookie extraction from browser (forced): $cookie_override" >> "$YTPL_LOG"
-    if _ytpl_extract "--cookies-from-browser" "$cookie_override"; then
-      echo "yt-dlp: succeeded with forced browser '$cookie_override'" >> "$YTPL_LOG"
+    if _extract_playlist "$cookie_override"; then
+      mv "${YTPL_QUEUE}.tmp" "$YTPL_QUEUE"
     else
-      echo "Forced browser cookie extraction failed for '$cookie_override'" >> "$YTPL_LOG"
-      [[ -f "$tmp_queue" ]] && rm -f "$tmp_queue"
+      echo "Forced browser cookie extraction failed for '$cookie_override'." >> "$YTPL_LOG"
+      [[ -f "${YTPL_QUEUE}.tmp" ]] && rm -f "${YTPL_QUEUE}.tmp"
     fi
   fi
 
-  # 2. Try explicit cookies file
-  if [[ -f "$YTDLP_COOKIES_PATH" ]] && [[ ! -f "$tmp_queue" ]]; then
+  if [[ ! -f "$YTPL_QUEUE" && -f "$YTDLP_COOKIES_PATH" ]]; then
     echo "Using explicit cookie file: $YTDLP_COOKIES_PATH" >> "$YTPL_LOG"
-    if _ytpl_extract "--cookies" "$YTDLP_COOKIES_PATH"; then
-      echo "yt-dlp: succeeded with explicit cookie file" >> "$YTPL_LOG"
+    if _extract_playlist; then
+      mv "${YTPL_QUEUE}.tmp" "$YTPL_QUEUE"
     else
-      echo "yt-dlp with explicit cookies failed; will try browser extraction" >> "$YTPL_LOG"
-      [[ -f "$tmp_queue" ]] && rm -f "$tmp_queue"
+      echo "yt-dlp with explicit cookies failed; trying browser cookie extraction." >> "$YTPL_LOG"
+      [[ -f "${YTPL_QUEUE}.tmp" ]] && rm -f "${YTPL_QUEUE}.tmp"
     fi
   fi
 
-  # 3. Try browsers auto-detection if nothing worked
-  if [[ ! -f "$tmp_queue" ]]; then
+  if [[ ! -f "$YTPL_QUEUE" ]]; then
     local -a browsers=(firefox chromium vivaldi zen brave chrome edge opera whale)
     for b in "${browsers[@]}"; do
       echo "Trying cookies from browser: $b" >> "$YTPL_LOG"
-      if _ytpl_extract "--cookies-from-browser" "$b"; then
+      if _extract_playlist "$b"; then
         echo "yt-dlp: succeeded with browser '$b' cookies" >> "$YTPL_LOG"
+        mv "${YTPL_QUEUE}.tmp" "$YTPL_QUEUE"
         break
       else
         echo "yt-dlp: browser '$b' failed; trying next candidate" >> "$YTPL_LOG"
-        [[ -f "$tmp_queue" ]] && rm -f "$tmp_queue"
+        [[ -f "${YTPL_QUEUE}.tmp" ]] && rm -f "${YTPL_QUEUE}.tmp"
       fi
     done
   fi
 
-  # 4. Check if extraction succeeded
-  if [[ ! -f "$tmp_queue" ]] || ! grep -q '[^[:space:]]' "$tmp_queue"; then
+  if [[ ! -f "$YTPL_QUEUE" ]]; then
     echo "ERROR: yt-dlp could not extract playlist entries" >> "$YTPL_LOG"
-    cat >> "$YTPL_LOG" <<'EOLOG'
-COOKIE EXPORT INSTRUCTIONS (no 3rd-party extensions)
-You need a Netscape-format cookies.txt file for yt-dlp at:
-  ${YTDLP_COOKIES_PATH}
-
-Two safe ways to obtain it without installing an extension:
-A) Use yt-dlp to export cookies from your local browser (preferred):
-   yt-dlp --cookies-from-browser chrome --cookies "${YTDLP_COOKIES_PATH}"
-
-B) Manually export cookies via DevTools as Netscape-format cookies.txt
-EOLOG
-    cat <<MSG
-yt-dlp needs cookies to access this playlist (YouTube is asking you to sign in).
-Create a cookies.txt at ${YTDLP_COOKIES_PATH}, chmod 600, then re-run:
-  ytpl start <playlist_url> -v
-See ${YTPL_LOG} for details.
-MSG
     return 1
   fi
 
-  # 5. Convert video IDs to full URLs, filter empty lines
-  awk -F'|' '{ if($2!="") print "https://www.youtube.com/watch?v="$2 }' "$tmp_queue" > "$YTPL_PLAYLIST"
+  # ----------------------- Build clean playlist -----------------------
+  # Normalize URLs and only include non-empty ones
+  awk -F'|' '
+    $2 != "" && $2 !~ /^$/ {
+      url=$2;
+      gsub("^https://music.youtube.com/watch\\?v=", "https://www.youtube.com/watch?v=", url);
+      print url
+    }
+  ' "$YTPL_QUEUE" > "$YTPL_PLAYLIST"
 
-  # Optional shuffle
+  # Shuffle if requested
   if [[ -n "$shuffle_flag" ]]; then
-    shuf -o "$YTPL_PLAYLIST" "$YTPL_PLAYLIST"
-    echo "Playlist shuffled" >> "$YTPL_LOG"
+    shuf "$YTPL_PLAYLIST" -o "$YTPL_PLAYLIST"
   fi
-
-  # Save queue with title|url for player/show purposes
-  mv "$tmp_queue" "$YTPL_QUEUE"
-  echo "Playlist built successfully with $(wc -l < "$YTPL_PLAYLIST") items" >> "$YTPL_LOG"
 
   return 0
 }
