@@ -96,7 +96,7 @@ ytpl() {
             local shuffle_flag=""
             local start_index=""
 
-            # Parse flags and URL
+            # Parse arguments
             while [[ $# -gt 0 ]]; do
                 case "$1" in
                     --shuffle)
@@ -122,14 +122,13 @@ ytpl() {
                 esac
             done
 
-            # Use last playlist if no URL provided
             [[ -z "$url" ]] && [[ -f "$YTPL_LAST" ]] && url=$(cat "$YTPL_LAST")
             if [[ -z "$url" ]]; then
                 echo "Usage: ytpl start <playlist_url> [--shuffle] [--start N]"
                 return 1
             fi
 
-            # Normalize YouTube / YouTube Music playlist URL
+            # Normalize YouTube playlist
             if [[ "$url" == *"list="* ]]; then
                 local plist_id="${url#*list=}"
                 plist_id="${plist_id%%&*}"
@@ -142,26 +141,31 @@ ytpl() {
                 return 1
             fi
 
-            # Prepare files
             echo "$url" > "$YTPL_LAST"
             [[ -e "$YTPL_IPC" ]] && rm -f "$YTPL_IPC"
             [[ -f "$YTPL_NOWPLAYING" ]] && rm -f "$YTPL_NOWPLAYING"
             > "$YTPL_LOG"
 
-            echo "Building local queue..."
-            yt-dlp -j --flat-playlist "$url" 2>/dev/null | jq -r '.title + "|" + .url' > "$YTPL_QUEUE" \
-                || echo "$url" > "$YTPL_QUEUE"
-
             local mode_flag=""
             [[ "$(cat "$YTPL_MODE")" == "audio" ]] && mode_flag="--no-video"
 
-            # Start playback
-            ytpl_playback "$url" "$mode_flag" "$shuffle_flag" "$start_index"
+            # Start mpv detached using setsid
+            setsid mpv $mode_flag \
+                --ytdl-format="bestaudio/best" \
+                --loop-playlist=no \
+                --input-ipc-server="$YTPL_IPC" \
+                --idle=no \
+                --no-terminal \
+                --script="$YTPL_LUA" \
+                --save-position-on-quit=no \
+                --msg-level=all=info \
+                $shuffle_flag $start_index "$url" >"$YTPL_LOG" 2>&1 &
 
+            echo $! > "$YTPL_PID"
             echo "ytpl started in $(cat "$YTPL_MODE") mode (PID $(cat "$YTPL_PID"))"
             echo "Logs: $YTPL_LOG"
             echo "Now Playing: $YTPL_NOWPLAYING"
-            ;;
+        ;;
         stop)
             if [[ -f "$YTPL_PID" ]]; then
                 kill "$(cat "$YTPL_PID")" 2>/dev/null && echo "ytpl stopped" || echo "ytpl not running"
