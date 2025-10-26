@@ -11,24 +11,23 @@ mkdir -p "$YTPL_DIR"
 
 # Files
 YTPL_PID="$YTPL_DIR/ytpl.pid"
-YTPL_LOG="/tmp/ytpl.log"             # moved to /tmp to avoid bloating
+YTPL_LOG="/tmp/ytpl.log"
 YTPL_NOWPLAYING="$YTPL_DIR/ytpl.nowplaying"
 YTPL_IPC="$YTPL_DIR/ytpl.sock"
 YTPL_LAST="$YTPL_DIR/last_playlist"
-YTPL_MODE="$YTPL_DIR/mode"           # audio or video
-YTPL_CONFIG="$YTPL_DIR/config"       # optional config file
+YTPL_MODE="$YTPL_DIR/mode"
+YTPL_CONFIG="$YTPL_DIR/config"
 
-# Default mode
 [[ ! -f "$YTPL_MODE" ]] && echo "audio" > "$YTPL_MODE"
 
-# Ensure Lua script exists
+# Lua script for now playing + notifications + reset time-pos
 YTPL_LUA="$YTPL_DIR/mpv_nowplaying.lua"
 if [[ ! -f "$YTPL_LUA" ]]; then
 cat > "$YTPL_LUA" <<'EOF'
--- writes current track title to file and sends desktop notification
 local nowplaying_file = os.getenv("YTPL_NOWPLAYING") or "/tmp/ytpl.nowplaying"
 
 mp.register_event("file-loaded", function()
+    mp.set_property("time-pos", 0)   -- always start at 0:00
     local title = mp.get_property("media-title")
     if title then
         local f = io.open(nowplaying_file, "w")
@@ -36,7 +35,6 @@ mp.register_event("file-loaded", function()
             f:write(title .. "\n")
             f:close()
         end
-        -- send desktop notification
         os.execute(string.format("notify-send 'Now Playing' '%s'", title:gsub("'", "'\\''")))
     end
 end)
@@ -54,7 +52,6 @@ ytpl() {
             local url=""
             local shuffle_flag=""
             local start_index=""
-            # Parse arguments
             while [[ $# -gt 0 ]]; do
                 case "$1" in
                     --shuffle) shuffle_flag="--shuffle"; shift ;;
@@ -80,22 +77,15 @@ ytpl() {
             fi
 
             echo "$url" > "$YTPL_LAST"
-
-            # Remove old IPC & Now Playing
             [[ -e "$YTPL_IPC" ]] && rm -f "$YTPL_IPC"
             [[ -f "$YTPL_NOWPLAYING" ]] && rm -f "$YTPL_NOWPLAYING"
-
-            # Clear old log
             > "$YTPL_LOG"
 
-            # Determine mode
             local mode_flag=""
-            if [[ "$(cat "$YTPL_MODE")" == "audio" ]]; then
-                mode_flag="--no-video"
-            fi
+            [[ "$(cat "$YTPL_MODE")" == "audio" ]] && mode_flag="--no-video"
 
-            # Start mpv with proper logging, shuffle, and start index
-            mpv $mode_flag \
+            # Start mpv with line-buffered output
+            stdbuf -oL -eL mpv $mode_flag \
                 --ytdl=yes \
                 --ytdl-format="bestaudio/best" \
                 --ytdl-raw-options=yes-playlist=yes \
@@ -106,22 +96,18 @@ ytpl() {
                 --script="$YTPL_LUA" \
                 --save-position-on-quit=no \
                 --msg-level=all=info \
-                $shuffle_flag \
-                $start_index \
-                "$url" \
-                >"$YTPL_LOG" 2>&1 &
-            echo $! > "$YTPL_PID"
+                $shuffle_flag $start_index \
+                "$url" >"$YTPL_LOG" 2>&1 &
 
+            echo $! > "$YTPL_PID"
             echo "ytpl started in $(cat "$YTPL_MODE") mode (PID $(cat "$YTPL_PID"))"
             echo "Logs: $YTPL_LOG"
             echo "Now Playing: $YTPL_NOWPLAYING"
-        ;;
+            ;;
         stop)
             if [[ -f "$YTPL_PID" ]]; then
                 kill "$(cat "$YTPL_PID")" 2>/dev/null && echo "ytpl stopped" || echo "ytpl not running"
-                rm -f "$YTPL_PID"
-                [[ -e "$YTPL_IPC" ]] && rm -f "$YTPL_IPC"
-                [[ -f "$YTPL_NOWPLAYING" ]] && rm -f "$YTPL_NOWPLAYING"
+                rm -f "$YTPL_PID" "$YTPL_IPC" "$YTPL_NOWPLAYING"
             else
                 echo "ytpl is not running"
             fi
@@ -155,11 +141,9 @@ ytpl() {
                     ;;
                 next)
                     echo '{ "command": ["playlist-next", "force"] }' | socat - "$YTPL_IPC"
-                    echo '{ "command": ["set_property", "time-pos", 0] }' | socat - "$YTPL_IPC"
                     ;;
                 prev)
                     echo '{ "command": ["playlist-prev", "force"] }' | socat - "$YTPL_IPC"
-                    echo '{ "command": ["set_property", "time-pos", 0] }' | socat - "$YTPL_IPC"
                     ;;
                 volume-up)
                     echo '{ "command": ["add", "volume", 5] }' | socat - "$YTPL_IPC"
@@ -183,12 +167,6 @@ ytpl() {
                     echo "Mode switched to $newmode. Restart ytpl to apply."
                     ;;
                 show)
-                    # Show now playing + queue context
-                    if [[ ! -S "$YTPL_IPC" ]]; then
-                        echo "ytpl is not running."
-                        return 1
-                    fi
-
                     local current="Unknown"
                     [[ -f "$YTPL_NOWPLAYING" ]] && current=$(cat "$YTPL_NOWPLAYING")
 
@@ -234,27 +212,25 @@ EOM
                     ;;
             esac
             ;;
-            # Default usage (for main command)
-            *)
+        *)
             cat <<'EOM'
 Usage:
-    ytpl start <playlist_url> [--shuffle] [--start N]  
-        Start playing a playlist.
-        --shuffle       Play the playlist in random order.
-        --start N       Start from the N-th video (0-based index).
+  ytpl start <playlist_url> [--shuffle] [--start N]  
+      Start playing a playlist.  
+      --shuffle       Play the playlist in random order.  
+      --start N       Start from the N-th video (0-based index).
 
-    ytpl stop
-        Stop playback and quit mpv.
+  ytpl stop
+      Stop playback and quit mpv.
 
-    ytpl status
-        Show current daemon status (running or not, mode).
+  ytpl status
+      Show current daemon status (running or not, mode).
 
-    ytpl logs
-        Show the last 30 lines of mpv logs.
+  ytpl logs
+      Show the last 30 lines of mpv logs.
 
-    ytpl player <command> [options]
-        Control playback and see queue.
-
+  ytpl player <command> [options]
+      Control playback and see queue.
 EOM
             ;;
     esac
