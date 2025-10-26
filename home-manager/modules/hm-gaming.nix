@@ -2,20 +2,20 @@
 
 {
 
-  ## GPU drivers
-  services.xserver.videoDrivers = [ "nvidia" "amdgpu" ];
+  # ## GPU drivers
+  # services.xserver.videoDrivers = [ "nvidia" "amdgpu" ];
 
-  ## Enable gamemode
-  programs.gamemode.enable = true;
+  # ## Enable gamemode
+  # programs.gamemode.enable = true;
 
-  ## Steam
-  programs.steam = {
-    enable = true;
-    gamescopeSession.enable = true;
-    remotePlay.openFirewall = true;
-    dedicatedServer.openFirewall = true;
-    extraCompatPackages = [ pkgs.proton-ge-bin];
-  };
+  # ## Steam
+  # programs.steam = {
+  #   enable = true;
+  #   gamescopeSession.enable = true;
+  #   remotePlay.openFirewall = true;
+  #   dedicatedServer.openFirewall = true;
+  #   extraCompatPackages = [ pkgs.proton-ge-bin];
+  # };
 
   ## Gaming packages
   home.packages = with pkgs; [
