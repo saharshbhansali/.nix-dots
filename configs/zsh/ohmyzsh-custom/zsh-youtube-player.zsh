@@ -1,11 +1,9 @@
 #!/usr/bin/env zsh
 # YTPL - YouTube Playlist Audio/Video Daemon
 
-# Ensure yt-dlp is installed
 pipx ensurepath > /dev/null 2>&1
 pipx install yt-dlp > /dev/null 2>&1
 
-# Directories and files
 YTPL_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/ytpl"
 mkdir -p "$YTPL_DIR"
 
@@ -20,7 +18,6 @@ YTPL_LUA="$YTPL_DIR/mpv_nowplaying.lua"
 
 [[ ! -f "$YTPL_MODE" ]] && echo "audio" > "$YTPL_MODE"
 
-# Lua script for notifications + reset time-pos
 if [[ ! -f "$YTPL_LUA" ]]; then
 cat > "$YTPL_LUA" <<'EOF'
 local nowplaying_file = os.getenv("YTPL_NOWPLAYING") or "/tmp/ytpl.nowplaying"
@@ -40,18 +37,30 @@ EOF
 fi
 export YTPL_NOWPLAYING
 
+# Playback helper function
+ytpl_playback() {
+    local url="$1"
+    local mode_flag="$2"
+    local shuffle_flag="$3"
+    local start_index="$4"
+
+    stdbuf -oL -eL yt-dlp -o - "$url" | stdbuf -oL -eL mpv $mode_flag \
+        --ytdl-format="bestaudio/best" \
+        --loop-playlist=no \
+        --input-ipc-server="$YTPL_IPC" \
+        --idle=no \
+        --no-terminal \
+        --script="$YTPL_LUA" \
+        --save-position-on-quit=no \
+        --msg-level=all=info \
+        $shuffle_flag $start_index -
+}
+
 ytpl() {
     local sub=$1
 
     if [[ -z "$sub" ]]; then
-cat <<'EOM'
-Usage:
-  ytpl start <playlist_url> [--shuffle] [--start N]
-  ytpl stop
-  ytpl status
-  ytpl logs
-  ytpl player <command>
-EOM
+        echo "Usage: ytpl {start|stop|status|logs|player}"
         return
     fi
 
@@ -62,7 +71,6 @@ EOM
             local url=""
             local shuffle_flag=""
             local start_index=""
-
             while [[ $# -gt 0 ]]; do
                 case "$1" in
                     --shuffle) shuffle_flag="--shuffle"; shift ;;
@@ -84,9 +92,12 @@ EOM
                 return 1
             fi
 
-            # Normalize playlist URL
-            if [[ "$url" =~ list=([^&]+) ]]; then
-                url="https://music.youtube.com/playlist?list=${match[1]}"
+            # Normalize URL for YouTube & YouTube Music
+            if [[ "$url" =~ "list=" ]]; then
+                # Extract playlist ID
+                local plist_id="${url#*list=}"
+                plist_id="${plist_id%%&*}"
+                url="https://www.youtube.com/playlist?list=$plist_id"
             fi
 
             if [[ -f "$YTPL_PID" ]] && kill -0 "$(cat "$YTPL_PID")" 2>/dev/null; then
@@ -106,20 +117,8 @@ EOM
             local mode_flag=""
             [[ "$(cat "$YTPL_MODE")" == "audio" ]] && mode_flag="--no-video"
 
-            # Start mpv in background safely
-            (
-                stdbuf -oL -eL yt-dlp -o - "$url" | stdbuf -oL -eL mpv $mode_flag \
-                    --ytdl-format="bestaudio/best" \
-                    --loop-playlist=no \
-                    --input-ipc-server="$YTPL_IPC" \
-                    --idle=no \
-                    --no-terminal \
-                    --script="$YTPL_LUA" \
-                    --save-position-on-quit=no \
-                    --msg-level=all=info \
-                    $shuffle_flag $start_index -
-            ) >"$YTPL_LOG" 2>&1 &
-
+            # Start playback in background using helper function
+            ytpl_playback "$url" "$mode_flag" "$shuffle_flag" "$start_index" >"$YTPL_LOG" 2>&1 &
             echo $! > "$YTPL_PID"
             echo "ytpl started in $(cat "$YTPL_MODE") mode (PID $(cat "$YTPL_PID"))"
             echo "Logs: $YTPL_LOG"
@@ -166,14 +165,12 @@ EOM
                     echo "Current track: $current"
 
                     if [[ -f "$YTPL_QUEUE" ]]; then
-                        # Read queue into array
                         local -a titles
-                        local -i idx=0
+                        local idx=0
                         while IFS="|" read -r t u; do
                             titles[idx++]="$t"
                         done < "$YTPL_QUEUE"
 
-                        # Get current position
                         local pos=$(printf '{ "command": ["get_property", "playlist-pos"] }' | socat - "$YTPL_IPC" | jq '.data // 0')
                         [[ -z "$pos" ]] && pos=0
 
@@ -181,7 +178,6 @@ EOM
                         local end=$(( pos + 5 >= ${#titles[@]} ? ${#titles[@]}-1 : pos + 5 ))
 
                         echo "Queue context (prev 2 / current / next 5):"
-                        local i
                         for i in $(seq $start $end); do
                             if [[ $i -eq $pos ]]; then
                                 echo "▶ ${titles[i]}"
@@ -193,13 +189,9 @@ EOM
                         echo "Queue not available."
                     fi
                     ;;
-                *)
-                    echo "ytpl player: Unknown command"
-                    ;;
+                *) echo "ytpl player: Unknown command" ;;
             esac
             ;;
-        *)
-            echo "Unknown subcommand: $sub"
-            ;;
+        *) echo "ytpl: Unknown subcommand $sub" ;;
     esac
 }
