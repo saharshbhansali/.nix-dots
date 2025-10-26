@@ -45,6 +45,30 @@ ytpl() {
     local sub=$1
     shift
 
+    # Show base menu if no subcommand given
+    if [[ -z "$sub" ]]; then
+cat <<'EOM'
+Usage:
+  ytpl start <playlist_url> [--shuffle] [--start N]  
+      Start playing a playlist.
+      --shuffle       Play playlist in random order
+      --start N       Start from N-th video (0-based)
+
+  ytpl stop
+      Stop playback.
+
+  ytpl status
+      Show daemon status.
+
+  ytpl logs
+      Show mpv logs.
+
+  ytpl player <command>
+      Control playback and see queue.
+EOM
+        return
+    fi
+
     case "$sub" in
         start)
             local url=""
@@ -53,7 +77,14 @@ ytpl() {
             while [[ $# -gt 0 ]]; do
                 case "$1" in
                     --shuffle) shuffle_flag="--shuffle"; shift ;;
-                    --start) start_index="--playlist-start=$2"; shift 2 ;;
+                    --start)
+                        if [[ $# -lt 2 ]]; then
+                            echo "Error: --start requires an argument"
+                            return 1
+                        fi
+                        start_index="--playlist-start=$2"
+                        shift 2
+                        ;;
                     *) url="$1"; shift ;;
                 esac
             done
@@ -86,7 +117,7 @@ ytpl() {
             local mode_flag=""
             [[ "$(cat "$YTPL_MODE")" == "audio" ]] && mode_flag="--no-video"
 
-            # Start mpv via explicit yt-dlp pipe for logs
+            # Start mpv via yt-dlp pipe for logs
             stdbuf -oL -eL yt-dlp -o - "$url" | \
             stdbuf -oL -eL mpv $mode_flag \
                 --ytdl-format="bestaudio/best" \
