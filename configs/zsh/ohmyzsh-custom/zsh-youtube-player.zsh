@@ -2,7 +2,6 @@
 # YTPL - YouTube Playlist Audio/Video Daemon
 
 pipx ensurepath > /dev/null 2>&1
-
 pipx install yt-dlp > /dev/null 2>&1
 
 YTPL_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/ytpl"
@@ -20,14 +19,14 @@ YTPL_CONFIG="$YTPL_DIR/config"   # optional config file
 # Default mode
 [[ ! -f "$YTPL_MODE" ]] && echo "audio" > "$YTPL_MODE"
 
-# Ensure Lua script exists
+# Lua script for now playing + reset track start
 YTPL_LUA="$YTPL_DIR/mpv_nowplaying.lua"
 if [[ ! -f "$YTPL_LUA" ]]; then
 cat > "$YTPL_LUA" <<'EOF'
--- writes current track title to file
 local nowplaying_file = os.getenv("YTPL_NOWPLAYING") or "/tmp/ytpl.nowplaying"
 
 mp.register_event("file-loaded", function()
+    mp.set_property("time-pos", 0)  -- always start at beginning
     local title = mp.get_property("media-title")
     if title then
         local f = io.open(nowplaying_file, "w")
@@ -46,6 +45,19 @@ ytpl() {
     local sub=$1
     shift
 
+    if [[ -z "$sub" ]]; then
+        echo "Usage: ytpl <command>
+
+Commands:
+  start <playlist_url>           Start playing a playlist
+  stop                           Stop playback
+  status                         Show daemon status
+  logs                           Show last 30 lines of mpv logs
+  player <command>               Control playback
+"
+        return
+    fi
+
     case "$sub" in
         start)
             local url=$1
@@ -55,6 +67,13 @@ ytpl() {
                 return 1
             fi
 
+            # Normalize YouTube URL
+            if [[ "$url" == *"list="* ]]; then
+                local plist_id="${url#*list=}"
+                plist_id="${plist_id%%&*}"
+                url="https://www.youtube.com/playlist?list=$plist_id"
+            fi
+
             if [[ -f "$YTPL_PID" ]] && kill -0 "$(cat "$YTPL_PID")" 2>/dev/null; then
                 echo "ytpl is already running (PID $(cat "$YTPL_PID"))"
                 return 1
@@ -62,15 +81,11 @@ ytpl() {
 
             echo "$url" > "$YTPL_LAST"
 
-            # Remove old IPC & Now Playing
             [[ -e "$YTPL_IPC" ]] && rm -f "$YTPL_IPC"
             [[ -f "$YTPL_NOWPLAYING" ]] && rm -f "$YTPL_NOWPLAYING"
 
-            # Determine mode
             local mode_flag=""
-            if [[ "$(cat "$YTPL_MODE")" == "audio" ]]; then
-                mode_flag="--no-video"
-            fi
+            [[ "$(cat "$YTPL_MODE")" == "audio" ]] && mode_flag="--no-video"
 
             # Start mpv
             (
@@ -111,11 +126,7 @@ ytpl() {
             fi
             ;;
         logs)
-            if [[ -f "$YTPL_LOG" ]]; then
-                tail -n 30 "$YTPL_LOG"
-            else
-                echo "No logs found."
-            fi
+            [[ -f "$YTPL_LOG" ]] && tail -n 30 "$YTPL_LOG" || echo "No logs found."
             ;;
         player)
             if [[ ! -S "$YTPL_IPC" ]]; then
@@ -124,32 +135,14 @@ ytpl() {
             fi
             local cmd=$1
             case "$cmd" in
-                play|pause)
-                    echo '{ "command": ["cycle", "pause"] }' | socat - "$YTPL_IPC"
-                    ;;
-                stop)
-                    echo '{ "command": ["quit"] }' | socat - "$YTPL_IPC"
-                    ;;
-                next)
-                    echo '{ "command": ["playlist-next", "force"] }' | socat - "$YTPL_IPC"
-                    echo '{ "command": ["set_property", "time-pos", 0] }' | socat - "$YTPL_IPC"
-                    ;;
-                prev)
-                    echo '{ "command": ["playlist-prev", "force"] }' | socat - "$YTPL_IPC"
-                    echo '{ "command": ["set_property", "time-pos", 0] }' | socat - "$YTPL_IPC"
-                    ;;
-                volume-up)
-                    echo '{ "command": ["add", "volume", 5] }' | socat - "$YTPL_IPC"
-                    ;;
-                volume-down)
-                    echo '{ "command": ["add", "volume", -5] }' | socat - "$YTPL_IPC"
-                    ;;
-                seek-forward)
-                    echo '{ "command": ["seek", 10, "relative"] }' | socat - "$YTPL_IPC"
-                    ;;
-                seek-backward)
-                    echo '{ "command": ["seek", -10, "relative"] }' | socat - "$YTPL_IPC"
-                    ;;
+                play|pause)    echo '{ "command": ["cycle", "pause"] }' | socat - "$YTPL_IPC" ;;
+                stop)          echo '{ "command": ["quit"] }' | socat - "$YTPL_IPC" ;;
+                next)          echo '{ "command": ["playlist-next", "force"] }' | socat - "$YTPL_IPC" ;;
+                prev)          echo '{ "command": ["playlist-prev", "force"] }' | socat - "$YTPL_IPC" ;;
+                volume-up)     echo '{ "command": ["add", "volume", 5] }' | socat - "$YTPL_IPC" ;;
+                volume-down)   echo '{ "command": ["add", "volume", -5] }' | socat - "$YTPL_IPC" ;;
+                seek-forward)  echo '{ "command": ["seek", 10, "relative"] }' | socat - "$YTPL_IPC" ;;
+                seek-backward) echo '{ "command": ["seek", -10, "relative"] }' | socat - "$YTPL_IPC" ;;
                 mode)
                     local newmode=$2
                     if [[ "$newmode" != "audio" && "$newmode" != "video" ]]; then
@@ -160,50 +153,56 @@ ytpl() {
                     echo "Mode switched to $newmode. Restart ytpl to apply."
                     ;;
                 show)
-                    # Show now playing + queue context
-                    if [[ ! -S "$YTPL_IPC" ]]; then
-                        echo "ytpl is not running."
-                        return 1
-                    fi
-
-                    # Current track
                     local current="Unknown"
                     [[ -f "$YTPL_NOWPLAYING" ]] && current=$(cat "$YTPL_NOWPLAYING")
+                    echo "Current track: $current"
 
-                    # Queue context
-                    local playlist_json pos
+                    local playlist_json pos titles start end
                     playlist_json=$(printf '{ "command": ["get_property", "playlist"] }' | socat - "$YTPL_IPC")
-                    pos=$(printf '{ "command": ["get_property", "playlist-pos"] }' | socat - "$YTPL_IPC" | jq '.data')
+                    pos=$(printf '{ "command": ["get_property", "playlist-pos"] }' | socat - "$YTPL_IPC" | jq '.data // 0')
 
                     if [[ -n "$playlist_json" && "$playlist_json" != "{}" ]]; then
-                        local titles=($(echo "$playlist_json" | jq -r '.data[]?.filename'))
-                        local start=$(( pos - 2 < 0 ? 0 : pos - 2 ))
-                        local end=$(( pos + 5 >= ${#titles[@]} ? ${#titles[@]}-1 : pos + 5 ))
+                        titles=($(echo "$playlist_json" | jq -r '.data[]?.filename'))
+                        start=$(( pos - 2 < 0 ? 0 : pos - 2 ))
+                        end=$(( pos + 5 >= ${#titles[@]} ? ${#titles[@]}-1 : pos + 5 ))
                         echo "Queue context (prev 2 / current / next 5):"
                         for i in $(seq $start $end); do
-                            if [[ $i -eq $pos ]]; then
-                                echo "▶ ${titles[$i]}"
-                            else
-                                echo "  ${titles[$i]}"
-                            fi
+                            [[ $i -eq $pos ]] && echo "▶ ${titles[$i]}" || echo "  ${titles[$i]}"
                         done
                     else
-                        echo "Current track: $current"
                         echo "Queue not available."
                     fi
                     ;;
                 *)
-                    echo "Usage: ytpl player {play|pause|stop|next|prev|volume-up|volume-down|seek-forward|seek-backward|mode audio|mode video|show}"
+                    echo "Usage: ytpl player <command>
+
+Commands:
+  play              Toggle playback (play/pause)
+  pause             Toggle playback (play/pause)
+  stop              Stop playback and quit mpv
+  next              Skip to next song
+  prev              Go to previous song
+  volume-up         Increase volume by 5%
+  volume-down       Decrease volume by 5%
+  seek-forward      Seek forward 10 seconds
+  seek-backward     Seek backward 10 seconds
+  mode audio        Switch to audio-only mode (restart required)
+  mode video        Switch to video mode (restart required)
+  show              Display current track and queue context
+"
                     ;;
             esac
             ;;
         *)
-            echo "Usage:"
-            echo "  ytpl start <playlist_url>"
-            echo "  ytpl stop"
-            echo "  ytpl status"
-            echo "  ytpl logs"
-            echo "  ytpl player {play|pause|stop|next|prev|volume-up|volume-down|seek-forward|seek-backward|mode audio|mode video|show}"
+            echo "Usage: ytpl <command>
+
+Commands:
+  start <playlist_url>   Start playing a playlist
+  stop                   Stop playback
+  status                 Show daemon status
+  logs                   Show last 30 lines of mpv logs
+  player <command>       Control playback
+"
             ;;
     esac
 }
