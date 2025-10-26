@@ -1,12 +1,15 @@
 #!/usr/bin/env zsh
 # YTPL - YouTube Playlist Audio/Video Daemon
 
+# Ensure yt-dlp is installed
 pipx ensurepath > /dev/null 2>&1
 pipx install yt-dlp > /dev/null 2>&1
 
+# Config directory
 YTPL_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/ytpl"
 mkdir -p "$YTPL_DIR"
 
+# Files
 YTPL_PID="$YTPL_DIR/ytpl.pid"
 YTPL_LOG="/tmp/ytpl.log"
 YTPL_NOWPLAYING="$YTPL_DIR/ytpl.nowplaying"
@@ -18,6 +21,7 @@ YTPL_LUA="$YTPL_DIR/mpv_nowplaying.lua"
 
 [[ ! -f "$YTPL_MODE" ]] && echo "audio" > "$YTPL_MODE"
 
+# Lua script for now playing + notifications + reset time-pos
 if [[ ! -f "$YTPL_LUA" ]]; then
 cat > "$YTPL_LUA" <<'EOF'
 local nowplaying_file = os.getenv("YTPL_NOWPLAYING") or "/tmp/ytpl.nowplaying"
@@ -37,14 +41,18 @@ EOF
 fi
 export YTPL_NOWPLAYING
 
-# Playback helper function
+# Playback using FIFO to avoid blocking
 ytpl_playback() {
     local url="$1"
     local mode_flag="$2"
     local shuffle_flag="$3"
     local start_index="$4"
 
-    stdbuf -oL -eL yt-dlp -o - "$url" | stdbuf -oL -eL mpv $mode_flag \
+    local fifo="/tmp/ytpl_fifo.$$"
+    [[ -p $fifo ]] || mkfifo "$fifo"
+
+    # Start mpv reading from FIFO
+    mpv $mode_flag \
         --ytdl-format="bestaudio/best" \
         --loop-playlist=no \
         --input-ipc-server="$YTPL_IPC" \
@@ -53,18 +61,34 @@ ytpl_playback() {
         --script="$YTPL_LUA" \
         --save-position-on-quit=no \
         --msg-level=all=info \
-        $shuffle_flag $start_index -
+        $shuffle_flag $start_index "$fifo" >"$YTPL_LOG" 2>&1 &
+
+    local mpv_pid=$!
+
+    # Feed yt-dlp into FIFO asynchronously
+    yt-dlp -o - "$url" >"$fifo" 2>/dev/null &
+
+    # Save PID of mpv daemon
+    echo $mpv_pid > "$YTPL_PID"
 }
 
 ytpl() {
     local sub=$1
 
+    # Base usage if no subcommand
     if [[ -z "$sub" ]]; then
-        echo "Usage: ytpl {start|stop|status|logs|player}"
+        echo "Usage: ytpl <command>"
+        echo
+        echo "Commands:"
+        echo "  start <playlist_url> [--shuffle] [--start N]   Start playing a playlist"
+        echo "  stop                                           Stop playback"
+        echo "  status                                         Show daemon status"
+        echo "  logs                                           Show last 50 lines of mpv logs"
+        echo "  player <command>                               Control playback"
         return
     fi
 
-    shift
+    shift  # remove subcommand
 
     case "$sub" in
         start)
@@ -72,7 +96,7 @@ ytpl() {
             local shuffle_flag=""
             local start_index=""
 
-            # Process all arguments
+            # Parse flags and URL
             while [[ $# -gt 0 ]]; do
                 case "$1" in
                     --shuffle)
@@ -87,7 +111,7 @@ ytpl() {
                         start_index="--playlist-start=$2"
                         shift 2
                         ;;
-                    --*) 
+                    --*)
                         echo "Unknown option: $1"
                         return 1
                         ;;
@@ -105,8 +129,8 @@ ytpl() {
                 return 1
             fi
 
-            # Normalize URL (YouTube / YouTube Music)
-            if [[ "$url" =~ "list=" ]]; then
+            # Normalize YouTube / YouTube Music playlist URL
+            if [[ "$url" == *"list="* ]]; then
                 local plist_id="${url#*list=}"
                 plist_id="${plist_id%%&*}"
                 url="https://www.youtube.com/playlist?list=$plist_id"
@@ -118,6 +142,7 @@ ytpl() {
                 return 1
             fi
 
+            # Prepare files
             echo "$url" > "$YTPL_LAST"
             [[ -e "$YTPL_IPC" ]] && rm -f "$YTPL_IPC"
             [[ -f "$YTPL_NOWPLAYING" ]] && rm -f "$YTPL_NOWPLAYING"
@@ -130,9 +155,9 @@ ytpl() {
             local mode_flag=""
             [[ "$(cat "$YTPL_MODE")" == "audio" ]] && mode_flag="--no-video"
 
-            # Start playback safely
-            ytpl_playback "$url" "$mode_flag" "$shuffle_flag" "$start_index" >"$YTPL_LOG" 2>&1 &
-            echo $! > "$YTPL_PID"
+            # Start playback
+            ytpl_playback "$url" "$mode_flag" "$shuffle_flag" "$start_index"
+
             echo "ytpl started in $(cat "$YTPL_MODE") mode (PID $(cat "$YTPL_PID"))"
             echo "Logs: $YTPL_LOG"
             echo "Now Playing: $YTPL_NOWPLAYING"
