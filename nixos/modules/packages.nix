@@ -90,6 +90,14 @@
     ## Wi-Fi utils
     iw
 
+    ## Socket utils
+    netcat
+    # netcat-gnu
+    socat
+    snicat
+    dbd
+    websocat
+
     ## Keyboard and Clipboard utils
     wl-clipboard
     xclip
