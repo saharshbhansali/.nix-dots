@@ -431,14 +431,17 @@ USAGE
       else
         echo "No explicit cookie file at: $YTDLP_COOKIES_PATH"
       fi
+
+      local test_url="https://www.youtube.com/playlist?list=PLAOCHv-zAmkge9fu4Ii6E6aKFBnnT7Egc"  # guaranteed public video
       for b in chrome firefox chromium vivaldi zen brave edge opera whale; do
         echo -n "Trying browser: $b ... "
-        if yt-dlp --cookies-from-browser "$b" -j --flat-playlist "https://www.youtube.com/playlist?list=PL" >/dev/null 2>>"$YTPL_LOG"; then
+        if yt-dlp --cookies-from-browser "$b" -j "$test_url" >/dev/null 2>>"$YTPL_LOG"; then
           echo "OK (browser: $b)"
         else
           echo "failed"
         fi
       done
+
       echo "Check $YTPL_LOG for details."
       ;;
 
