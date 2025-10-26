@@ -185,7 +185,7 @@ build_playlist_file() {
     fi
   fi
 
-  local -a browsers=(chrome firefox chromium vivaldi zen brave edge opera whale)
+  local -a browsers=(firefox chromium vivaldi zen brave chrome edge opera whale)
   for b in "${browsers[@]}"; do
     echo "Trying cookies from browser: $b" >> "$YTPL_LOG"
     if yt-dlp $ytdlp_verbose --cookies-from-browser "$b" -j --flat-playlist "$url" 2>>"$YTPL_LOG" | jq -r '.title + "|" + .url' > "${YTPL_QUEUE}.tmp"; then
