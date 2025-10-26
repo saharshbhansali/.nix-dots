@@ -117,6 +117,8 @@
     ## Media utils
     ffmpeg
     pamixer
+    mpv
+    vlc
 
     ## Development utils
     devenv                          # development environment manager
