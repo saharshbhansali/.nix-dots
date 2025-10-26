@@ -88,6 +88,7 @@
   hardware.enableAllFirmware = true;
   # Optional: Use latest kernel for better Realtek driver support
   # boot.kernelPackages = pkgs.linuxPackages_latest;
-  boot.kernelPackages = pkgs.linuxPackages_6_12;
+  # boot.kernelPackages = pkgs.linuxPackages_6_12;
+  boot.kernelPackages = pkgs.linuxPackages_zen;
 
 }
