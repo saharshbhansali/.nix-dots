@@ -165,6 +165,9 @@
     gtk3
     gtk4
 
+    # Notification utils
+    libnotify
+
     ## BitWarden
     bitwarden-cli
     bitwarden-desktop
