@@ -164,13 +164,33 @@ EOM
                     local current="Unknown"
                     [[ -f "$YTPL_NOWPLAYING" ]] && current=$(cat "$YTPL_NOWPLAYING")
                     echo "Current track: $current"
+
                     if [[ -f "$YTPL_QUEUE" ]]; then
-                        local i=0
-                        echo "Queue:"
-                        while IFS="|" read -r title url; do
-                            echo "$i: $title"
-                            ((i++))
+                        # Read queue into array
+                        local -a titles
+                        local -i idx=0
+                        while IFS="|" read -r t u; do
+                            titles[idx++]="$t"
                         done < "$YTPL_QUEUE"
+
+                        # Get current position
+                        local pos=$(printf '{ "command": ["get_property", "playlist-pos"] }' | socat - "$YTPL_IPC" | jq '.data // 0')
+                        [[ -z "$pos" ]] && pos=0
+
+                        local start=$(( pos - 2 < 0 ? 0 : pos - 2 ))
+                        local end=$(( pos + 5 >= ${#titles[@]} ? ${#titles[@]}-1 : pos + 5 ))
+
+                        echo "Queue context (prev 2 / current / next 5):"
+                        local i
+                        for i in $(seq $start $end); do
+                            if [[ $i -eq $pos ]]; then
+                                echo "▶ ${titles[i]}"
+                            else
+                                echo "  ${titles[i]}"
+                            fi
+                        done
+                    else
+                        echo "Queue not available."
                     fi
                     ;;
                 *)
