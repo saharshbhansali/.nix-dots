@@ -184,5 +184,6 @@ eval "$(atuin init zsh)"
 source "$ZINIT_CUSTOM/zsh-aliases.zsh"
 source "$ZINIT_CUSTOM/zsh-autorun.zsh"
 source "$ZINIT_CUSTOM/zsh-pastebin.zsh"
+source "$ZINIT_CUSTOM/zsh-youtube-player.zsh"
 
 #-----------------------------------------------------------------------------------------------------------
