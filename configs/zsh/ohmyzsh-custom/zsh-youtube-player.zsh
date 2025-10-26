@@ -1,9 +1,8 @@
 #!/usr/bin/env zsh
 # YTPL - YouTube Playlist Audio/Video Daemon
 
-pipx ensurepath &> /dev/null
-
-pipx install yt-dlp &> /dev/null
+pipx ensurepath > /dev/null 2>&1
+pipx install yt-dlp > /dev/null 2>&1
 
 # YTPL - YouTube Playlist Audio/Video Daemon
 YTPL_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/ytpl"
@@ -43,9 +42,8 @@ export YTPL_NOWPLAYING
 
 ytpl() {
     local sub=$1
-    shift
 
-    # Show base menu if no subcommand given
+    # Show base menu if no subcommand
     if [[ -z "$sub" ]]; then
 cat <<'EOM'
 Usage:
@@ -68,6 +66,8 @@ Usage:
 EOM
         return
     fi
+
+    shift  # safe because we already checked $sub
 
     case "$sub" in
         start)
@@ -112,24 +112,27 @@ EOM
 
             # Build local queue
             echo "Building local queue..."
-            yt-dlp -j --flat-playlist "$url" | jq -r '.title + "|" + .url' > "$YTPL_QUEUE"
+            yt-dlp -j --flat-playlist "$url" 2>/dev/null | jq -r '.title + "|" + .url' > "$YTPL_QUEUE" \
+                || echo "$url" > "$YTPL_QUEUE"
 
             local mode_flag=""
             [[ "$(cat "$YTPL_MODE")" == "audio" ]] && mode_flag="--no-video"
 
-            # Start mpv via yt-dlp pipe for logs
-            stdbuf -oL -eL yt-dlp -o - "$url" | \
-            stdbuf -oL -eL mpv $mode_flag \
-                --ytdl-format="bestaudio/best" \
-                --loop-playlist=no \
-                --input-ipc-server="$YTPL_IPC" \
-                --idle=no \
-                --no-terminal \
-                --script="$YTPL_LUA" \
-                --save-position-on-quit=no \
-                --msg-level=all=info \
-                $shuffle_flag $start_index \
-                - >"$YTPL_LOG" 2>&1 &
+            # Start mpv via yt-dlp pipe for logs (subshell to fix zsh & issue)
+            (
+                stdbuf -oL -eL yt-dlp -o - "$url" | \
+                stdbuf -oL -eL mpv $mode_flag \
+                    --ytdl-format="bestaudio/best" \
+                    --loop-playlist=no \
+                    --input-ipc-server="$YTPL_IPC" \
+                    --idle=no \
+                    --no-terminal \
+                    --script="$YTPL_LUA" \
+                    --save-position-on-quit=no \
+                    --msg-level=all=info \
+                    $shuffle_flag $start_index \
+                    -
+            ) >"$YTPL_LOG" 2>&1 &
 
             echo $! > "$YTPL_PID"
             echo "ytpl started in $(cat "$YTPL_MODE") mode (PID $(cat "$YTPL_PID"))"
