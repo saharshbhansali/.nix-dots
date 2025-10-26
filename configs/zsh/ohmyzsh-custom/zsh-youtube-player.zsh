@@ -71,9 +71,14 @@ ytpl() {
             local url=""
             local shuffle_flag=""
             local start_index=""
+
+            # Process all arguments
             while [[ $# -gt 0 ]]; do
                 case "$1" in
-                    --shuffle) shuffle_flag="--shuffle"; shift ;;
+                    --shuffle)
+                        shuffle_flag="--shuffle"
+                        shift
+                        ;;
                     --start)
                         if [[ $# -le 1 ]]; then
                             echo "Error: --start requires an argument"
@@ -82,24 +87,32 @@ ytpl() {
                         start_index="--playlist-start=$2"
                         shift 2
                         ;;
-                    *) url="$1"; shift ;;
+                    --*) 
+                        echo "Unknown option: $1"
+                        return 1
+                        ;;
+                    *)
+                        url="$1"
+                        shift
+                        ;;
                 esac
             done
 
+            # Use last playlist if no URL provided
             [[ -z "$url" ]] && [[ -f "$YTPL_LAST" ]] && url=$(cat "$YTPL_LAST")
             if [[ -z "$url" ]]; then
                 echo "Usage: ytpl start <playlist_url> [--shuffle] [--start N]"
                 return 1
             fi
 
-            # Normalize URL for YouTube & YouTube Music
+            # Normalize URL (YouTube / YouTube Music)
             if [[ "$url" =~ "list=" ]]; then
-                # Extract playlist ID
                 local plist_id="${url#*list=}"
                 plist_id="${plist_id%%&*}"
                 url="https://www.youtube.com/playlist?list=$plist_id"
             fi
 
+            # Prevent multiple instances
             if [[ -f "$YTPL_PID" ]] && kill -0 "$(cat "$YTPL_PID")" 2>/dev/null; then
                 echo "ytpl is already running (PID $(cat "$YTPL_PID"))"
                 return 1
@@ -117,7 +130,7 @@ ytpl() {
             local mode_flag=""
             [[ "$(cat "$YTPL_MODE")" == "audio" ]] && mode_flag="--no-video"
 
-            # Start playback in background using helper function
+            # Start playback safely
             ytpl_playback "$url" "$mode_flag" "$shuffle_flag" "$start_index" >"$YTPL_LOG" 2>&1 &
             echo $! > "$YTPL_PID"
             echo "ytpl started in $(cat "$YTPL_MODE") mode (PID $(cat "$YTPL_PID"))"
