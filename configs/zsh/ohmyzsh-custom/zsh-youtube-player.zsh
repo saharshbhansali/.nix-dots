@@ -51,10 +51,21 @@ ytpl() {
 
     case "$sub" in
         start)
-            local url=$1
+            local url=""
+            local shuffle_flag=""
+            local start_index=""
+            # Parse arguments
+            while [[ $# -gt 0 ]]; do
+                case "$1" in
+                    --shuffle) shuffle_flag="--shuffle"; shift ;;
+                    --start) start_index="--playlist-start=$2"; shift 2 ;;
+                    *) url="$1"; shift ;;
+                esac
+            done
+
             [[ -z "$url" ]] && [[ -f "$YTPL_LAST" ]] && url=$(cat "$YTPL_LAST")
             if [[ -z "$url" ]]; then
-                echo "Usage: ytpl start <playlist_url>"
+                echo "Usage: ytpl start <playlist_url> [--shuffle] [--start N]"
                 return 1
             fi
 
@@ -83,7 +94,7 @@ ytpl() {
                 mode_flag="--no-video"
             fi
 
-            # Start mpv with proper logging
+            # Start mpv with proper logging, shuffle, and start index
             mpv $mode_flag \
                 --ytdl=yes \
                 --ytdl-format="bestaudio/best" \
@@ -95,6 +106,8 @@ ytpl() {
                 --script="$YTPL_LUA" \
                 --save-position-on-quit=no \
                 --msg-level=all=info \
+                $shuffle_flag \
+                $start_index \
                 "$url" \
                 >"$YTPL_LOG" 2>&1 &
             echo $! > "$YTPL_PID"
@@ -102,7 +115,7 @@ ytpl() {
             echo "ytpl started in $(cat "$YTPL_MODE") mode (PID $(cat "$YTPL_PID"))"
             echo "Logs: $YTPL_LOG"
             echo "Now Playing: $YTPL_NOWPLAYING"
-            ;;
+        ;;
         stop)
             if [[ -f "$YTPL_PID" ]]; then
                 kill "$(cat "$YTPL_PID")" 2>/dev/null && echo "ytpl stopped" || echo "ytpl not running"
@@ -221,14 +234,26 @@ EOM
                     ;;
             esac
             ;;
-        *)
+            # Default usage (for main command)
+            *)
             cat <<'EOM'
 Usage:
-  ytpl start <playlist_url>         Start playing a playlist
-  ytpl stop                         Stop playback
-  ytpl status                       Show daemon status
-  ytpl logs                         Show last 30 lines of logs
-  ytpl player <command> [options]   Control playback and see queue
+    ytpl start <playlist_url> [--shuffle] [--start N]  
+        Start playing a playlist.
+        --shuffle       Play the playlist in random order.
+        --start N       Start from the N-th video (0-based index).
+
+    ytpl stop
+        Stop playback and quit mpv.
+
+    ytpl status
+        Show current daemon status (running or not, mode).
+
+    ytpl logs
+        Show the last 30 lines of mpv logs.
+
+    ytpl player <command> [options]
+        Control playback and see queue.
 
 EOM
             ;;
