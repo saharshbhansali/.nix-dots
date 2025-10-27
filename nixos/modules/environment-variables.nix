@@ -5,7 +5,7 @@
   # Set environment variables
   environment.sessionVariables = {
     EDITOR = "nvim";
-    DOTNET_SYSTEM_GLOBALIZATION_INVARIANT = 1;
+    DOTNET_SYSTEM_GLOBALIZATION_INVARIANT = "1";
   };
 
 }

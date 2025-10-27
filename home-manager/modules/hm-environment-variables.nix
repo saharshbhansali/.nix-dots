@@ -6,7 +6,7 @@
   home.sessionVariables = {
     EDITOR = "nvim";
     # QT_QPA_PLATFORMTHEME = "kvantum";
-    DOTNET_SYSTEM_GLOBALIZATION_INVARIANT = 1;
+    DOTNET_SYSTEM_GLOBALIZATION_INVARIANT = "1";
   };
 
 }
