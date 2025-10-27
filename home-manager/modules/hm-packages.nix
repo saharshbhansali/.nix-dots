@@ -26,9 +26,11 @@
 
     ## Spotify
     spotify
-    spicetify-cli
+    # spicetify-cli
+    spotifyd
+    spotify-player
+    spotify-cli-linux
     # spotify-tui
-    # spotifyd
 
     ## Browsers
     # zen
