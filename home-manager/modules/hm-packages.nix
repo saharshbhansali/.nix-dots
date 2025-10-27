@@ -82,6 +82,12 @@
     # stremio
     obsidian
 
+    ## TUI apps
+    # ytui-music
+    youtube-tui
+    wiki-tui
+    systemctl-tui
+
     # Torrent
     qbittorrent
 
