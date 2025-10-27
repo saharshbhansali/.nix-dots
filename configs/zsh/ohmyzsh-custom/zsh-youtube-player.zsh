@@ -269,6 +269,9 @@ playlist_nonempty() {
 }
 
 _check_prereqs() {
+  # pipx install spotify_to_ytmusic > /dev/null 2>&1
+  # pipx install yt-dlp > /dev/null 2>&1
+  # pipx ensurepath > /dev/null 2>&1
   for c in mpv yt-dlp jq socat; do
     if ! command -v "$c" >/dev/null 2>&1; then
       echo "Required program '$c' not found in PATH"
