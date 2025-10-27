@@ -1,0 +1,14 @@
+############################ Switch to the next buffer (NEXT)
+keymap  N       NEXT
+############################ Switch to the previous buffer (PREV)
+keymap  P       PREV
+############################ Help keymaps (F1, :h, \, M-h)
+keymap  F1      HELP
+keymap  \\      HELP
+keymap  ": h"   HELP
+keymap  M-h     HELP
+############################ Switch pages (NEXT_PAGE, PREV_PAGE)
+keymap  f       NEXT_PAGE
+keymap  b       PREV_PAGE
+keymap  SPC     NEXT_PAGE
+keymap  M-SPC   PREV_PAGE

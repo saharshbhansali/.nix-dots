@@ -84,6 +84,7 @@ in
 
   home.file.".links/links.cfg".source = ../../configs/links/links.cfg;
   home.file.".config/elinks/elinks.conf".source = ../../configs/elinks/elinks.conf;
+  home.file.".w3m/keymap".source = ../../configs/w3m/keymap;
 
   # home.file.".links/links.cfg".text = builtins.readFile ../../configs/links/links.cfg;
   # home.file.".config/elinks/elinks.conf".text = builtins.readFile ../../configs/elinks/elinks.conf;
