@@ -44,17 +44,4 @@
   ## Configure home-manager
   # home-manager.backupFileExtension = "hm.bak";
 
-
-  ## Set environment variables for X and Wayland cursor settings
-  home.sessionVariables = {
-    EDITOR = "nvim";
-
-    XCURSOR_THEME = "Catppuccin Mocha Mauve";
-    XCURSOR_SIZE = "20";
-    HYPRCURSOR_THEME = lib.mkForce "Catppuccin Mocha Mauve";
-    HYPRCURSOR_SIZE = lib.mkForce "20";
-
-    # QT_QPA_PLATFORMTHEME="kvantum";
-  };
-
 }

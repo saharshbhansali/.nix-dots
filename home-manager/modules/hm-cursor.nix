@@ -13,4 +13,12 @@
     size = 20;
   };
 
+  ## Set environment variables for X and Wayland cursor settings
+  home.sessionVariables = {
+    XCURSOR_THEME = "Catppuccin Mocha Mauve";
+    XCURSOR_SIZE = "20";
+    HYPRCURSOR_THEME = lib.mkForce "Catppuccin Mocha Mauve";
+    HYPRCURSOR_SIZE = lib.mkForce "20";
+  };
+
 }
