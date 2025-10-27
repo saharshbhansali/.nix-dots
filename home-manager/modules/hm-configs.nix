@@ -75,6 +75,13 @@ in
     recursive = true;
   };
 
+  home.file.".newsboat/dark".source = builtins.fetchurl {
+    # url = "https://raw.githubusercontent.com/catppuccin/newsboat/main/themes/dark";
+    # sha256 = lib.fakeSha256;
+    url = "https://github.com/catppuccin/newsboat/raw/be3d0ee1ba0fc26baf7a47c2aa7032b7541deb0f/themes/dark";
+    sha256 = "sha256:09x50g74mld8zv8r6a873j52zx3w86qv3mc7g4fhzr85911cz799";
+  };
+
   home.file.".links/links.cfg".source = ../../configs/links/links.cfg;
   home.file.".config/elinks/elinks.conf".source = ../../configs/elinks/elinks.conf;
 
