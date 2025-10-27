@@ -45,6 +45,8 @@
     ## Service configurations
     ../modules/services.nix
     ../modules/gestures.nix
+    ## System environment configurations
+    ../modules/environment-variables.nix
     ## Desktop Environments
     # GNOME
     ../modules/gnome-desktop.nix

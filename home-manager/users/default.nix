@@ -28,6 +28,8 @@
     ../modules/hm-spicetify.nix
     # Feature
     ../modules/hm-gaming.nix
+    ## System environment configurations
+    ../modules/hm-environment-variables.nix
     ## Application configurations
     ../modules/hm-configs.nix
     ../modules/hm-shell.nix
