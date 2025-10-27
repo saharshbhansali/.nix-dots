@@ -25,4 +25,7 @@
     ];
   };
 
+  # Gestures configuration
+  environment.etc."libinput-gestures.conf".source = ../../configs/gestures/libinput-gestures.conf;
+
 }
