@@ -19,6 +19,8 @@
 
   ## Gaming packages
   environment.systemPackages = with pkgs; [
+    steam-run
+
     # HUD for system performance
     mangohud
 
