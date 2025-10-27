@@ -34,6 +34,7 @@
     ../modules/programs.nix
     ../modules/services.nix
     ../modules/flatpaks.nix
+    ../modules/appimages.nix
     ## Feature configurations
     ../modules/gaming.nix
     ## Application configurations
