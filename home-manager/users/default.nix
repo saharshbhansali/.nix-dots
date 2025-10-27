@@ -16,19 +16,26 @@
 
   ## Import modules
   imports = [
+    ## Application installation
+    # System
     ../modules/hm-packages.nix
     ../modules/hm-programs.nix
     ../modules/hm-flatpaks.nix
-    ../modules/hm-nixvim.nix
-    ../modules/hm-shell.nix
-    ../modules/hm-configs.nix
     ../modules/hm-devtools.nix
+    # Specific
+    ../modules/hm-nixvim.nix
     ../modules/hm-nushell.nix
-    ../modules/hm-cursor.nix
     ../modules/hm-spicetify.nix
-    ../modules/hm-desktop-shortcuts.nix
+    # Feature
     ../modules/hm-gaming.nix
+    ## Application configurations
+    ../modules/hm-configs.nix
+    ../modules/hm-shell.nix
+    ## Desktop Environment configurations
+    ../modules/hm-cursor.nix
     ../modules/hm-gdm.nix
+    ## Miscellaneous configurations
+    ../modules/hm-desktop-shortcuts.nix
   ];
 
 

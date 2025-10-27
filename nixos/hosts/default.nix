@@ -28,26 +28,31 @@
     ../modules/bootloader.nix
     ../modules/swap.nix
     ../modules/filesystem.nix
-    ../modules/shell.nix
     ## Application installation
+    # System
     ../modules/packages.nix
     ../modules/programs.nix
-    ../modules/services.nix
     ../modules/flatpaks.nix
     ../modules/appimages.nix
-    ## Feature configurations
+    # Specific
+    # ../modules/nixvim.nix
+    ../modules/shell.nix
+    # Feature
     ../modules/gaming.nix
     ## Application configurations
-    # ../modules/nixvim.nix
     ../modules/neovim.nix
     ../modules/tmux.nix
     ## Service configurations
+    ../modules/services.nix
     ../modules/gestures.nix
-    ## Desktop Environment configurations
+    ## Desktop Environments
+    # GNOME
     ../modules/gnome-desktop.nix
     # ../modules/gdm.nix
+    # KDE
     ../modules/kde-desktop.nix
     ../modules/sddm.nix
+    # Cosmic
     # ../modules/cosmic-desktop.nix
   ];
 
