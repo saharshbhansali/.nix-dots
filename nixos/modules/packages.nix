@@ -127,6 +127,7 @@
     pamixer
     mpv
     vlc
+    playerctl
 
     ## Development utils
     devenv                          # development environment manager
