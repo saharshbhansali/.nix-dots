@@ -199,6 +199,9 @@
     nerd-fonts.caskaydia-cove
     nerd-fonts.dejavu-sans-mono
 
+    ## Unicode and globalization support
+    icu
+
   ];
 
 }
