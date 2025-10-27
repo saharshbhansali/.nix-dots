@@ -26,6 +26,7 @@
     ../modules/hm-nushell.nix
     ../modules/hm-cursor.nix
     ../modules/hm-spicetify.nix
+    ../modules/hm-desktop-shortcuts.nix
     ../modules/hm-gaming.nix
     ../modules/hm-gdm.nix
   ];
