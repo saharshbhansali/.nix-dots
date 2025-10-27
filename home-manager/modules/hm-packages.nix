@@ -25,7 +25,7 @@
     # ventoy-full
 
     ## Spotify
-    spotify
+    # spotify
     # spicetify-cli
     spotifyd
     spotify-player
