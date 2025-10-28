@@ -184,6 +184,7 @@
 
     ## VM Software
     vmware-workstation
+    qemu
 
     ## Cursors and icons
     catppuccin-cursors.mochaRed
