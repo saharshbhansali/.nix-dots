@@ -23,15 +23,15 @@ alias '.Dw'='~/Downloads/'
 alias '.Dp'='~/Downloads/packages/'
 alias '..d'='~/.dotfiles'
 alias '..c'='~/.config'
-alias '.CS'='~/Downloads/packages/CyberSecurity/'
+# alias '.CS'='~/Downloads/packages/CyberSecurity/'
 
 # VIT WiFi login aliases
 
-alias 'vwifi'='~/login-vit-wifi.sh'
-alias 'vwifi-off'='~/logout-vit-wifi.sh'
-alias 'vpn-on'='~/login-vit-wifi.sh && ~/vpn-vit-connect.sh'
-alias 'cf-on'='~/login-vit-wifi.sh && warp-cli connect && ping 8.8.8.8 -c 5'
-alias 'cf-off'='warp-cli disconnect'
+# alias 'vwifi'='~/login-vit-wifi.sh'
+# alias 'vwifi-off'='~/logout-vit-wifi.sh'
+# alias 'vpn-on'='~/login-vit-wifi.sh && ~/vpn-vit-connect.sh'
+# alias 'cf-on'='~/login-vit-wifi.sh && warp-cli connect && ping 8.8.8.8 -c 5'
+# alias 'cf-off'='warp-cli disconnect'
 # alias 'cf-on'='~/login-vit-wifi.sh && wg-quick up cloudflare && ping 8.8.8.8 -c 5'
 # alias 'cf-off'='wg-quick down cloudflare'
 
@@ -58,7 +58,7 @@ alias 'vdiff'="diff --color -EZy"
 diff_so_fancy() { 
   diff -u $1 $2 | diff-so-fancy
 }
-alias dsf='diff_so_fancy'
+alias 'dsf'='diff_so_fancy'
 
 # Creating directories
 
@@ -82,16 +82,16 @@ alias 'egrep'='grep -iE'
 
 # Picom
 
-alias 'effects'='picom --experimental-backends -b'
+# alias 'effects'='picom --experimental-backends -b'
 
 # Rofi
 
 # alias 'menu'='rofi -show run'
-alias 'menu'='rofi -combi-modi window,drun,ssh -theme Arc-Dark -font "hack 12" -show combi 2>&1 /dev/null &'
+# alias 'menu'='rofi -combi-modi window,drun,ssh -theme Arc-Dark -font "hack 12" -show combi 2>&1 /dev/null &'
 
 # Brightness
 
-alias 'brightness'='xrandr --brightness'
+# alias 'brightness'='xrandr --brightness'
 
 ## VIM customizations - can't autogenerate .vimrc rip
 
@@ -136,7 +136,7 @@ alias 'export-aliases'='alias | sed -E "s/([^=]*)=(.*)/alias '\1'=\2/; p" > alia
 ## Metasploit Alias
 
 # alias 'Metasploit'="/opt/SecTools/metasploit-framework/bin/msfconsole"
-alias 'Metasploit'="/opt/SecTools/metasploit/bin/msfconsole"
+# alias 'Metasploit'="/opt/SecTools/metasploit/bin/msfconsole"
 
 ## Ghidra Alias
 
@@ -148,7 +148,7 @@ alias 'Metasploit'="/opt/SecTools/metasploit/bin/msfconsole"
 
 ## IDA Free Alias
 
-alias 'IDA'="/opt/SecTools/idafree-8.2/ida64 &> /dev/null &"
+# alias 'IDA'="/opt/SecTools/idafree-8.2/ida64 &> /dev/null &"
 
 ## John The Ripper Alias 
 
