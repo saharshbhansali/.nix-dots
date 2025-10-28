@@ -37,13 +37,8 @@
     yazi
     gh # GitHub CLI
 
-    ## Terminal utils
+    ## Process utils
     pm2
-
-    ## Zip utils
-    gzip
-    zip
-    unzip
 
     ## Networking utils
     wget
@@ -64,31 +59,10 @@
     dust
     strace
 
-    ## Terminal enhancers
-    rip2
-    eza
-    bat
-    fzf
-    ripgrep
-    ripgrep-all
-    fd
-    jq
-    sd
-
-    ## Terminal customization
-    zoxide
-    pay-respects
-    starship
-    atuin
-    carapace
-    btop
-    bottom
-    diff-so-fancy
-
-    ## Fetch utils
-    pfetch
-    fastfetch
-    neofetch
+    ## Zip utils
+    gzip
+    zip
+    unzip
 
     ## Wi-Fi utils
     iw
@@ -100,6 +74,32 @@
     snicat
     dbd
     websocat
+
+    ## Terminal enhancers
+    rip2
+    eza
+    bat
+    fzf
+    ripgrep
+    ripgrep-all
+    fd
+    jq
+    sd
+    btop
+
+    ## Terminal customization
+    zoxide
+    pay-respects
+    starship
+    atuin
+    carapace
+    bottom
+    diff-so-fancy
+
+    ## Fetch utils
+    pfetch
+    fastfetch
+    neofetch
 
     ## Keyboard and Clipboard utils
     wl-clipboard
