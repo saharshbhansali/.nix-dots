@@ -28,6 +28,8 @@
     ../modules/bootloader.nix
     ../modules/swap.nix
     ../modules/filesystem.nix
+    ../modules/graphics.nix
+    ../modules/networking.nix
     ## Application installation
     # System
     ../modules/packages.nix
