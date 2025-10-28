@@ -38,6 +38,9 @@
     gh # GitHub CLI
 
     ## Terminal utils
+    pm2
+
+    ## Zip utils
     gzip
     zip
     unzip
