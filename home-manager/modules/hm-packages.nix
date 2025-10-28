@@ -77,9 +77,12 @@
     litellm
 
     ## Media
-    # mpv
+    mpv
     vlc
     # stremio
+    obs-studio
+
+    ## Notes
     obsidian
 
     ## TUI apps
