@@ -38,51 +38,7 @@
 
   swapDevices = [ ];
 
-  # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
-  # (the default) this is the recommended approach. When using systemd-networkd it's
-  # still possible to use this option, but it's recommended to use it in conjunction
-  # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
-  networking.useDHCP = lib.mkDefault true;
-  # networking.interfaces.docker0.useDHCP = lib.mkDefault true;
-  # networking.interfaces.eno1.useDHCP = lib.mkDefault true;
-  # networking.interfaces.wlo1.useDHCP = lib.mkDefault true;
-  # networking.interfaces.wlp5s0f4u1.useDHCP = lib.mkDefault true;
-
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
-
-  hardware = {
-    graphics = {
-      enable = true;
-      enable32Bit = true;
-    };
-
-    nvidia = {
-      modesetting.enable = true;
-      powerManagement.enable = true;
-      prime = {
-        offload = {
-          enable = true;
-          enableOffloadCmd = true;
-        };
-        amdgpuBusId = "PCI:5:0:0";     # AMD iGPU
-        nvidiaBusId = "PCI:1:0:0";     # NVIDIA dGPU
-      };
-      # Use the open kernel module (required for driver >= 560 on Turing+ GPUs)
-      open = true;
-    };
-  };
-
-  specialisation = {
-    gaming-time.configuration = {
-      hardware.nvidia = {
-        prime.sync.enable = lib.mkForce true;
-        prime.offload = {
-          enable = lib.mkForce false;
-          enableOffloadCmd = lib.mkForce false;
-        };
-      };
-    };
-  };
 
 }
