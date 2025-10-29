@@ -50,11 +50,12 @@ in
       ipv6_servers = hasIPv6Internet;
       block_ipv6 = ! (hasIPv6Internet);
 
-      require_dnssec = true;
+      require_dnssec = false;
       require_nolog = false;
       require_nofilter = true;
 
       server_names = [
+        "libredns-noads"
         "adguard-dns-doh"
         "mullvad-adblock-doh"
       ];
