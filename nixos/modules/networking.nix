@@ -1,5 +1,8 @@
 { config, lib, pkgs, ... }:
-
+let
+  hasIPv6Internet = true;
+  StateDirectory = "dnscrypt-proxy";
+in
 {
 
   # Networking services
@@ -22,86 +25,43 @@
   # networking.interfaces.wlo1.useDHCP = lib.mkDefault true;
   # networking.interfaces.wlp5s0f4u1.useDHCP = lib.mkDefault true;
 
-  ## Systemd resolved configuration
-  networking.nameservers = [
-    ## IPv4 DNS servers
-    # Mullvad - adblock.dns.mullvad.net
-    "194.242.2.3"
-    # AdGuard - dns.adguard-dns.com
-    "94.140.14.14"
-    # LibreDNS no ads
-    "116.202.176.26#noads.libredns.gr"
-    ## IPv6 DNS servers
-    # Mullvad - adblock.dns.mullvad.net
-    "2a07:e340::3"
-    # AdGuard - dns.adguard-dns.com
-    "2a10:50c0::ad1:ff"
-    # LibreDNS no ads
-    "2a01:4f8:1c0c:8274::1#noads.libredns.gr"
-  ];
+  # Set DNS nameservers statically and make sure that network manager won't override set nameservers with some random settings it received over DHCP
+  networking.nameservers = [ "127.0.0.1" "::1" ];
+  networking.dhcpcd.extraConfig = "nohook resolv.conf";
 
-  services.dnsproxy = {
+  networking.resolvconf.enable = pkgs.lib.mkForce false;
+  services.resolved.enable = false;
+
+  # See https://wiki.nixos.org/wiki/Encrypted_DNS
+  services.dnscrypt-proxy = {
     enable = true;
-
+    # See https://github.com/DNSCrypt/dnscrypt-proxy/blob/master/dnscrypt-proxy/example-dnscrypt-proxy.toml
     settings = {
-      # Listen locally on the default DNS port
-      listen-addrs = [
-        "127.0.0.1"
-        "0.0.0.0"
+      sources.public-resolvers = {
+        urls = [
+          "https://raw.githubusercontent.com/DNSCrypt/dnscrypt-resolvers/master/v3/public-resolvers.md"
+          "https://download.dnscrypt.info/resolvers-list/v3/public-resolvers.md"
+        ];
+        minisign_key = "RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3"; # See https://github.com/DNSCrypt/dnscrypt-resolvers/blob/master/v3/public-resolvers.md
+        cache_file = "/var/lib/${StateDirectory}/public-resolvers.md";
+      };
+
+      # Use servers reachable over IPv6 -- Do not enable if you don't have IPv6 connectivity
+      ipv6_servers = hasIPv6Internet;
+      block_ipv6 = ! (hasIPv6Internet);
+
+      require_dnssec = true;
+      require_nolog = false;
+      require_nofilter = true;
+
+      server_names = [
+        "adguard-dns-doh"
+        "mullvad-adblock-doh"
       ];
-      listen-ports = [ 53 ];
-
-      # === Upstream servers ===
-      upstream = [
-        ## LibreDNS
-        # DNS-over-TLS
-        "tls://noads.libredns.gr"
-        # DNS-over-HTTPS
-        "https://doh.libredns.gr/noads"
-
-        ## Mullvad
-        # DNS-over-TLS
-        "tls://adblock.dns.mullvad.net"
-        # DNS-over-HTTPS
-        "https://adblock.dns.mullvad.net/dns-query"
-      ];
-
-      # === Bootstrap resolver ===
-      # Used to resolve the LibreDNS domain initially
-      bootstrap = [
-        "1.1.1.1:53"
-        "8.8.8.8:53"
-      ];
-
-      # === Fallback plaintext DNS (used only if all encrypted fail) ===
-      fallback = [
-        ## IPv4 DNS servers
-        # Cloudflare - 1.1.1.1
-        "1.1.1.1"
-        # Google - 8.8.8.8
-        "8.8.8.8"
-        ## IPv6 DNS servers
-        # Cloudflare - 1.1.1.1
-        "2606:4700:4700::1111"
-        # Google - 8.8.8.8
-        "2001:4860:4860::8888"
-      ];
-
-      # === Timeouts/Faliures ===
-      timeout = "5s";
-      max-fails = 3;
-
-      # === Performance / behavior options ===
-      cache = true;
-      cache-size = 4096;        # entries
-      all-servers = false;      # query all servers for every query
-      ipv6-disabled = false;    # disable IPv6 if you don't use it
-
     };
-
-    flags = [ "--verbose" ];
-
   };
+
+  systemd.services.dnscrypt-proxy.serviceConfig.StateDirectory = StateDirectory;
 
   ## Fix broken captive portal detection
   programs.captive-browser.enable = true;
