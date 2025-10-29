@@ -60,5 +60,11 @@
 
   networking.networkmanager.dns = "systemd-resolved";
 
+  ## Fix broken captive portal detection
+  programs.captive-browser.enable = true;
+  # hardcoded interface name, bypass with:
+  ## captive-browser --interface $(ip route | awk '/default/ {print $5; exit}')
+  programs.captive-browser.interface = "wlo1";
+
 }
 
