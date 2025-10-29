@@ -63,6 +63,7 @@
           enable = lib.mkForce false;
           enableOffloadCmd = lib.mkForce false;
         };
+        powerManagement.finegrained = lib.mkForce false;
       };
     };
   };
