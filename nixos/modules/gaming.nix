@@ -2,9 +2,6 @@
 
 {
 
-  ## GPU drivers
-  services.xserver.videoDrivers = [ "nvidia" "amdgpu" ];
-
   ## Enable gamemode
   programs.gamemode.enable = true;
 
