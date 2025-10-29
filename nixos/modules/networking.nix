@@ -46,6 +46,15 @@ in
         cache_file = "/var/lib/${StateDirectory}/public-resolvers.md";
       };
 
+      # static = [
+      #   {
+      #     myserver.name = {
+      #       # Calculate stamp from: https://dnscrypt.info/stamps/
+      #       stamp = "";
+      #     };
+      #   }
+      # ];
+
       # Use servers reachable over IPv6 -- Do not enable if you don't have IPv6 connectivity
       ipv6_servers = hasIPv6Internet;
       block_ipv6 = ! (hasIPv6Internet);
