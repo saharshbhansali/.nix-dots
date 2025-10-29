@@ -8,6 +8,7 @@
 
   # Network Manager
   networking.networkmanager.enable = true;
+  networking.networkmanager.dns = "none"; # prevent DHCP DNS override
 
   users.users.saharsh.extraGroups = lib.mkAfter [ "networkmanager" ];
 
@@ -39,26 +40,60 @@
     "2a01:4f8:1c0c:8274::1#noads.libredns.gr"
   ];
 
-  services.resolved = {
+  services.dnsproxy = {
     enable = true;
-    dnssec = "true";
-    domains = [ "~." ];
-    fallbackDns = [
-      ## IPv4 DNS servers
-      # Cloudflare - 1.1.1.1
-      "1.1.1.1"
-      # Google - 8.8.8.8
-      "8.8.8.8"
-      ## IPv6 DNS servers
-      # Cloudflare - 1.1.1.1
-      "2606:4700:4700::1111"
-      # Google - 8.8.8.8
-      "2001:4860:4860::8888"
-    ];
-    dnsovertls = "true";
-  };
 
-  networking.networkmanager.dns = "systemd-resolved";
+    settings = {
+      # Listen locally on the default DNS port
+      listen-addrs = [
+        # "127.0.0.1:53"
+        "127.0.0.1"
+        "0.0.0.0"
+      ];
+
+      # === Upstream servers ===
+      # LibreDNS adblocking over DoT, DoH, and DoQ
+      upstream = [
+        # DNS-over-TLS
+        "tls://noads.libredns.gr"
+
+        # DNS-over-HTTPS
+        "https://doh.libredns.gr/noads"
+
+        # DNS-over-QUIC (UDP/784)
+        "quic://noads.libredns.gr"
+      ];
+
+      # === Bootstrap resolver ===
+      # Used to resolve the LibreDNS domain initially
+      bootstrap = [ "116.202.176.26" ];
+
+      # === Fallback plaintext DNS (used only if all encrypted fail) ===
+      fallback = [
+        ## IPv4 DNS servers
+        # Cloudflare - 1.1.1.1
+        "1.1.1.1"
+        # Google - 8.8.8.8
+        "8.8.8.8"
+        ## IPv6 DNS servers
+        # Cloudflare - 1.1.1.1
+        "2606:4700:4700::1111"
+        # Google - 8.8.8.8
+        "2001:4860:4860::8888"
+      ];
+
+      # === Performance / behavior options ===
+      cache = true;
+      cache-size = 4096;        # entries
+      all-servers = false;      # query one upstream at a time
+      ipv6-disabled = false;    # disable IPv6 if you don't use it
+
+      # === Logging ===
+      log-queries = false;
+      verbose = false;
+    };
+
+  };
 
   ## Fix broken captive portal detection
   programs.captive-browser.enable = true;
