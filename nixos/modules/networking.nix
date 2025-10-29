@@ -58,6 +58,8 @@ in
         "libredns-noads"
         "adguard-dns-doh"
         "mullvad-adblock-doh"
+        "quad9-dnscrypt-ip4-filter-ecs-pri"
+        "controld-block-malware-ad"
       ];
     };
   };
