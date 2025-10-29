@@ -49,27 +49,28 @@
         "127.0.0.1"
         "0.0.0.0"
       ];
-      # listen-ports = [ "53" ];
+      listen-ports = [ 53 ];
 
       # === Upstream servers ===
-      # LibreDNS adblocking over DoT, DoH, and DoQ
       upstream = [
+        ## LibreDNS
         # DNS-over-TLS
         "tls://noads.libredns.gr"
-
         # DNS-over-HTTPS
         "https://doh.libredns.gr/noads"
 
-        # DNS-over-QUIC (UDP/784)
-        "quic://noads.libredns.gr"
+        ## Mullvad
+        # DNS-over-TLS
+        "tls://adblock.dns.mullvad.net"
+        # DNS-over-HTTPS
+        "https://adblock.dns.mullvad.net/dns-query"
       ];
 
       # === Bootstrap resolver ===
       # Used to resolve the LibreDNS domain initially
       bootstrap = [
-        "1.1.1.1"
-        "8.8.8.8"
-        "116.202.176.26"
+        "1.1.1.1:53"
+        "8.8.8.8:53"
       ];
 
       # === Fallback plaintext DNS (used only if all encrypted fail) ===
@@ -93,19 +94,13 @@
       # === Performance / behavior options ===
       cache = true;
       cache-size = 4096;        # entries
-      all-servers = false;      # query one upstream at a time
+      all-servers = false;      # query all servers for every query
       ipv6-disabled = false;    # disable IPv6 if you don't use it
 
-      # === Logging ===
-      log-queries = false;
-      verbose = false;
     };
 
-  };
+    flags = [ "--verbose" ];
 
-  systemd.services.dnsproxy = {
-    after = [ "network.target" ];
-    wants = [ "network.target" ];
   };
 
   ## Fix broken captive portal detection
