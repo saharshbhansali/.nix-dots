@@ -73,14 +73,6 @@
 
   ## Enable services
 
-  # Networking services
-  networking.networkmanager.enable = true;
-  networking.wireless.enable = false;
-  networking.hostName = "nixos";
-
-  # Flatpak
-  services.flatpak.enable = true;
-
   # Virtualisation and docker
   virtualisation.docker.enable = true;
   virtualisation.docker.storageDriver = "btrfs";
