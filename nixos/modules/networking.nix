@@ -19,5 +19,44 @@
   # networking.interfaces.wlo1.useDHCP = lib.mkDefault true;
   # networking.interfaces.wlp5s0f4u1.useDHCP = lib.mkDefault true;
 
+  ## Systemd resolved configuration
+  networking.nameservers = [
+    ## IPv4 DNS servers
+    # Mullvad - adblock.dns.mullvad.net
+    "194.242.2.3"
+    # AdGuard - dns.adguard-dns.com
+    "94.140.14.14"
+    # LibreDNS no ads
+    "116.202.176.26#noads.libredns.gr"
+    ## IPv6 DNS servers
+    # Mullvad - adblock.dns.mullvad.net
+    "2a07:e340::3"
+    # AdGuard - dns.adguard-dns.com
+    "2a10:50c0::ad1:ff"
+    # LibreDNS no ads
+    "2a01:4f8:1c0c:8274::1#noads.libredns.gr"
+  ];
+
+  services.resolved = {
+    enable = true;
+    dnssec = "true";
+    domains = [ "~." ];
+    fallbackDns = [
+      ## IPv4 DNS servers
+      # Cloudflare - 1.1.1.1
+      "1.1.1.1"
+      # Google - 8.8.8.8
+      "8.8.8.8"
+      ## IPv6 DNS servers
+      # Cloudflare - 1.1.1.1
+      "2606:4700:4700::1111"
+      # Google - 8.8.8.8
+      "2001:4860:4860::8888"
+    ];
+    dnsovertls = "true";
+  };
+
+  networking.networkmanager.dns = "systemd-resolved";
+
 }
 
