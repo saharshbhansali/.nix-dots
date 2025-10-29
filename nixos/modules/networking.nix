@@ -46,10 +46,10 @@
     settings = {
       # Listen locally on the default DNS port
       listen-addrs = [
-        # "127.0.0.1:53"
         "127.0.0.1"
         "0.0.0.0"
       ];
+      # listen-ports = [ "53" ];
 
       # === Upstream servers ===
       # LibreDNS adblocking over DoT, DoH, and DoQ
@@ -66,7 +66,11 @@
 
       # === Bootstrap resolver ===
       # Used to resolve the LibreDNS domain initially
-      bootstrap = [ "116.202.176.26" ];
+      bootstrap = [
+        "1.1.1.1"
+        "8.8.8.8"
+        "116.202.176.26"
+      ];
 
       # === Fallback plaintext DNS (used only if all encrypted fail) ===
       fallback = [
@@ -82,6 +86,10 @@
         "2001:4860:4860::8888"
       ];
 
+      # === Timeouts/Faliures ===
+      timeout = "5s";
+      max-fails = 3;
+
       # === Performance / behavior options ===
       cache = true;
       cache-size = 4096;        # entries
@@ -93,6 +101,11 @@
       verbose = false;
     };
 
+  };
+
+  systemd.services.dnsproxy = {
+    after = [ "network.target" ];
+    wants = [ "network.target" ];
   };
 
   ## Fix broken captive portal detection
