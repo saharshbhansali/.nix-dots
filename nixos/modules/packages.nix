@@ -43,6 +43,8 @@
     ## Networking utils
     wget
     curl
+    dig
+    dog
 
     ## Info utils
     # most
@@ -158,6 +160,9 @@
     rustup                          # rust toolchain installer
     cargo                           # rust package manager
     texliveFull                     # latex support
+
+    ## Security utils
+    minisign
 
     ## KDE Wallet utils
     # kwalletcli
