@@ -63,9 +63,9 @@
     ## VPN software
     protonvpn-cli
     protonvpn-gui
-    cloudflare-warp
-    cloudflare-cli
-    wgcf
+    # cloudflare-warp
+    # cloudflare-cli
+    # wgcf
 
     ## LLMs
     aichat
