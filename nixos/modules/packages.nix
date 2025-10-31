@@ -8,6 +8,7 @@
 
     ## Nix utils and compatibility layers
     cachix
+    # nix-ld
     steam-run
     appimage-run
     nix-inspect
