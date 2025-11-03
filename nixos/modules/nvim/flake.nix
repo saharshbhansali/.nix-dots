@@ -34,7 +34,7 @@
     # will not apply to module imports
     # as that will have your system values
     extra_pkg_config = {
-      # allowUnfree = true;
+      allowUnfree = true;
     };
     # management of the system variable is one of the harder parts of using flakes.
 
@@ -91,6 +91,21 @@
           lua-language-server
           nil # I would go for nixd but lazy chooses this one idk
           stylua
+
+          # --- LSP plugins ---
+          black
+          prettier
+          ruff
+          dockerfile-language-server-nodejs
+          gopls
+          jdt-language-server
+          rust-analyzer
+          yaml-language-server
+          tailwindcss-language-server
+          typescript-language-server
+          sqls
+          texlab
+          taplo
         ];
       };
 
@@ -147,6 +162,48 @@
           { plugin = mini-pairs; name = "mini.pairs"; }
           # you could do this within the lazy spec instead if you wanted
           # and get the new names from `:NixCats pawsible` debug command
+
+          # --- LazyVim Extras mapped plugins ---
+          copilot-vim
+          mini-comment
+          mini-snippets
+          mini-surround
+          neogen
+          yanky-nvim
+          dial-nvim
+          harpoon2
+          inc-rename-nvim
+          leap-nvim
+          mini-diff
+          mini-files
+          mini-move
+          outline-nvim
+          overseer-nvim
+          refactoring-nvim
+          fzf-lua
+          pkgs.black
+          vim-prettier
+          gitsigns-nvim
+          go-nvim
+          nvim-jdtls
+          markdown-preview-nvim
+          rustaceanvim
+          tailwindcss-colors-nvim
+          vimtex
+          yaml-companion-nvim
+          dashboard-nvim
+          edgy-nvim
+          indent-blankline-nvim
+          mini-indentscope
+          mini-hipatterns
+          project-nvim
+          vim-startuptime
+          telescope-fzf-native-nvim
+          telescope-nvim
+
+          # Language-related utilities
+          vim-dadbod
+          vim-dadbod-ui
         ];
       };
 
