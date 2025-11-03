@@ -81,5 +81,17 @@ in
   ## captive-browser --interface $(ip route | awk '/default/ {print $5; exit}')
   programs.captive-browser.interface = "wlo1";
 
+  ## Temporary fix (disable autoconnect) for broken Realtek PCI WiFi card
+  systemd.services."disable-wlo1-autoconnct-on-boot" = {
+	description = "Disable wlo1 autoconnect on boot via nmcli";
+	after = [ "NetworkManager.service" ];
+	wantedBy = [ "multi-user.target" ];
+	serviceConfig = {
+	  ExecStart = "${pkgs.networkmanager}/bin/nmcli device set wlo1 autoconnect no";
+	  Type = "oneshot";
+      RemainAfterExit = true;
+	};
+  };
+
 }
 
