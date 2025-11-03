@@ -297,7 +297,7 @@
           suffix-path = true;
           suffix-LD = true;
           wrapRc = false;
-          unwrappedCfgPath = utils.mkLuaInline "os.getenv('HOME') .. '/some/path/to/your/config'";
+          unwrappedCfgPath = utils.mkLuaInline "os.getenv('HOME') .. '.config/nvim/init.lua'";
         };
         categories = {
           general = true;
