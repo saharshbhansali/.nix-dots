@@ -73,7 +73,7 @@
     if [ -e "$target" ]; then
       echo "Found existing $target — backing up before copying..."
       backup="$target.backup-$(date +%Y%m%d-%H%M%S)"
-      mv "$target" "$backup"
+      mv "$target" "/tmp/$backup"
       echo "Backed up to $backup"
     fi
   
