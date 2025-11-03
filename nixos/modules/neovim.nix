@@ -4,7 +4,7 @@
   # imports = [ inputs.nixCatsNvim.nixosModules.default ];
 
   environment.systemPackages = [
-    inputs.nixCatsNvim.packages.${pkgs.system}.default
+    inputs.nixCatsNvim.packages.${pkgs.system}.nvim
     pkgs.fd
   ];
 
