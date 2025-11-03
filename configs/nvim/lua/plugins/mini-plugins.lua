@@ -1,7 +1,7 @@
 return {
-  { 'echasnovski/mini.nvim', version = '*' }
+  { 'nvim-mini/mini.nvim', version = '*' }
   -- {
-  --   "echasnovski/mini.surround",
+  --   "nvim-mini/mini.surround",
   --   opts = {
   --     mappings = {
   --       add = "<leader>sa", -- Add surrounding in Normal and Visual modes
