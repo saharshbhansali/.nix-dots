@@ -106,6 +106,9 @@
           sqls
           texlab
           taplo
+          marksman
+          nil
+          nixfmt
         ];
       };
 
