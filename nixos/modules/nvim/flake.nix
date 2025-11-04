@@ -197,7 +197,7 @@
           go-nvim
           nvim-jdtls
           markdown-preview-nvim
-          rustaceanvim
+          # rustaceanvim
           tailwindcss-colors-nvim
           vimtex
           yaml-companion-nvim
