@@ -14,8 +14,18 @@ local function getlockfilepath()
     return vim.fn.stdpath 'config' .. '/lazy-lock.json'
   end
 end
+
 local lazyOptions = {
   lockfile = getlockfilepath(),
+  install = { missing = false },      -- ⛔ don’t install or modify plugins
+  checker = { enabled = false },      -- ⛔ don’t auto-update
+  change_detection = { notify = false },
+  readme = { enabled = false },       -- ⛔ don’t open README/help files
+  performance = {
+    rtp = {
+      disabled_plugins = { "netrwPlugin", "gzip", "tarPlugin", "tohtml", "tutor" },
+    },
+  },
 }
 
 -- NOTE: this the lazy wrapper. Use it like require('lazy').setup() but with an extra
