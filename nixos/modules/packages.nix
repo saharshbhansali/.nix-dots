@@ -161,7 +161,10 @@
     rustup                          # rust toolchain installer
     cargo                           # rust package manager
     texliveFull                     # latex support
-    lua                             # lua programming language
+    # lua                             # lua programming language
+    luajit                          # lua programming language
+    luajitPackages.luarocks
+    luajitPackages.luarocks-nix
 
     ## Security utils
     minisign
