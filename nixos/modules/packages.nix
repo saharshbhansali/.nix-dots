@@ -161,6 +161,7 @@
     rustup                          # rust toolchain installer
     cargo                           # rust package manager
     texliveFull                     # latex support
+    lua                             # lua programming language
 
     ## Security utils
     minisign
