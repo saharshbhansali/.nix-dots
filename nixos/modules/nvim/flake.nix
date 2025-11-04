@@ -91,6 +91,7 @@
           lua-language-server
           nil # I would go for nixd but lazy chooses this one idk
           stylua
+          fzf
 
           # --- LSP plugins ---
           black
@@ -111,8 +112,10 @@
           nixfmt
           luajitPackages.luarocks
           luajitPackages.luarocks-nix
+          luajitPackages.fzf-lua
           lua51Packages.luarocks
           lua51Packages.luarocks-nix
+          lua51Packages.fzf-lua
         ];
       };
 
@@ -208,8 +211,6 @@
           mini-hipatterns
           project-nvim
           vim-startuptime
-          telescope-fzf-native-nvim
-          telescope-nvim
 
           # Language-related utilities
           vim-dadbod
