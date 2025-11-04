@@ -25,7 +25,6 @@
     #     # catppuccin.cattppuccin-vscode
     #   ];
     # })
-    vimPlugins.supermaven-nvim
 
     # ## Helix editor
     helix

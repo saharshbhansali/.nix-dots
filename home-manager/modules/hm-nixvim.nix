@@ -49,6 +49,7 @@
   ## User level packages
   home.packages = with pkgs; [
     inputs.nixCatsNvim.packages.${pkgs.system}.testnvim
+    vimPlugins.supermaven-nvim
     # vimPlugins.mason-tool-installer-nvim
     # vimPlugins.mason-nvim-dap-nvim
     # vimPlugins.mason-nvim
