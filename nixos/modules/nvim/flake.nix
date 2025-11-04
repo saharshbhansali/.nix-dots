@@ -109,6 +109,10 @@
           marksman
           nil
           nixfmt
+          luajitPackages.luarocks
+          luajitPackages.luarocks-nix
+          lua51Packages.luarocks
+          lua51Packages.luarocks-nix
         ];
       };
 
