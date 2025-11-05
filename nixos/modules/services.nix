@@ -3,6 +3,8 @@
 {
 
   ## Enable services
+  # XDG
+  xdg.autostart.enable = true;
 
   # Atuin daemon
   systemd.user.services.atuind = {
