@@ -92,6 +92,8 @@
           nil # I would go for nixd but lazy chooses this one idk
           stylua
           fzf
+          ghostscript
+          mermaid-cli
 
           # --- LSP plugins ---
           black
@@ -113,6 +115,8 @@
           luajitPackages.luarocks
           luajitPackages.luarocks-nix
           luajitPackages.fzf-lua
+          lua
+          lua51Packages.lua
           lua51Packages.luarocks
           lua51Packages.luarocks-nix
           lua51Packages.fzf-lua
@@ -264,6 +268,12 @@
       # populates $LUA_PATH and $LUA_CPATH
       extraLuaPackages = {
         test = [ (_:[]) ];
+        default = with pkgs; [
+          lua51Packages.lua
+          lua51Packages.luarocks
+          lua51Packages.luarocks-nix
+          lua51Packages.fzf-lua
+        ];
       };
     };
 

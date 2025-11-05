@@ -1,58 +1,58 @@
 return {
     -- Noice plugin
     {
-        'folke/noice.nvim',
+        "folke/noice.nvim",
         config = function()
-            require('noice').setup {
+            require("noice").setup({
                 lsp = {
                     override = {
                         -- Optionally, override LSP progress message display
-                        ['vim.lsp.util.get_progress_messages'] = true,
+                        ["vim.lsp.util.get_progress_messages"] = true,
                     },
                 },
                 -- You can also add other customizations based on your needs
-            }
+            })
         end,
     },
 
     -- Trouble plugin
     {
-        'folke/trouble.nvim',
+        "folke/trouble.nvim",
         config = function()
-            require('trouble').setup {}
+            require("trouble").setup({})
         end,
     },
 
     -- lualine plugin
     {
-        'nvim-lualine/lualine.nvim',
-        dependencies = { 'folke/noice.nvim' }, -- Ensure noice is available when lualine is set up
+        "nvim-lualine/lualine.nvim",
+        dependencies = { "folke/noice.nvim" }, -- Ensure noice is available when lualine is set up
         config = function()
-            require('lualine').setup {
+            require("lualine").setup({
                 options = {
-                    theme = 'gruvbox', -- Adjust according to your color theme
+                    theme = "gruvbox", -- Adjust according to your color theme
                 },
                 sections = {
-                    lualine_c = { 'filename', require('noice').api.statusline }, -- Integrating Noice with Lualine
+                    lualine_c = { "filename", require("noice").api.statusline }, -- Integrating Noice with Lualine
                 },
-            }
+            })
         end,
     },
 
     -- Treesitter plugin
     {
-        'nvim-treesitter/nvim-treesitter',
-        run = ':TSUpdate', -- Ensure parsers are updated
+        "nvim-treesitter/nvim-treesitter",
+        run = ":TSUpdate", -- Ensure parsers are updated
         config = function()
-            require('nvim-treesitter.configs').setup {
-                ensure_installed = 'maintained', -- Install only maintained parsers
+            require("nvim-treesitter.configs").setup({
+                ensure_installed = "all", -- Install all parsers
                 highlight = {
                     enable = true, -- Enable syntax highlighting
                 },
                 indent = {
                     enable = true, -- Enable tree-sitter based indentation
                 },
-            }
+            })
         end,
     },
 }

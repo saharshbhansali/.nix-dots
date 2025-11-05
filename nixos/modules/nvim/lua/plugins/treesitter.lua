@@ -45,7 +45,7 @@ return {
         run = ':TSUpdate', -- Ensure parsers are updated
         config = function()
             require('nvim-treesitter.configs').setup {
-                ensure_installed = 'maintained', -- Install only maintained parsers
+                ensure_installed = 'all', -- Install all parsers
                 highlight = {
                     enable = true, -- Enable syntax highlighting
                 },
