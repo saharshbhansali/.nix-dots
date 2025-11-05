@@ -1,43 +1,45 @@
 return {
-    -- Noice plugin
-    {
-        'folke/noice.nvim',
-        config = function()
-            require('noice').setup {
-                lsp = {
-                    override = {
-                        -- Optionally, override LSP progress message display
-                        ['vim.lsp.util.get_progress_messages'] = true,
-                    },
-                },
-                -- You can also add other customizations based on your needs
-            }
-        end,
-    },
+    -- -- Noice plugin
+    -- {
+    --     'folke/noice.nvim',
+    --     optional = true,
+    --     opts = {
+    --         presets = { inc_rename = true },
+    --     },
+    -- },
 
-    -- Trouble plugin
-    {
-        'folke/trouble.nvim',
-        config = function()
-            require('trouble').setup {}
-        end,
-    },
+    -- -- Trouble plugin
+    -- {
+    --     'folke/trouble.nvim',
+    --     cmd = { 'Trouble' },
+    --     opts = {
+    --         modes = {
+    --             lsp = {
+    --                 win = { position = 'right' },
+    --             },
+    --         },
+    --     },
+    -- },
 
-    -- lualine plugin
-    {
-        'nvim-lualine/lualine.nvim',
-        dependencies = { 'folke/noice.nvim' }, -- Ensure noice is available when lualine is set up
-        config = function()
-            require('lualine').setup {
-                options = {
-                    theme = 'gruvbox', -- Adjust according to your color theme
-                },
-                sections = {
-                    lualine_c = { 'filename', require('noice').api.statusline }, -- Integrating Noice with Lualine
-                },
-            }
-        end,
-    },
+    -- -- lualine plugin
+    -- {
+    --     'nvim-lualine/lualine.nvim',
+    --     optional = true,
+    --     event = 'VeryLazy',
+    --     opts = function(_, opts)
+    --         if LazyVim.has_extra 'ai.sidekick' then
+    --             return
+    --         end
+    --         table.insert(
+    --             opts.sections.lualine_x,
+    --             2,
+    --             LazyVim.lualine.status(LazyVim.config.icons.kinds.Copilot, function()
+    --                 local clients = vim.lsp.get_clients { name = 'copilot', bufnr = 0 }
+    --                 return #clients > 0 and status[clients[1].id] or nil
+    --             end)
+    --         )
+    --     end,
+    -- },
 
     -- Treesitter plugin
     {
@@ -45,13 +47,10 @@ return {
         run = ':TSUpdate', -- Ensure parsers are updated
         config = function()
             require('nvim-treesitter.configs').setup {
-                ensure_installed = 'maintained', -- Install only maintained parsers
-                highlight = {
-                    enable = true, -- Enable syntax highlighting
-                },
-                indent = {
-                    enable = true, -- Enable tree-sitter based indentation
-                },
+                ensure_installed = {}, -- Disabled
+                indent = { enable = true }, ---@type lazyvim.TSFeat
+                highlight = { enable = true }, ---@type lazyvim.TSFeat
+                folds = { enable = true }, ---@type lazyvim.TSFeat
             }
         end,
     },
