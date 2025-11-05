@@ -189,6 +189,8 @@
           mini-git
           mini-extra
           mini-doc
+          mini-indentscope
+          mini-hipatterns
           neogen
           yanky-nvim
           dial-nvim
@@ -212,8 +214,6 @@
           dashboard-nvim
           edgy-nvim
           indent-blankline-nvim
-          mini-indentscope
-          mini-hipatterns
           # project-nvim
           vim-repeat
           vim-startuptime
