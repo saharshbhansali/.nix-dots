@@ -30,10 +30,10 @@ in
 
   home.file.".config/fish/config.fish".source = ../../configs/fish/config.fish;
 
-  home.file.".config/nvim" = {
-    source = ../../configs/nvim;
-    recursive = true;
-  };
+  # home.file.".config/nvim" = {
+  #   source = ../../configs/nvim;
+  #   recursive = true;
+  # };
 
   # Your tmux directory (contains patch + symlink)
   home.file.".config/tmux" = {
