@@ -135,7 +135,7 @@
           aerial-nvim
           none-ls-nvim
           noice-nvim
-          lualine-nvim
+          # lualine-nvim
           nui-nvim
           nvim-lint
           nvim-lspconfig
