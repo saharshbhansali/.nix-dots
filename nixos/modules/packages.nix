@@ -165,6 +165,9 @@
     luajit                          # lua programming language
     luajitPackages.luarocks
     luajitPackages.luarocks-nix
+    lua51Packages.lua
+    lua51Packages.luarocks
+    lua51Packages.luarocks-nix
 
     ## Security utils
     minisign
