@@ -191,7 +191,7 @@
     bitwarden-menu
 
     ## Office software
-    onlyoffice-bin
+    onlyoffice-desktopeditors
 
     ## File Management software
     kdePackages.filelight
