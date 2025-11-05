@@ -44,7 +44,7 @@ require('nixCatsUtils.lazyCat').setup(nixCats.pawsible { 'allPlugins', 'start', 
       -- nix already ensured they were installed, and we would need to change the parser_install_dir if we wanted to use it instead.
       -- so we just disable install and do it via nix.
       -- ensure_installed = require('nixCatsUtils').lazyAdd({ 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'vim', 'vimdoc' }, false),
-      ensure_installed = require('nixCatsUtils').lazyAdd({ 'all', 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'vim', 'vimdoc' }, false),
+      ensure_installed = {},
       auto_install = require('nixCatsUtils').lazyAdd(true, false),
     },
   },
