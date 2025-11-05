@@ -23,21 +23,21 @@ return {
         end,
     },
 
-    -- lualine plugin
-    {
-        "nvim-lualine/lualine.nvim",
-        dependencies = { "folke/noice.nvim" }, -- Ensure noice is available when lualine is set up
-        config = function()
-            require("lualine").setup({
-                options = {
-                    theme = "gruvbox", -- Adjust according to your color theme
-                },
-                sections = {
-                    lualine_c = { "filename", require("noice").api.statusline }, -- Integrating Noice with Lualine
-                },
-            })
-        end,
-    },
+    -- -- lualine plugin
+    -- {
+    --     'nvim-lualine/lualine.nvim',
+    --     dependencies = { 'folke/noice.nvim' }, -- Ensure noice is available when lualine is set up
+    --     config = function()
+    --         require('lualine').setup {
+    --             options = {
+    --                 theme = 'catppuccin', -- Adjust according to your color theme
+    --             },
+    --             sections = {
+    --                 lualine_c = { 'filename', require('noice').api.statusline }, -- Integrating Noice with Lualine
+    --             },
+    --         }
+    --     end,
+    -- },
 
     -- Treesitter plugin
     {
@@ -45,7 +45,7 @@ return {
         run = ":TSUpdate", -- Ensure parsers are updated
         config = function()
             require("nvim-treesitter.configs").setup({
-                ensure_installed = "all", -- Install all parsers
+                ensure_installed = {}, -- Disabled
                 highlight = {
                     enable = true, -- Enable syntax highlighting
                 },

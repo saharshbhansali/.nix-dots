@@ -92,14 +92,12 @@
           nil # I would go for nixd but lazy chooses this one idk
           stylua
           fzf
-          ghostscript
-          mermaid-cli
 
           # --- LSP plugins ---
           black
           prettier
           ruff
-          dockerfile-language-server-nodejs
+          dockerfile-language-server
           gopls
           jdt-language-server
           rust-analyzer
@@ -112,10 +110,6 @@
           marksman
           nil
           nixfmt
-          luajitPackages.luarocks
-          luajitPackages.luarocks-nix
-          luajitPackages.fzf-lua
-          lua
           lua51Packages.lua
           lua51Packages.luarocks
           lua51Packages.luarocks-nix
@@ -138,6 +132,8 @@
           friendly-snippets
           gitsigns-nvim
           grug-far-nvim
+          aerial-nvim
+          none-ls-nvim
           noice-nvim
           lualine-nvim
           nui-nvim
@@ -146,6 +142,7 @@
           nvim-ts-autotag
           ts-comments-nvim
           blink-cmp
+          blink-compat
           nvim-web-devicons
           persistence-nvim
           plenary-nvim
@@ -174,26 +171,30 @@
 
           # sometimes you have to fix some names
           { plugin = catppuccin-nvim; name = "catppuccin"; }
-          { plugin = mini-ai; name = "mini.ai"; }
-          { plugin = mini-icons; name = "mini.icons"; }
-          { plugin = mini-pairs; name = "mini.pairs"; }
           # you could do this within the lazy spec instead if you wanted
           # and get the new names from `:NixCats pawsible` debug command
 
-          # --- LazyVim Extras mapped plugins ---
-          copilot-vim
+          CopilotChat-nvim
+          supermaven-nvim
+          mini-nvim
+          mini-ai
+          mini-icons
+          mini-pairs
           mini-comment
           mini-snippets
           mini-surround
+          mini-diff
+          mini-files
+          mini-move
+          mini-git
+          mini-extra
+          mini-doc
           neogen
           yanky-nvim
           dial-nvim
           harpoon2
           inc-rename-nvim
           leap-nvim
-          mini-diff
-          mini-files
-          mini-move
           outline-nvim
           overseer-nvim
           refactoring-nvim
@@ -213,12 +214,18 @@
           indent-blankline-nvim
           mini-indentscope
           mini-hipatterns
-          project-nvim
+          # project-nvim
+          vim-repeat
           vim-startuptime
+          venv-selector-nvim
+          render-markdown-nvim
+          litee-nvim
+          telescope-github-nvim
 
           # Language-related utilities
           vim-dadbod
           vim-dadbod-ui
+          vim-dadbod-completion
         ];
       };
 
@@ -268,12 +275,6 @@
       # populates $LUA_PATH and $LUA_CPATH
       extraLuaPackages = {
         test = [ (_:[]) ];
-        default = with pkgs; [
-          lua51Packages.lua
-          lua51Packages.luarocks
-          lua51Packages.luarocks-nix
-          lua51Packages.fzf-lua
-        ];
       };
     };
 
