@@ -54,158 +54,146 @@
   };
 
   ## User level packages
-  home.packages = {
-    general = with pkgs; [
-      # inputs.nixCatsNvim.packages.${pkgs.system}.nvim
-      # inputs.nixCatsNvim.packages.${pkgs.system}.testnvim
-      universal-ctags
-      curl
-      # NOTE:
-      # lazygit
-      # Apparently lazygit when launched via snacks cant create its own config file
-      # but we can add one from nix!
-      (pkgs.writeShellScriptBin "lazygit" ''
-        exec ${pkgs.lazygit}/bin/lazygit --use-config-file ${pkgs.writeText "lazygit_config.yml" ""} "$@"
-      '')
-      ripgrep
-      fd
-      stdenv.cc.cc
-      lua-language-server
-      nil # I would go for nixd but lazy chooses this one idk
-      stylua
-      fzf
+  home.packages = with pkgs; [
+    # inputs.nixCatsNvim.packages.${pkgs.system}.nvim
+    # inputs.nixCatsNvim.packages.${pkgs.system}.testnvim
+    universal-ctags
+    curl
+    # NOTE:
+    # lazygit
+    # Apparently lazygit when launched via snacks cant create its own config file
+    # but we can add one from nix!
+    (pkgs.writeShellScriptBin "lazygit" ''
+      exec ${pkgs.lazygit}/bin/lazygit --use-config-file ${pkgs.writeText "lazygit_config.yml" ""} "$@"
+    '')
+    ripgrep
+    fd
+    stdenv.cc.cc
+    lua-language-server
+    nil # I would go for nixd but lazy chooses this one idk
+    stylua
+    fzf
+    # --- LSP plugins ---
+    black
+    prettier
+    ruff
+    dockerfile-language-server
+    gopls
+    jdt-language-server
+    rust-analyzer
+    yaml-language-server
+    tailwindcss-language-server
+    typescript-language-server
+    sqls
+    texlab
+    taplo
+    marksman
+    nil
+    nixfmt
+    lua51Packages.lua
+    lua51Packages.luarocks
+    lua51Packages.luarocks-nix
+    lua51Packages.fzf-lua
 
-      # --- LSP plugins ---
-      black
-      prettier
-      ruff
-      dockerfile-language-server
-      gopls
-      jdt-language-server
-      rust-analyzer
-      yaml-language-server
-      tailwindcss-language-server
-      typescript-language-server
-      sqls
-      texlab
-      taplo
-      marksman
-      nil
-      nixfmt
-      lua51Packages.lua
-      lua51Packages.luarocks
-      lua51Packages.luarocks-nix
-      lua51Packages.fzf-lua
-    ];
-    plugin = with pkgs.vimPlugins; [
-      lazy-nvim
-      LazyVim
-      bufferline-nvim
-      lazydev-nvim
-      conform-nvim
-      flash-nvim
-      friendly-snippets
-      gitsigns-nvim
-      grug-far-nvim
-      aerial-nvim
-      none-ls-nvim
-      noice-nvim
-      # lualine-nvim
-      nui-nvim
-      nvim-lint
-      nvim-lspconfig
-      nvim-ts-autotag
-      ts-comments-nvim
-      blink-cmp
-      blink-compat
-      nvim-web-devicons
-      persistence-nvim
-      plenary-nvim
-      telescope-fzf-native-nvim
-      telescope-nvim
-      todo-comments-nvim
-      tokyonight-nvim
-      trouble-nvim
-      vim-illuminate
-      vim-startuptime
-      which-key-nvim
-      snacks-nvim
-      nvim-treesitter-textobjects
-      nvim-treesitter-context
-      nvim-treesitter-pairs
-      nvim-treesitter-endwise
-      nvim-treesitter
-      nvim-treesitter.withAllGrammars
-      # This is for if you only want some of the grammars
-      # (nvim-treesitter.withPlugins (
-      #   plugins: with plugins; [
-      #     nix
-      #     lua
-      #   ]
-      # ))
+    vimPlugins.lazy-nvim
+    vimPlugins.LazyVim
+    vimPlugins.bufferline-nvim
+    vimPlugins.lazydev-nvim
+    vimPlugins.conform-nvim
+    vimPlugins.flash-nvim
+    vimPlugins.friendly-snippets
+    vimPlugins.gitsigns-nvim
+    vimPlugins.grug-far-nvim
+    vimPlugins.aerial-nvim
+    vimPlugins.none-ls-nvim
+    vimPlugins.noice-nvim
+    # lualine-nvim
+    vimPlugins.nui-nvim
+    vimPlugins.nvim-lint
+    vimPlugins.nvim-lspconfig
+    vimPlugins.nvim-ts-autotag
+    vimPlugins.ts-comments-nvim
+    vimPlugins.blink-cmp
+    vimPlugins.blink-compat
+    vimPlugins.nvim-web-devicons
+    vimPlugins.persistence-nvim
+    vimPlugins.plenary-nvim
+    vimPlugins.telescope-fzf-native-nvim
+    vimPlugins.telescope-nvim
+    vimPlugins.todo-comments-nvim
+    vimPlugins.tokyonight-nvim
+    vimPlugins.trouble-nvim
+    vimPlugins.vim-illuminate
+    vimPlugins.vim-startuptime
+    vimPlugins.which-key-nvim
+    vimPlugins.snacks-nvim
+    vimPlugins.nvim-treesitter-textobjects
+    vimPlugins.nvim-treesitter-context
+    vimPlugins.nvim-treesitter-pairs
+    vimPlugins.nvim-treesitter-endwise
+    vimPlugins.nvim-treesitter
+    vimPlugins.nvim-treesitter.withAllGrammars
+    # This is for if you only want some of the grammars
+    # (nvim-treesitter.withPlugins (
+    #   plugins: with plugins; [
+    #     nix
+    #     lua
+    #   ]
+    # ))
 
-      # sometimes you have to fix some names
-      {
-        plugin = catppuccin-nvim;
-        name = "catppuccin";
-      }
-      # you could do this within the lazy spec instead if you wanted
-      # and get the new names from `:NixCats pawsible` debug command
+    vimPlugins.catppuccin-nvim
+    vimPlugins.CopilotChat-nvim
+    vimPlugins.supermaven-nvim
+    vimPlugins.mini-nvim
+    vimPlugins.mini-ai
+    vimPlugins.mini-icons
+    vimPlugins.mini-pairs
+    vimPlugins.mini-comment
+    vimPlugins.mini-snippets
+    vimPlugins.mini-surround
+    vimPlugins.mini-diff
+    vimPlugins.mini-files
+    vimPlugins.mini-move
+    vimPlugins.mini-git
+    vimPlugins.mini-extra
+    vimPlugins.mini-doc
+    vimPlugins.mini-indentscope
+    vimPlugins.mini-hipatterns
+    vimPlugins.neogen
+    vimPlugins.yanky-nvim
+    vimPlugins.dial-nvim
+    vimPlugins.harpoon2
+    vimPlugins.inc-rename-nvim
+    vimPlugins.leap-nvim
+    vimPlugins.outline-nvim
+    vimPlugins.overseer-nvim
+    vimPlugins.refactoring-nvim
+    vimPlugins.fzf-lua
+    vimPlugins.vim-prettier
+    vimPlugins.gitsigns-nvim
+    vimPlugins.go-nvim
+    vimPlugins.nvim-jdtls
+    vimPlugins.markdown-preview-nvim
+    # rustaceanvim
+    vimPlugins.tailwindcss-colors-nvim
+    vimPlugins.vimtex
+    vimPlugins.yaml-companion-nvim
+    vimPlugins.dashboard-nvim
+    vimPlugins.edgy-nvim
+    vimPlugins.indent-blankline-nvim
+    # project-nvim
+    vimPlugins.vim-repeat
+    vimPlugins.vim-startuptime
+    vimPlugins.venv-selector-nvim
+    vimPlugins.render-markdown-nvim
+    vimPlugins.litee-nvim
+    vimPlugins.telescope-github-nvim
 
-      CopilotChat-nvim
-      supermaven-nvim
-      mini-nvim
-      mini-ai
-      mini-icons
-      mini-pairs
-      mini-comment
-      mini-snippets
-      mini-surround
-      mini-diff
-      mini-files
-      mini-move
-      mini-git
-      mini-extra
-      mini-doc
-      mini-indentscope
-      mini-hipatterns
-      neogen
-      yanky-nvim
-      dial-nvim
-      harpoon2
-      inc-rename-nvim
-      leap-nvim
-      outline-nvim
-      overseer-nvim
-      refactoring-nvim
-      fzf-lua
-      pkgs.black
-      vim-prettier
-      gitsigns-nvim
-      go-nvim
-      nvim-jdtls
-      markdown-preview-nvim
-      # rustaceanvim
-      tailwindcss-colors-nvim
-      vimtex
-      yaml-companion-nvim
-      dashboard-nvim
-      edgy-nvim
-      indent-blankline-nvim
-      # project-nvim
-      vim-repeat
-      vim-startuptime
-      venv-selector-nvim
-      render-markdown-nvim
-      litee-nvim
-      telescope-github-nvim
-
-      # Language-related utilities
-      vim-dadbod
-      vim-dadbod-ui
-      vim-dadbod-completion
-    ];
-  };
+    # Language-related utilities
+    vimPlugins.vim-dadbod
+    vimPlugins.vim-dadbod-ui
+    vimPlugins.vim-dadbod-completion
+  ];
 
   home.file.".config/nvim" = {
     source = ../../configs/nvim;
