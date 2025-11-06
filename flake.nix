@@ -32,6 +32,10 @@
       url = "path:./nixos/modules/nvim";
     };
 
+    nixPatchNvim = {
+      url = "path:./nixos/modules/nixPatch-nvim";
+    };
+
     # # Required, nvf works best and only directly supports flakes
     # nvf = {
     #   url = "github:notashelf/nvf";
