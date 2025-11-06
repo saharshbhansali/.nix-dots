@@ -74,6 +74,7 @@
     stylua
     fzf
     # --- LSP plugins ---
+    tree-sitter
     black
     prettier
     ruff
@@ -91,48 +92,50 @@
     nil
     nixfmt
     lua51Packages.lua
-    lua51Packages.luarocks
+    # lua51Packages.luarocks
     lua51Packages.luarocks-nix
     lua51Packages.fzf-lua
 
-    vimPlugins.lazy-nvim
     vimPlugins.LazyVim
-    vimPlugins.bufferline-nvim
-    vimPlugins.lazydev-nvim
-    vimPlugins.conform-nvim
-    vimPlugins.flash-nvim
-    vimPlugins.friendly-snippets
-    vimPlugins.gitsigns-nvim
-    vimPlugins.grug-far-nvim
-    vimPlugins.aerial-nvim
-    vimPlugins.none-ls-nvim
-    vimPlugins.noice-nvim
-    # lualine-nvim
-    vimPlugins.nui-nvim
-    vimPlugins.nvim-lint
-    vimPlugins.nvim-lspconfig
-    vimPlugins.nvim-ts-autotag
-    vimPlugins.ts-comments-nvim
-    vimPlugins.blink-cmp
-    vimPlugins.blink-compat
-    vimPlugins.nvim-web-devicons
-    vimPlugins.persistence-nvim
-    vimPlugins.plenary-nvim
-    vimPlugins.telescope-fzf-native-nvim
-    vimPlugins.telescope-nvim
-    vimPlugins.todo-comments-nvim
-    vimPlugins.tokyonight-nvim
-    vimPlugins.trouble-nvim
-    vimPlugins.vim-illuminate
-    vimPlugins.vim-startuptime
-    vimPlugins.which-key-nvim
-    vimPlugins.snacks-nvim
-    vimPlugins.nvim-treesitter-textobjects
-    vimPlugins.nvim-treesitter-context
-    vimPlugins.nvim-treesitter-pairs
-    vimPlugins.nvim-treesitter-endwise
-    vimPlugins.nvim-treesitter
-    vimPlugins.nvim-treesitter.withAllGrammars
+    # vimPlugins.lazy-nvim
+    # vimPlugins.bufferline-nvim
+    # vimPlugins.lazydev-nvim
+    # vimPlugins.conform-nvim
+    # vimPlugins.flash-nvim
+    # vimPlugins.friendly-snippets
+    # vimPlugins.gitsigns-nvim
+    # vimPlugins.grug-far-nvim
+    # vimPlugins.aerial-nvim
+    # vimPlugins.none-ls-nvim
+    # vimPlugins.noice-nvim
+    # vimPlugins.lualine-nvim
+    # vimPlugins.nui-nvim
+    # vimPlugins.nvim-lint
+    # vimPlugins.nvim-lspconfig
+    # vimPlugins.nvim-ts-autotag
+    # vimPlugins.ts-comments-nvim
+    # vimPlugins.blink-cmp
+    # vimPlugins.blink-compat
+    # vimPlugins.nvim-web-devicons
+    # vimPlugins.persistence-nvim
+    # vimPlugins.plenary-nvim
+    # vimPlugins.telescope-fzf-native-nvim
+    # vimPlugins.telescope-nvim
+    # vimPlugins.todo-comments-nvim
+    # vimPlugins.tokyonight-nvim
+    # vimPlugins.trouble-nvim
+    # vimPlugins.vim-illuminate
+    # vimPlugins.vim-startuptime
+    # vimPlugins.which-key-nvim
+    # vimPlugins.snacks-nvim
+
+    ## Treesitter
+    # vimPlugins.nvim-treesitter-textobjects
+    # vimPlugins.nvim-treesitter-context
+    # vimPlugins.nvim-treesitter-pairs
+    # vimPlugins.nvim-treesitter-endwise
+    # vimPlugins.nvim-treesitter
+    # vimPlugins.nvim-treesitter.withAllGrammars
     # This is for if you only want some of the grammars
     # (nvim-treesitter.withPlugins (
     #   plugins: with plugins; [
@@ -141,58 +144,58 @@
     #   ]
     # ))
 
-    vimPlugins.catppuccin-nvim
-    vimPlugins.CopilotChat-nvim
-    vimPlugins.supermaven-nvim
-    vimPlugins.mini-nvim
-    vimPlugins.mini-ai
-    vimPlugins.mini-icons
-    vimPlugins.mini-pairs
-    vimPlugins.mini-comment
-    vimPlugins.mini-snippets
-    vimPlugins.mini-surround
-    vimPlugins.mini-diff
-    vimPlugins.mini-files
-    vimPlugins.mini-move
-    vimPlugins.mini-git
-    vimPlugins.mini-extra
-    vimPlugins.mini-doc
-    vimPlugins.mini-indentscope
-    vimPlugins.mini-hipatterns
-    vimPlugins.neogen
-    vimPlugins.yanky-nvim
-    vimPlugins.dial-nvim
-    vimPlugins.harpoon2
-    vimPlugins.inc-rename-nvim
-    vimPlugins.leap-nvim
-    vimPlugins.outline-nvim
-    vimPlugins.overseer-nvim
-    vimPlugins.refactoring-nvim
-    vimPlugins.fzf-lua
-    vimPlugins.vim-prettier
-    vimPlugins.gitsigns-nvim
-    vimPlugins.go-nvim
-    vimPlugins.nvim-jdtls
-    vimPlugins.markdown-preview-nvim
-    # rustaceanvim
-    vimPlugins.tailwindcss-colors-nvim
-    vimPlugins.vimtex
-    vimPlugins.yaml-companion-nvim
-    vimPlugins.dashboard-nvim
-    vimPlugins.edgy-nvim
-    vimPlugins.indent-blankline-nvim
-    # project-nvim
-    vimPlugins.vim-repeat
-    vimPlugins.vim-startuptime
-    vimPlugins.venv-selector-nvim
-    vimPlugins.render-markdown-nvim
-    vimPlugins.litee-nvim
-    vimPlugins.telescope-github-nvim
+    # vimPlugins.catppuccin-nvim
+    # vimPlugins.CopilotChat-nvim
+    # vimPlugins.supermaven-nvim
+    # vimPlugins.mini-nvim
+    # vimPlugins.mini-ai
+    # vimPlugins.mini-icons
+    # vimPlugins.mini-pairs
+    # vimPlugins.mini-comment
+    # vimPlugins.mini-snippets
+    # vimPlugins.mini-surround
+    # vimPlugins.mini-diff
+    # vimPlugins.mini-files
+    # vimPlugins.mini-move
+    # vimPlugins.mini-git
+    # vimPlugins.mini-extra
+    # vimPlugins.mini-doc
+    # vimPlugins.mini-indentscope
+    # vimPlugins.mini-hipatterns
+    # vimPlugins.neogen
+    # vimPlugins.yanky-nvim
+    # vimPlugins.dial-nvim
+    # vimPlugins.harpoon2
+    # vimPlugins.inc-rename-nvim
+    # vimPlugins.leap-nvim
+    # vimPlugins.outline-nvim
+    # vimPlugins.overseer-nvim
+    # vimPlugins.refactoring-nvim
+    # vimPlugins.fzf-lua
+    # vimPlugins.vim-prettier
+    # vimPlugins.gitsigns-nvim
+    # vimPlugins.go-nvim
+    # vimPlugins.nvim-jdtls
+    # vimPlugins.markdown-preview-nvim
+    # vimPlugins.rustaceanvim
+    # vimPlugins.tailwindcss-colors-nvim
+    # vimPlugins.vimtex
+    # vimPlugins.yaml-companion-nvim
+    # vimPlugins.dashboard-nvim
+    # vimPlugins.edgy-nvim
+    # vimPlugins.indent-blankline-nvim
+    # vimPlugins.project-nvim
+    # vimPlugins.vim-repeat
+    # vimPlugins.vim-startuptime
+    # vimPlugins.venv-selector-nvim
+    # vimPlugins.render-markdown-nvim
+    # vimPlugins.litee-nvim
+    # vimPlugins.telescope-github-nvim
 
-    # Language-related utilities
-    vimPlugins.vim-dadbod
-    vimPlugins.vim-dadbod-ui
-    vimPlugins.vim-dadbod-completion
+    ## Language-related utilities
+    # vimPlugins.vim-dadbod
+    # vimPlugins.vim-dadbod-ui
+    # vimPlugins.vim-dadbod-completion
   ];
 
   home.file.".config/nvim" = {
