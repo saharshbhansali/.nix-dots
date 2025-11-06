@@ -1,3 +1,6 @@
 [submodule "configs/oh-my-tmux"]
 	path = configs/oh-my-tmux
 	url = https://github.com/gpakosz/.tmux
+[submodule "nixos/modules/nixPatch-nvim"]
+	path = nixos/modules/nixPatch-nvim
+	url = https://github.com/saharshbhansali/nixPatchNvim
