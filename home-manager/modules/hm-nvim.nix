@@ -1,8 +1,14 @@
-{ config, lib, pkgs, inputs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
 
 {
 
-  imports = [ 
+  imports = [
     inputs.nixvim.homeModules.nixvim
     inputs.nixCatsNvim.homeModules.default
   ];
@@ -13,10 +19,12 @@
     inputs.nixCatsNvim.packages.${pkgs.system}.testnvim
     inputs.nixCatsNvim.packages.${pkgs.system}.catsnvim
     inputs.nixPatchNvim.packages.${pkgs.system}.default
+    vimPlugins.nvim-treesitter.withAllGrammars
+    # vimPlugins.nvim-treesitter
   ];
 
   # Config files for nixCatsNvim
-  home.file.".config/nvim" = {
+  home.file.".config/LazyVim" = {
     source = ../../configs/nvim;
     recursive = true;
   };
@@ -50,127 +58,253 @@
   ## NixVim
   programs.nixvim = {
     enable = true;
-  
-    clipboard = {
-      register = "unnamedplus";
-      providers = {
-        wl-copy.enable = true;
-        xclip.enable = true;
+
+    nixpkgs = {
+      config = {
+        allowUnfree = true;
       };
     };
 
-    colorschemes.catppuccin.enable = true;
+    clipboard.register = "unnamedplus";
+    clipboard.providers.wl-copy.enable = true;
+    clipboard.providers.xclip.enable = true;
+
+    colorschemes.catppuccin = {
+      enable = true;
+      autoLoad = true;
+      settings = {
+        flavour = "mocha";
+        transparent_background = true;
+        term_colors = true;
+        default_integrations = true;
+        integrations = {
+          cmp = true;
+          gitsigns = true;
+          nvimtree = true;
+          treesitter = true;
+          notify = false;
+          mini = {
+            enabled = true;
+            indentscope_color = "";
+          };
+        };
+      };
+    };
 
     viAlias = true;
     vimAlias = true;
+
     luaLoader.enable = true;
 
-    plugins = {
-      lazy.enable = true;
+    # extraConfigLua = ''
+    #   -- Disable Mason and mason-lspconfig
+    #   require("lazy").setup({
+    #     { 'williamboman/mason.nvim', enabled = false },
+    #     { 'williamboman/mason-lspconfig.nvim', enabled = false },
+    #     {
+    #       'nvim-treesitter/nvim-treesitter',
+    #       run = ':TSUpdate', -- Ensure parsers are updated
+    #       config = function()
+    #         require('nvim-treesitter.configs').setup {
+    #           ensure_installed = {}, -- Disabled
+    #           indent = { enable = true }, ---@type lazyvim.TSFeat
+    #           highlight = { enable = true }, ---@type lazyvim.TSFeat
+    #           folds = { enable = true }, ---@type lazyvim.TSFeat
+    #         }
+    #       end,
+    #     },
+    #   }, {})
+    # '';
 
-      # Core LSP and related tools
-      lsp = {
+    plugins = {
+      # LazyVim
+      # lazy.enable = true;
+      # LazyVim.enable = true;
+
+      # Bufferline and UI-related plugins
+      bufferline.enable = true;
+      alpha.enable = true;
+      alpha.theme = "dashboard";
+
+      # LSP and Completion
+      lsp.enable = true;
+      lsp.servers = {
+        astro.enable = true;
+        bashls.enable = true;
+        basedpyright.enable = true;
+        clangd.enable = true;
+        cmake.enable = true;
+        copilot.enable = true;
+        docker_compose_language_service.enable = true;
+        dockerls.enable = true;
+        docker_language_server.enable = true;
+        eslint.enable = true;
+        gopls.enable = true;
+        jsonls.enable = true;
+        markdown_oxide.enable = true;
+        marksman.enable = true;
+        nginx_language_server.enable = true;
+        nil_ls.enable = true;
+        postgres_lsp.enable = true;
+        # pyre.enable = true;
+        pyrefly.enable = true;
+        pyright.enable = true;
+        ruff.enable = true;
+        # ruff_lsp.enable = true;
+        yamlls.enable = true;
+        lua_ls.enable = true;
+        rust_analyzer.enable = true;
+        rust_analyzer.installCargo = true;
+        rust_analyzer.installRustc = true;
+        rust_analyzer.installRustfmt = true;
+        # snyk_ls.enable = true;
+        sqls.enable = true;
+        stylua.enable = true;
+        systemd_ls.enable = true;
+        tailwindcss.enable = true;
+        texlab.enable = true;
+        ts_ls.enable = true;
+        tsgo.enable = true;
+      };
+
+      # Treesitter
+      # cmp-treesitter.enable = true;
+      treesitter-textobjects.enable = true;
+      treesitter-context.enable = true;
+      # treesitter-pairs.enable = true;
+      treesitter-refactor.enable = true;
+      treesitter = {
         enable = true;
-        servers = {
-          lua_ls.enable = true;
-          rust_analyzer = {
+        settings = {
+          auto_install = false;
+          ensure_installed = [ "all" ];
+          highlight = {
             enable = true;
-            installCargo = true;
-            installRustc = true;
+            additional_vim_regex_highlighting = true;
+            custom_captures = { };
+            # disable = [
+            #   "rust"
+            # ];
           };
-          jdtls.enable = true;
-          yamlls.enable = true;
-          tailwindcss.enable = true;
+          # ignore_install = [
+          #   "rust"
+          # ];
+          incremental_selection = {
+            enable = true;
+            # keymaps = {
+            #   init_selection = false;
+            #   node_decremental = "grm";
+            #   node_incremental = "grn";
+            #   scope_incremental = "grc";
+            # };
+          };
+          indent = {
+            enable = true;
+          };
+          # parser_install_dir = {
+          #   __raw = "vim.fs.joinpath(vim.fn.stdpath('data'), 'treesitter')";
+          # };
+          sync_install = false;
         };
       };
 
-      none-ls = {
-        enable = true;
-        sources.formatting.black.enable = true;
-      };
-      nvim-lint.enable = true;
-
-      treesitter = {
-        enable = true;
-        withAllGrammars = true;
-        textobjects.enable = true;
-        context.enable = true;
-        pairs.enable = true;
-        endwise.enable = true;
-      };
-
+      # Which Key and UI Enhancements
       which-key.enable = true;
+      which-key.autoLoad = true;
       lualine.enable = true;
+      web-devicons.enable = true;
+      noice.enable = true;
+      trouble.enable = true;
+
+      # Snippet-related
+      luasnip.enable = true;
+      friendly-snippets.enable = true;
+
+      # Git Integration
+      gitsigns.enable = true;
       yanky.enable = true;
       harpoon.enable = true;
-      telescope = {
-        enable = true;
-        fzf-native.enable = true;
-        github.enable = true;
-      };
 
-      mini = {
-        enable = true;
-        ai.enable = true;
-        comment.enable = true;
-        diff.enable = true;
-        files.enable = true;
-        git.enable = true;
-        pairs.enable = true;
-        snippets.enable = true;
-        surround.enable = true;
-        indentscope.enable = true;
-        move.enable = true;
-        extra.enable = true;
-        hipatterns.enable = true;
-        doc.enable = true;
-        icons.enable = true;
-      };
+      # Telescope
+      telescope.enable = true;
+      telescope.extensions.advanced-git-search.enable = true;
+      telescope.extensions.file-browser.enable = true;
+      telescope.extensions.fzf-native.enable = true;
+      telescope.extensions.project.enable = true;
+      telescope.extensions.ui-select.enable = true;
+      telescope.extensions.undo.enable = true;
 
-      web-devicons.enable = true;
-      flash.enable = true;
-      alpha.enable = true;
-      bufferline.enable = true;
-      conform-nvim.enable = true;
-      friendly-snippets.enable = true;
-      gitsigns.enable = true;
-      todo-comments.enable = true;
-      trouble.enable = true;
-      noice.enable = true;
-      nui.enable = true;
-      aerial.enable = true;
-      outline.enable = true;
-      edgy.enable = true;
-      snacks.enable = true;
-      persistence.enable = true;
-      overseer.enable = true;
+      # Mini Plugins
+      mini.enable = true;
+      mini-ai.enable = true;
+      mini-basics.enable = true;
+      mini-bracketed.enable = true;
+      mini-clue.enable = true;
+      mini-colors.enable = true;
+      mini-comment.enable = true;
+      mini-completion.enable = true;
+      mini-cursorword.enable = true;
+      mini-diff.enable = true;
+      mini-doc.enable = true;
+      mini-extra.enable = true;
+      # mini-files.enable = true;
+      mini-fuzzy.enable = true;
+      mini-git.enable = true;
+      mini-hipatterns.enable = true;
+      mini-icons.enable = true;
+      mini-indentscope.enable = true;
+      mini-jump.enable = true;
+      mini-jump2d.enable = true;
+      mini-keymap.enable = true;
+      mini-misc.enable = true;
+      mini-move.enable = true;
+      mini-notify.enable = true;
+      mini-pairs.enable = true;
+      mini-pick.enable = true;
+      mini-sessions.enable = true;
+      mini-snippets.enable = true;
+      mini-starter.enable = true;
+      mini-surround.enable = true;
+      mini-tabline.enable = true;
+
+      # Neogen
       neogen.enable = true;
-      dial.enable = true;
-      inc-rename.enable = true;
-      leap.enable = true;
-      refactoring.enable = true;
-      illuminate.enable = true;
-      dashboard.enable = true;
-      indent-blankline.enable = true;
-      vimtex.enable = true;
-      markdown-preview.enable = true;
-      venv-selector.enable = true;
-      render-markdown.enable = true;
-      litee.enable = true;
-      vim-dadbod = {
-        enable = true;
-        ui.enable = true;
-        completion.enable = true;
-      };
 
-      # External integrations
+      # Refactoring and code enhancements
+      refactoring.enable = true;
+      inc-rename.enable = true;
+
+      # FZF and Search Enhancements
+      fzf-lua.enable = true;
+
+      # Specific UI and Miscellaneous
+      illuminate.enable = true;
+      # startuptime.enable = true;
+      snacks.enable = true;
+
+      # Copilot and AI
       copilot-chat.enable = true;
       supermaven.enable = true;
-      blink-cmp.enable = true;
-      prettier.enable = true;
-      rustacean.enable = true;
-      dap-go.enable = true;
-      fzf-lua.enable = true;
+
+      # Other Plugins
+      leap.enable = true;
+      overseer.enable = true;
+      # tailwind-tools.enable = true;
+      vimtex.enable = true;
+      dashboard.enable = true;
+      indent-blankline.enable = true;
+
+      # Project Management
+      project-nvim.enable = true;
+
+      # Debugging/Markdown/Additional Support
+      markdown-preview.enable = true;
+      render-markdown.enable = true;
+
+      # Database interface for vim
+      vim-dadbod.enable = true;
+      vim-dadbod-ui.enable = true; # Enable UI for vim-dadbod
+      vim-dadbod-completion.enable = true;
     };
   };
 
