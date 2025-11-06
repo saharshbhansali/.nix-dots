@@ -11,6 +11,7 @@
   home.packages = with pkgs; [
     inputs.nixCatsNvim.packages.${pkgs.system}.nvim
     inputs.nixCatsNvim.packages.${pkgs.system}.testnvim
+    inputs.nixCatsNvim.packages.${pkgs.system}.catsnvim
     # vimPlugins.mason-tool-installer-nvim
     # vimPlugins.mason-nvim-dap-nvim
     # vimPlugins.mason-nvim

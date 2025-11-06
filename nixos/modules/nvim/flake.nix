@@ -300,6 +300,7 @@
           # your alias may not conflict with your other packages.
           # aliases = [ "vim" ];
           # neovim-unwrapped = inputs.neovim-nightly-overlay.packages.${pkgs.stdenv.hostPlatform.system}.neovim;
+          configDirName = "nixCats-nvim";
           hosts.python3.enable = true;
           hosts.node.enable = true;
         };
@@ -319,9 +320,33 @@
           suffix-path = true;
           suffix-LD = true;
           wrapRc = false;
-          unwrappedCfgPath = utils.mkLuaInline "os.getenv('HOME') .. '/.config/testnvim'";
-          configDirName = "testnvim";
+          configDirName = "testCats-nvim";
+          aliases = [ "testvim" "nvim-test" "vim-test" ];
         };
+        categories = {
+          general = true;
+          test = false;
+        };
+        extra = {};
+      };
+      catsnvim = { pkgs, name, mkPlugin, ... }: {
+        # they contain a settings set defined above
+        # see :help nixCats.flake.outputs.settings
+        settings = {
+          suffix-path = false;
+          suffix-LD = true;
+          wrapRc = true;
+          # IMPORTANT:
+          # your alias may not conflict with your other packages.
+          # aliases = [ "vim" ];
+          # neovim-unwrapped = inputs.neovim-nightly-overlay.packages.${pkgs.stdenv.hostPlatform.system}.neovim;
+          hosts.python3.enable = true;
+          hosts.node.enable = true;
+          unwrappedCfgPath = "/etc/lazynvim";
+          aliases = [ "catsvim" ];
+        };
+        # and a set of categories that you want
+        # (and other information to pass to lua)
         categories = {
           general = true;
           test = false;
