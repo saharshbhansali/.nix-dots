@@ -78,15 +78,31 @@
         term_colors = true;
         default_integrations = true;
         integrations = {
+          aerial = true;
+          alpha = true;
           cmp = true;
+          dashboard = true;
+          flash = true;
+          fzf = true;
+          grug_far = true;
           gitsigns = true;
-          nvimtree = true;
-          treesitter = true;
-          notify = false;
-          mini = {
-            enabled = true;
-            indentscope_color = "";
-          };
+          headlines = true;
+          illuminate = true;
+          indent_blankline = true;
+          leap = true;
+          lsp_trouble = true;
+          mason = true;
+          mini = true;
+          # navic = { enabled = true; custom_bg = "lualine" };
+          navic = true;
+          neotest = true;
+          neotree = true;
+          noice = true;
+          notify = true;
+          snacks = true;
+          telescope = true;
+          treesitter_context = true;
+          which_key = true;
         };
       };
     };
@@ -121,8 +137,7 @@
       # lazy.enable = true;
       # LazyVim.enable = true;
 
-      # Bufferline and UI-related plugins
-      bufferline.enable = true;
+      # UI-related plugins
       alpha.enable = true;
       alpha.theme = "dashboard";
 
@@ -173,6 +188,7 @@
       treesitter-context.enable = true;
       # treesitter-pairs.enable = true;
       treesitter-refactor.enable = true;
+      ts-autotag.enable = true;
       treesitter = {
         enable = true;
         settings = {
@@ -208,20 +224,54 @@
         };
       };
 
-      # Which Key and UI Enhancements
+      ## LazyVim setup
+      # Core Plugins
+      mini-pairs.enable = true;
+      ts-comments.enable = true;
+      mini-ai.enable = true;
+      lazydev.enable = true;
+      # Colorscheme
+      bufferline.enable = true;
+      # Editor
+      grug-far.enable = true;
+      flash.enable = true;
       which-key.enable = true;
       which-key.autoLoad = true;
-      lualine.enable = true;
-      web-devicons.enable = true;
-      noice.enable = true;
+      gitsigns.enable = true;
       trouble.enable = true;
+      todo-comments.enable = true;
+      # Formatting and Linting
+      conform-nvim.enable = true; # Needs a bit of configuration
+      lint.enable = true;
+      # LSP
+      lspconfig.enable = true;
+      # TreeSitter
+      # treesitter.enable = true;
+      # UI
+      # bufferline.enable = true;
+      lualine.enable = true;
+      noice.enable = true;
+      mini-icons.enable = true;
+      nui.enable = true;
+      snacks.enable = true;
+      # Util
+      persistence.enable = true;
+      # plenary.enable = true;
 
+      # # Which Key and UI Enhancements
+      # which-key.enable = true;
+      # which-key.autoLoad = true;
+      # lualine.enable = true;
+      web-devicons.enable = true;
+      # noice.enable = true;
+      # trouble.enable = true;
+      #
       # Snippet-related
       luasnip.enable = true;
       friendly-snippets.enable = true;
 
-      # Git Integration
-      gitsigns.enable = true;
+      # QoL Integration
+      # gitsigns.enable = true;
       yanky.enable = true;
       harpoon.enable = true;
 
@@ -234,45 +284,45 @@
       telescope.extensions.ui-select.enable = true;
       telescope.extensions.undo.enable = true;
 
-      # Mini Plugins
+      # # Mini Plugins
       mini.enable = true;
-      mini-ai.enable = true;
-      mini-basics.enable = true;
-      mini-bracketed.enable = true;
-      mini-clue.enable = true;
-      mini-colors.enable = true;
-      mini-comment.enable = true;
-      mini-completion.enable = true;
-      mini-cursorword.enable = true;
-      mini-diff.enable = true;
-      mini-doc.enable = true;
-      mini-extra.enable = true;
-      # mini-files.enable = true;
-      mini-fuzzy.enable = true;
-      mini-git.enable = true;
-      mini-hipatterns.enable = true;
-      mini-icons.enable = true;
-      mini-indentscope.enable = true;
-      mini-jump.enable = true;
-      mini-jump2d.enable = true;
-      mini-keymap.enable = true;
-      mini-misc.enable = true;
-      mini-move.enable = true;
-      mini-notify.enable = true;
-      mini-pairs.enable = true;
-      mini-pick.enable = true;
-      mini-sessions.enable = true;
-      mini-snippets.enable = true;
-      mini-starter.enable = true;
+      # mini-ai.enable = true;
+      # mini-basics.enable = true;
+      # mini-bracketed.enable = true;
+      # mini-clue.enable = true;
+      # mini-colors.enable = true;
+      # mini-comment.enable = true;
+      # mini-completion.enable = true;
+      # mini-cursorword.enable = true;
+      # mini-diff.enable = true;
+      # mini-doc.enable = true;
+      # mini-extra.enable = true;
+      # # mini-files.enable = true;
+      # mini-fuzzy.enable = true;
+      # mini-git.enable = true;
+      # mini-hipatterns.enable = true;
+      # mini-icons.enable = true;
+      # mini-indentscope.enable = true;
+      # mini-jump.enable = true;
+      # mini-jump2d.enable = true;
+      # mini-keymap.enable = true;
+      # mini-misc.enable = true;
+      # mini-move.enable = true;
+      # mini-notify.enable = true;
+      # mini-pairs.enable = true;
+      # mini-pick.enable = true;
+      # mini-sessions.enable = true;
+      # mini-snippets.enable = true;
+      # mini-starter.enable = true;
       mini-surround.enable = true;
-      mini-tabline.enable = true;
+      # mini-tabline.enable = true;
 
       # Neogen
       neogen.enable = true;
 
       # Refactoring and code enhancements
-      refactoring.enable = true;
-      inc-rename.enable = true;
+      # refactoring.enable = true;
+      # inc-rename.enable = true;
 
       # FZF and Search Enhancements
       fzf-lua.enable = true;
@@ -280,19 +330,20 @@
       # Specific UI and Miscellaneous
       illuminate.enable = true;
       # startuptime.enable = true;
-      snacks.enable = true;
+      # snacks.enable = true;
 
       # Copilot and AI
       copilot-chat.enable = true;
       supermaven.enable = true;
 
       # Other Plugins
-      leap.enable = true;
-      overseer.enable = true;
-      # tailwind-tools.enable = true;
-      vimtex.enable = true;
-      dashboard.enable = true;
+      # leap.enable = true;
+      # overseer.enable = true;
+      # # tailwind-tools.enable = true;
+      # vimtex.enable = true;
+      # dashboard.enable = true;
       indent-blankline.enable = true;
+      # navic.enable = true;
 
       # Project Management
       project-nvim.enable = true;
