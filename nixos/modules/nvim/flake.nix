@@ -311,6 +311,28 @@
         };
         extra = {};
       };
+      cats-vim = { pkgs, name, mkPlugin, ... }: {
+        # they contain a settings set defined above
+        # see :help nixCats.flake.outputs.settings
+        settings = {
+          suffix-path = true;
+          suffix-LD = true;
+          wrapRc = true;
+          # IMPORTANT:
+          # your alias may not conflict with your other packages.
+          # aliases = [ "vim" ];
+          # neovim-unwrapped = inputs.neovim-nightly-overlay.packages.${pkgs.stdenv.hostPlatform.system}.neovim;
+          hosts.python3.enable = true;
+          hosts.node.enable = true;
+        };
+        # and a set of categories that you want
+        # (and other information to pass to lua)
+        categories = {
+          general = true;
+          test = false;
+        };
+        extra = {};
+      };
       # an extra test package with normal lua reload for fast edits
       # nix doesnt provide the config in this package, allowing you free reign to edit it.
       # then you can swap back to the normal pure package when done.

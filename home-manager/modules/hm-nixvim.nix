@@ -55,6 +55,7 @@
 
   ## User level packages
   home.packages = with pkgs; [
+    inputs.nixCatsNvim.packages.${pkgs.system}.cats-vim
     # inputs.nixCatsNvim.packages.${pkgs.system}.nvim
     # inputs.nixCatsNvim.packages.${pkgs.system}.testnvim
     universal-ctags
