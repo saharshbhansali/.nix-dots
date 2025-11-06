@@ -1,7 +1,5 @@
 { nixpkgs, inputs, config, lib, pkgs, ... }:
-# let
-#   nixvim = inputs.nixvim.legacyPackages.${pkgs.system};
-# in
+
 {
 
   home.stateVersion = "24.11";
@@ -23,7 +21,7 @@
     ../modules/hm-flatpaks.nix
     ../modules/hm-devtools.nix
     # Specific
-    ../modules/hm-nixvim.nix
+    ../modules/hm-nvim.nix
     ../modules/hm-nushell.nix
     ../modules/hm-spicetify.nix
     # Feature
