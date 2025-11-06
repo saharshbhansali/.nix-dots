@@ -129,13 +129,17 @@
           lazydev-nvim
           conform-nvim
           flash-nvim
+          alpha-nvim
+          luasnip
           friendly-snippets
           gitsigns-nvim
           grug-far-nvim
+          edgy-nvim
           aerial-nvim
+          outline-nvim
           none-ls-nvim
           noice-nvim
-          # lualine-nvim
+          lualine-nvim
           nui-nvim
           nvim-lint
           nvim-lspconfig
@@ -197,11 +201,11 @@
           harpoon2
           inc-rename-nvim
           leap-nvim
-          outline-nvim
           overseer-nvim
           refactoring-nvim
           fzf-lua
           pkgs.black
+          nvim-fzf
           vim-prettier
           gitsigns-nvim
           go-nvim
