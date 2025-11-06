@@ -320,6 +320,7 @@
           suffix-LD = true;
           wrapRc = false;
           unwrappedCfgPath = utils.mkLuaInline "os.getenv('HOME') .. '/.config/testnvim'";
+          configDirName = "testnvim";
         };
         categories = {
           general = true;

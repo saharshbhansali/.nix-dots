@@ -59,6 +59,11 @@
     # vimPlugins.mason-lspconfig-nvim
   ];
 
+  home.file.".config/nvim" = {
+    source = ../../configs/nvim;
+    recursive = true;
+  };
+
   # # Test config for experimentation
   # home.file.".config/testnvim" = {
   #   source = ../../configs/nvim;

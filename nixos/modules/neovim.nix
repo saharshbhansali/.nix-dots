@@ -5,7 +5,6 @@
 
   environment.systemPackages = [
     inputs.nixCatsNvim.packages.${pkgs.system}.nvim
-    pkgs.fd
   ];
 
   # Mount custom config directory
