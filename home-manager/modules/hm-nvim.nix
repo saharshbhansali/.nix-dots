@@ -244,7 +244,7 @@
       conform-nvim.enable = true; # Needs a bit of configuration
       lint.enable = true;
       # LSP
-      lspconfig.enable = true;
+      # lspconfig.enable = true;
       # TreeSitter
       # treesitter.enable = true;
       # UI
