@@ -191,10 +191,12 @@
     # Notification utils
     libnotify
 
-    ## BitWarden
+    ## Security
     bitwarden-cli
     bitwarden-desktop
     bitwarden-menu
+    ente-auth
+    tor-browser
 
     ## Office software
     onlyoffice-desktopeditors

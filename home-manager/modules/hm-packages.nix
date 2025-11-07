@@ -52,6 +52,7 @@
     # firefox and chromium
     firefox
     chromium
+    tor-browser
     # text-based/terminal web browser
     chawan
     browsh
