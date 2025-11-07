@@ -22,6 +22,7 @@
     steam
     steam-unwrapped
     steam-run
+    steam-devices-udev-rules
 
     # HUD for system performance
     mangohud

@@ -112,11 +112,17 @@
     xorg.setxkbmap
     xorg.xev
 
-    ## Gesture utils
+    ## Input utils
     libinput
     libinput-gestures
     wmctrl
     xdotool
+    xorg.xinput
+    gamepad-tool
+
+    # Backlight utils
+    acpilight
+    xbacklight
 
     ## Disk utils
     parted
