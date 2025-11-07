@@ -14,8 +14,13 @@
     extraCompatPackages = [ pkgs.proton-ge-bin];
   };
 
+  # Hardware support
+  hardware.steam-hardware.enable = true;
+
   ## Gaming packages
   environment.systemPackages = with pkgs; [
+    steam
+    steam-unwrapped
     steam-run
 
     # HUD for system performance
