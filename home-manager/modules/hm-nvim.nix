@@ -287,12 +287,12 @@
       # # Mini Plugins
       mini.enable = true;
       # mini-ai.enable = true;
-      # mini-basics.enable = true;
-      # mini-bracketed.enable = true;
+      mini-basics.enable = true;
+      mini-bracketed.enable = true;
       mini-clue.enable = true;
-      # mini-colors.enable = true;
+      mini-colors.enable = true;
       mini-comment.enable = true;
-      # mini-completion.enable = true;
+      mini-completion.enable = true;
       mini-cursorword.enable = true;
       mini-diff.enable = true;
       mini-doc.enable = true;
@@ -307,21 +307,21 @@
       # mini-jump2d.enable = true;
       mini-keymap.enable = true;
       # mini-misc.enable = true;
-      # mini-move.enable = true;
-      # mini-notify.enable = true;
+      mini-move.enable = true;
+      mini-notify.enable = true;
       # mini-pairs.enable = true;
       # mini-pick.enable = true;
       # mini-sessions.enable = true;
       # mini-snippets.enable = true;
       # mini-starter.enable = true;
       mini-surround.enable = true;
-      # mini-tabline.enable = true;
+      mini-tabline.enable = true;
 
       # Neogen
       neogen.enable = true;
 
       # Refactoring and code enhancements
-      # refactoring.enable = true;
+      refactoring.enable = true;
       # inc-rename.enable = true;
 
       # FZF and Search Enhancements
@@ -337,13 +337,13 @@
       supermaven.enable = true;
 
       # Other Plugins
-      # leap.enable = true;
-      # overseer.enable = true;
+      leap.enable = true;
+      overseer.enable = true;
       # # tailwind-tools.enable = true;
-      # vimtex.enable = true;
+      vimtex.enable = true;
       dashboard.enable = true;
       indent-blankline.enable = true;
-      # navic.enable = true;
+      navic.enable = true;
 
       # Project Management
       project-nvim.enable = true;
