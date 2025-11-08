@@ -42,7 +42,7 @@ in
           "https://raw.githubusercontent.com/DNSCrypt/dnscrypt-resolvers/master/v3/public-resolvers.md"
           "https://download.dnscrypt.info/resolvers-list/v3/public-resolvers.md"
         ];
-        minisign_key = "RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3"; # See https://github.com/DNSCrypt/dnscrypt-resolvers/blob/master/v3/public-resolvers.md
+        minisign_key = "RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3"; 
         cache_file = "/var/lib/${StateDirectory}/public-resolvers.md";
       };
 
@@ -83,15 +83,17 @@ in
 
   ## Temporary fix (disable autoconnect) for broken Realtek PCI WiFi card
   systemd.services."disable-wlo1-on-boot" = {
-	description = "Disable wlo1 autoconnect on boot via nmcli";
-	after = [ "NetworkManager.service" ];
-	wantedBy = [ "multi-user.target" ];
-	serviceConfig = {
-	  # ExecStart = "${pkgs.networkmanager}/bin/nmcli device set wlo1 autoconnect no";
-	  ExecStart = "${pkgs.networkmanager}/bin/nmcli device down wlo1";
-	  Type = "oneshot";
+    description = "disable wlo1 on boot (nmcli)";
+    after = [ "NetworkManager-wait-online.service" ];
+    wants = [ "NetworkManager-wait-online.service" ];
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      # ExecStart = "${pkgs.networkmanager}/bin/nmcli device set wlo1 autoconnect no";
+      # ExecStart = "${pkgs.networkmanager}/bin/nmcli device disconnect wlo1";
+      ExecStart = "${pkgs.networkmanager}/bin/nmcli device down wlo1";
+      Type = "oneshot";
       RemainAfterExit = true;
-	};
+    };
   };
 
 }
