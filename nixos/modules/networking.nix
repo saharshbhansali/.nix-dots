@@ -112,6 +112,8 @@ in
     connection-wifi-wlo1."connection.autoconnect-priority" = -100;
     connection-wifi-wlo1."connection.autoconnect-retries" = 1;
   };
+  # ## Unmanage wlo1 interface
+  # networking.networkmanager.unmanaged = [ "wlo1" ];
 
   ## User systemd service to disable-wifi-on-login
   systemd.user.services.disable-wifi-on-login = {
@@ -120,7 +122,9 @@ in
     # Ensure it runs after the graphical session has started
     after = [ "graphical-session.target" ];
     wantedBy = [ "graphical-session.target" ];
- 
+    # after = [ "network-online.target" ];
+    # wantedBy = [ "network-online.target" ];
+
     serviceConfig = {
       Type = "oneshot";
       # Small delay to let NetworkManager recognize wlo1 before running nmcli
