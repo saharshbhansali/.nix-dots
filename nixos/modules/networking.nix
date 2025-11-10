@@ -104,14 +104,15 @@ in
   #   };
   # };
 
-  networking.networkmanager.settings = {
-    # under the [connection-wifi-wlo1] section
-    connection-wifi-wlo1."match-device" = "interface-name:wlo1";
-    connection-wifi-wlo1."connection.auth-retries" = 1;
-    connection-wifi-wlo1."connection.autoconnect" = "no";
-    connection-wifi-wlo1."connection.autoconnect-priority" = -100;
-    connection-wifi-wlo1."connection.autoconnect-retries" = 1;
-  };
+  # networking.networkmanager.settings = {
+  #   # under the [connection-wifi-wlo1] section
+  #   connection-wifi-wlo1."match-device" = "interface-name:wlo1";
+  #   connection-wifi-wlo1."connection.auth-retries" = 1;
+  #   connection-wifi-wlo1."connection.autoconnect" = "no";
+  #   connection-wifi-wlo1."connection.autoconnect-priority" = -100;
+  #   connection-wifi-wlo1."connection.autoconnect-retries" = 1;
+  # };
+
   # ## Unmanage wlo1 interface
   # networking.networkmanager.unmanaged = [ "wlo1" ];
 
