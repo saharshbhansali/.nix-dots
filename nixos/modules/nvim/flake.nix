@@ -201,11 +201,13 @@
           harpoon2
           inc-rename-nvim
           leap-nvim
+          flit-nvim
           overseer-nvim
           refactoring-nvim
           fzf-lua
           pkgs.black
           nvim-fzf
+          nvim-navic
           vim-prettier
           gitsigns-nvim
           go-nvim
