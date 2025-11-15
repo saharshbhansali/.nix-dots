@@ -120,7 +120,7 @@
     xdotool
     xorg.xinput
     gamepad-tool
-    xpad
+    # xpad
     SDL2
     opengamepadui
     antimicrox
