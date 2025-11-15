@@ -120,6 +120,12 @@
     xdotool
     xorg.xinput
     gamepad-tool
+    xpad
+    SDL2
+    opengamepadui
+    antimicrox
+    moltengamepad
+    qjoypad
 
     # Backlight utils
     acpilight
