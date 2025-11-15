@@ -44,6 +44,9 @@
     protonplus
     protonup-qt
     winetricks
+
+    # Controllers
+    dualsensectl
   ];
 
   environment.sessionVariables = {
