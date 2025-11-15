@@ -361,11 +361,11 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "path": "./nixos/modules/nvim",
+        "path": "./nixos/modules/nixCats-nvim",
         "type": "path"
       },
       "original": {
-        "path": "./nixos/modules/nvim",
+        "path": "./nixos/modules/nixCats-nvim",
         "type": "path"
       },
       "parent": []
