@@ -29,7 +29,7 @@
     };
 
     nixCatsNvim = {
-      url = "path:./nixos/modules/nvim";
+      url = "path:./nixos/modules/nixCats-nvim";
     };
 
     nixPatchNvim = {
