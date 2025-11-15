@@ -1,17 +1,21 @@
 return {
     { "nvim-mini/mini.nvim", version = "*" },
-    -- {
-    --   "nvim-mini/mini.surround",
-    --   opts = {
-    --     mappings = {
-    --       add = "<leader>sa", -- Add surrounding in Normal and Visual modes
-    --       delete = "<leader>sd", -- Delete surrounding
-    --       find = "<leader>sf", -- Find surrounding (to the right)
-    --       find_left = "<leader>sF", -- Find surrounding (to the left)
-    --       highlight = "<leader>sh", -- Highlight surrounding
-    --       replace = "<leader>sr", -- Replace surrounding
-    --       update_n_lines = "<leader>sn", -- Update `n_lines`
-    --     },
-    --   },
-    -- }
+    {
+      "nvim-mini/mini.surround",
+      optional = true,
+      opts = {
+        mappings = {
+          add = "gza", -- Add surrounding in Normal and Visual modes
+          delete = "gzd", -- Delete surrounding
+          find = "gzf", -- Find surrounding (to the right)
+          find_left = "gzF", -- Find surrounding (to the left)
+          highlight = "gzh", -- Highlight surrounding
+          replace = "gzr", -- Replace surrounding
+          update_n_lines = "gzn", -- Update `n_lines`
+        },
+      },
+      keys = {
+        { "gz", "", desc = "+surround" },
+      },
+    }
 }
