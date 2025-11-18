@@ -131,7 +131,8 @@ in
       # Small delay to let NetworkManager recognize wlo1 before running nmcli
       ExecStartPre = "${pkgs.coreutils}/bin/sleep 5";
       # ExecStart = "${pkgs.networkmanager}/bin/nmcli device down wlo1";
-      ExecStart = "${pkgs.networkmanager}/bin/nmcli device set wlo1 managed no";
+      ExecStart = "${pkgs.networkmanager}/bin/nmcli device set wlo1 autoconnect no";
+      # ExecStart = "${pkgs.networkmanager}/bin/nmcli device set wlo1 managed no";
     };
   };
 
