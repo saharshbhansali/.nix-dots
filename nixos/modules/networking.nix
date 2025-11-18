@@ -119,7 +119,7 @@ in
   ## User systemd service to disable-wifi-on-login
   systemd.user.services.disable-wifi-on-login = {
     enable = true;
-    description = "Disable WiFi interface wlo1 after graphical login";
+    description = "disable WiFi interface wlo1 after graphical login";
     # Ensure it runs after the graphical session has started
     after = [ "graphical-session.target" ];
     wantedBy = [ "graphical-session.target" ];
@@ -130,7 +130,8 @@ in
       Type = "oneshot";
       # Small delay to let NetworkManager recognize wlo1 before running nmcli
       ExecStartPre = "${pkgs.coreutils}/bin/sleep 5";
-      ExecStart = "${pkgs.networkmanager}/bin/nmcli device down wlo1";
+      # ExecStart = "${pkgs.networkmanager}/bin/nmcli device down wlo1";
+      ExecStart = "${pkgs.networkmanager}/bin/nmcli device set wlo1 managed no";
     };
   };
 
