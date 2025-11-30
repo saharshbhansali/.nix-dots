@@ -67,6 +67,11 @@
     gzip
     zip
     unzip
+    unrar-free
+    unar
+    peazip
+    _7zz
+    _7zz-rar
 
     ## Wi-Fi utils
     iw
