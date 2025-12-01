@@ -45,6 +45,7 @@ zinit light zsh-users/zsh-autosuggestions
 zinit light Aloxaf/fzf-tab
 zinit light akash329d/zsh-alias-finder
 # zinit light rkh/zsh-jj
+zinit light Freed-Wu/fzf-tab-source
 
 ## Add in snippets
 # OMZ plugins
