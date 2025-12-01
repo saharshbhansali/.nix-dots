@@ -157,15 +157,22 @@ zstyle ':fzf-tab:*' prefix '·'
 # zstyle ':fzf-tab:*' query-string prefix longest
 zstyle ':fzf-tab:*' query-string prefix first
 
-zstyle ':fzf-tab:complete:bat:*' fzf-preview 'ls --almost-all --group-directories-first --color $realpath'
-zstyle ':fzf-tab:complete:cat:*' fzf-preview 'ls --almost-all --group-directories-first --color $realpath'
+zstyle ':fzf-tab:complete:bat:*' fzf-preview 'ls --almost-all --group-directories-first --color $(realpath $PWD/$word)'
+zstyle ':fzf-tab:complete:cat:*' fzf-preview 'ls --almost-all --group-directories-first --color $(realpath $PWD/$word)'
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --almost-all --group-directories-first --color $realpath'
 zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --almost-all --group-directories-first --color $realpath'
-zstyle ':fzf-tab:complete:ls:*' fzf-preview 'ls --almost-all --group-directories-first --color $realpath'
-zstyle ':fzf-tab:complete:nvim:*' fzf-preview 'ls --almost-all --group-directories-first --color $realpath'
-zstyle ':fzf-tab:complete:bat:*' fzf-preview 'ls --almost-all --group-directories-first --color $realpath'
-zstyle ':fzf-tab:complete:cat:*' fzf-preview 'ls --almost-all --group-directories-first --color $realpath'
-zstyle ':fzf-tab:complete:chezmoi:*' fzf-preview 'ls --almost-all --group-directories-first --color $realpath'
+zstyle ':fzf-tab:complete:ls:*' fzf-preview 'ls --almost-all --group-directories-first --color $(realpath $PWD/$word)'
+zstyle ':fzf-tab:complete:la:*' fzf-preview 'ls --almost-all --group-directories-first --color $(realpath $PWD/$word)'
+zstyle ':fzf-tab:complete:ll:*' fzf-preview 'ls --almost-all --group-directories-first --color $(realpath $PWD/$word)'
+zstyle ':fzf-tab:complete:exa:*' fzf-preview 'ls --almost-all --group-directories-first --color $(realpath $PWD/$word)'
+zstyle ':fzf-tab:complete:mv:*' fzf-preview 'ls --almost-all --group-directories-first --color $(realpath $PWD/$word)'
+zstyle ':fzf-tab:complete:cp:*' fzf-preview 'ls --almost-all --group-directories-first --color $(realpath $PWD/$word)'
+zstyle ':fzf-tab:complete:rm:*' fzf-preview 'ls --almost-all --group-directories-first --color $(realpath $PWD/$word)'
+zstyle ':fzf-tab:complete:rem:*' fzf-preview 'ls --almost-all --group-directories-first --color $realpath'
+# zstyle ':fzf-tab:complete:rip:*' fzf-preview 'ls --almost-all --group-directories-first --color $realpath'
+zstyle ':fzf-tab:complete:mkdir:*' fzf-preview 'ls --almost-all --group-directories-first --color $(realpath $PWD/$word)'
+zstyle ':fzf-tab:complete:md:*' fzf-preview 'ls --almost-all --group-directories-first --color $(realpath $PWD/$word)'
+zstyle ':fzf-tab:complete:nvim:*' fzf-preview 'ls --almost-all --group-directories-first --color $(realpath $PWD/$word)'
 
 # Carapace completions
 export CARAPACE_BRIDGES='zsh' # optional
@@ -178,6 +185,7 @@ CARAPACE_PATTERN="($(printf '%s|' "${CARAPACE_EXCEPTIONS[@]}" | sed 's/|$//'))"
 source <(carapace _carapace | sed -E "s/(^|\\s)${CARAPACE_PATTERN}(\\s|$)/ /g")
 # source <(carapace _carapace | sed -E 's/(^|\s)(nvim|ls|la|rm|rem|cd|vscode)(\s|$)/ /g')
 zstyle ':completion:*:git:*' group-order 'main commands' 'alias commands' 'external commands'
+zstyle ':completion:*:jj:*' group-order 'main commands' 'alias commands' 'external commands'
 
 # Shell integrations
 eval "$(fzf --zsh)"
