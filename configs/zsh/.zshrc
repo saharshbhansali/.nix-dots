@@ -151,6 +151,14 @@ setopt hist_find_no_dups
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 zstyle ':completion:*' menu no
+
+zstyle ':fzf-tab:*' switch-group '<' '>'
+zstyle ':fzf-tab:*' prefix '·'
+# zstyle ':fzf-tab:*' query-string prefix longest
+zstyle ':fzf-tab:*' query-string prefix first
+
+zstyle ':fzf-tab:complete:bat:*' fzf-preview 'ls --almost-all --group-directories-first --color $realpath'
+zstyle ':fzf-tab:complete:cat:*' fzf-preview 'ls --almost-all --group-directories-first --color $realpath'
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --almost-all --group-directories-first --color $realpath'
 zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --almost-all --group-directories-first --color $realpath'
 zstyle ':fzf-tab:complete:ls:*' fzf-preview 'ls --almost-all --group-directories-first --color $realpath'
