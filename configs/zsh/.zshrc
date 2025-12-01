@@ -22,25 +22,6 @@ source "${ZINIT_HOME}/zinit.zsh"
 
 #-----------------------------------------------------------------------------------------------------------
 
-### Customize prompt
-
-# ## Add in Powerlevel10k
-# zinit ice depth=1; zinit light romkatv/powerlevel10k
-
-# # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-# [[ ! -f $HOME/.p10k.zsh ]] || source $HOME/.p10k.zsh
-
-## Add in Starship
-eval "$(starship init zsh)"
-
-# zinit ice as"command" from"gh-r" \
-#           atclone"./starship init zsh > init.zsh; ./starship completions zsh > _starship" \
-#           atpull"%atclone" src"init.zsh"
-#
-# zinit light starship/starship
-
-#-----------------------------------------------------------------------------------------------------------
-
 ## Atuin
 
 # # line 1: `atuin` binary as command, from github release, only look at .tar.gz files, use the `atuin` file from the extracted archive
@@ -73,6 +54,25 @@ for plugin in $(echo "$plugins"); do
   zinit snippet OMZP::${plugin}
 done
 zinit snippet OMZL::git.zsh
+
+#-----------------------------------------------------------------------------------------------------------
+
+### Customize prompt
+
+# ## Add in Powerlevel10k
+# zinit ice depth=1; zinit light romkatv/powerlevel10k
+
+# # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+# [[ ! -f $HOME/.p10k.zsh ]] || source $HOME/.p10k.zsh
+
+## Add in Starship
+eval "$(starship init zsh)"
+
+# zinit ice as"command" from"gh-r" \
+#           atclone"./starship init zsh > init.zsh; ./starship completions zsh > _starship" \
+#           atpull"%atclone" src"init.zsh"
+#
+# zinit light starship/starship
 
 #-----------------------------------------------------------------------------------------------------------
 
