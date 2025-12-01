@@ -7,10 +7,10 @@ alias 'pm-hib'='sudo pm-hibernate'
 
 # Information and Movement Aliases
 
-alias 'lsx'='exa --color=auto --icons'
+alias 'lsx'='exa --color=auto --icons=auto'
 alias 'ls'='ls --color=auto'
-alias 'lss'='exa -lahg --color=auto --icons'
-alias 'la'='exa -lahg --color=auto --git --icons'
+alias 'lss'='exa -lahg --color=auto --icons=auto'
+alias 'la'='exa -lahg --color=auto --git --icons=auto'
 # alias 'cat'='bat'
 alias '..'='cd ..'
 alias '.1'='cd ..'
