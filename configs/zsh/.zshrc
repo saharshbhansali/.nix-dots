@@ -40,7 +40,7 @@ source "${ZINIT_HOME}/zinit.zsh"
 
 ## Add in zsh plugins
 zinit light zsh-users/zsh-syntax-highlighting
-zinit light zsh-users/zsh-completions
+# zinit light zsh-users/zsh-completions
 zinit light zsh-users/zsh-autosuggestions
 zinit light Aloxaf/fzf-tab
 zinit light akash329d/zsh-alias-finder
@@ -194,16 +194,16 @@ zstyle ':fzf-tab:complete:egrep:*' fzf-preview 'fzf-preview $realpath'
 
 zstyle ':fzf-tab:complete:chezmoi:*' fzf-preview 'fzf-preview $realpath'
 
-# Carapace completions
-export CARAPACE_BRIDGES='zsh' # optional
-zstyle ':completion:*' format $'\e[2;37mCompleting %d\e[m'
-# Define the list of command exceptions
-CARAPACE_EXCEPTIONS=(nvim ls la exa eza rm rem rip cat bat cd mv cp mkdir md vscode)
-# Join the list into a regex pattern: (nvim|ls|la|...)
-CARAPACE_PATTERN="($(printf '%s|' "${CARAPACE_EXCEPTIONS[@]}" | sed 's/|$//'))"
-# Run carapace and apply the regex pattern via sed
-source <(carapace _carapace | sed -E "s/(^|\\s)${CARAPACE_PATTERN}(\\s|$)/ /g")
-# source <(carapace _carapace | sed -E 's/(^|\s)(nvim|ls|la|rm|rem|cd|vscode)(\s|$)/ /g')
+# # Carapace completions
+# export CARAPACE_BRIDGES='zsh' # optional
+# zstyle ':completion:*' format $'\e[2;37mCompleting %d\e[m'
+# # Define the list of command exceptions
+# CARAPACE_EXCEPTIONS=(nvim ls la exa eza rm rem rip cat bat cd mv cp mkdir md vscode)
+# # Join the list into a regex pattern: (nvim|ls|la|...)
+# CARAPACE_PATTERN="($(printf '%s|' "${CARAPACE_EXCEPTIONS[@]}" | sed 's/|$//'))"
+# # Run carapace and apply the regex pattern via sed
+# source <(carapace _carapace | sed -E "s/(^|\\s)${CARAPACE_PATTERN}(\\s|$)/ /g")
+# # source <(carapace _carapace | sed -E 's/(^|\s)(nvim|ls|la|rm|rem|cd|vscode)(\s|$)/ /g')
 
 zstyle ':completion:*:git:*' group-order 'main commands' 'alias commands' 'external commands'
 zstyle ':completion:*:jj:*' group-order 'main commands' 'alias commands' 'external commands'
