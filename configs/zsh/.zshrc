@@ -155,25 +155,44 @@ zstyle ':completion:*' menu no
 
 zstyle ':fzf-tab:*' switch-group '<' '>'
 zstyle ':fzf-tab:*' prefix '·'
+
 # zstyle ':fzf-tab:*' query-string prefix longest
 zstyle ':fzf-tab:*' query-string prefix first
 
 zstyle ':fzf-tab:complete:bat:*' fzf-preview 'fzf-preview $(realpath $PWD/$word)'
 zstyle ':fzf-tab:complete:cat:*' fzf-preview 'fzf-preview $(realpath $PWD/$word)'
+
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'fzf-preview $(realpath $PWD/$word)'
 zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'fzf-preview $(realpath $PWD/$word)'
+
 zstyle ':fzf-tab:complete:ls:*' fzf-preview 'fzf-preview $(realpath $PWD/$word)'
 zstyle ':fzf-tab:complete:la:*' fzf-preview 'fzf-preview $(realpath $PWD/$word)'
 zstyle ':fzf-tab:complete:ll:*' fzf-preview 'fzf-preview $(realpath $PWD/$word)'
 zstyle ':fzf-tab:complete:exa:*' fzf-preview 'fzf-preview $(realpath $PWD/$word)'
+
 zstyle ':fzf-tab:complete:mv:*' fzf-preview 'fzf-preview $(realpath $PWD/$word)'
+
 zstyle ':fzf-tab:complete:cp:*' fzf-preview 'fzf-preview $(realpath $PWD/$word)'
+
 zstyle ':fzf-tab:complete:rm:*' fzf-preview 'fzf-preview $(realpath $PWD/$word)'
 zstyle ':fzf-tab:complete:rem:*' fzf-preview 'fzf-preview $(realpath $PWD/$word)'
-# zstyle ':fzf-tab:complete:rip:*' fzf-preview 'fzf-preview $(realpath $PWD/$word)'
+zstyle ':fzf-tab:complete:rip:*' fzf-preview 'fzf-preview $(realpath $PWD/$word)'
+
 zstyle ':fzf-tab:complete:mkdir:*' fzf-preview 'fzf-preview $(realpath $PWD/$word)'
 zstyle ':fzf-tab:complete:md:*' fzf-preview 'fzf-preview $(realpath $PWD/$word)'
+
 zstyle ':fzf-tab:complete:nvim:*' fzf-preview 'fzf-preview $(realpath $PWD/$word)'
+
+zstyle ':fzf-tab:complete:diff:*' fzf-preview 'fzf-preview $realpath'
+
+zstyle ':fzf-tab:complete:find:*' fzf-preview 'fzf-preview $realpath'
+zstyle ':fzf-tab:complete:fd:*' fzf-preview 'fzf-preview $realpath'
+
+zstyle ':fzf-tab:complete:grep:*' fzf-preview 'fzf-preview $realpath'
+zstyle ':fzf-tab:complete:rg:*' fzf-preview 'fzf-preview $realpath'
+zstyle ':fzf-tab:complete:egrep:*' fzf-preview 'fzf-preview $realpath'
+
+zstyle ':fzf-tab:complete:chezmoi:*' fzf-preview 'fzf-preview $realpath'
 
 # Carapace completions
 export CARAPACE_BRIDGES='zsh' # optional
@@ -185,6 +204,7 @@ CARAPACE_PATTERN="($(printf '%s|' "${CARAPACE_EXCEPTIONS[@]}" | sed 's/|$//'))"
 # Run carapace and apply the regex pattern via sed
 source <(carapace _carapace | sed -E "s/(^|\\s)${CARAPACE_PATTERN}(\\s|$)/ /g")
 # source <(carapace _carapace | sed -E 's/(^|\s)(nvim|ls|la|rm|rem|cd|vscode)(\s|$)/ /g')
+
 zstyle ':completion:*:git:*' group-order 'main commands' 'alias commands' 'external commands'
 zstyle ':completion:*:jj:*' group-order 'main commands' 'alias commands' 'external commands'
 
