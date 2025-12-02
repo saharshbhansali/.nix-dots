@@ -157,7 +157,8 @@ zstyle ':fzf-tab:*' switch-group '<' '>'
 zstyle ':fzf-tab:*' prefix '·'
 
 # zstyle ':fzf-tab:*' query-string prefix longest
-zstyle ':fzf-tab:*' query-string prefix first
+# zstyle ':fzf-tab:*' query-string prefix first
+zstyle ':fzf-tab:*' query-string prefix input first
 
 zstyle ':fzf-tab:complete:bat:*' fzf-preview 'fzf-preview $(realpath $PWD/$word)'
 zstyle ':fzf-tab:complete:cat:*' fzf-preview 'fzf-preview $(realpath $PWD/$word)'
