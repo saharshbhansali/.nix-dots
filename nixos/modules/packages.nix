@@ -89,6 +89,7 @@
     eza
     bat
     fzf
+    fzf-preview
     ripgrep
     ripgrep-all
     fd
