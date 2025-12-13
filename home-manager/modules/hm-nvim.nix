@@ -12,7 +12,7 @@
     inputs.nixCatsNvim.packages.${pkgs.system}.nvim
     inputs.nixCatsNvim.packages.${pkgs.system}.testnvim
     # inputs.nixCatsNvim.packages.${pkgs.system}.catsnvim
-    inputs.nixPatchNvim.packages.${pkgs.system}.default
+    # inputs.nixPatchNvim.packages.${pkgs.system}.default
     vimPlugins.nvim-treesitter.withAllGrammars
     # vimPlugins.nvim-treesitter
   ];
