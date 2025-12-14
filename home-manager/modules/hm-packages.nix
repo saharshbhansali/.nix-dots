@@ -34,7 +34,7 @@
 
     ## Browsers
     # zen
-    inputs.zen-browser.packages.${system}.twilight
+    inputs.zen-browser.packages.${stdenv.hostPlatform.system}.twilight
     # vivaldi
     ((vivaldi.overrideAttrs
       (oldattrs: {
