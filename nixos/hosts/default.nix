@@ -30,6 +30,7 @@
     ../modules/filesystem.nix
     ../modules/graphics.nix
     ../modules/networking.nix
+    ../modules/power-management.nix
     ## Application installation
     # System
     ../modules/packages.nix
