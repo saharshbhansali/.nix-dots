@@ -5,6 +5,9 @@
     catppuccin-grub
   ];
 
+  ## Config hibernate/suspend/resume settings (via systemd)
+  boot.initrd.systemd.enable = true;
+
   ## Configure bootloader - GRUB
   boot.loader.systemd-boot.enable = lib.mkForce false;
   boot.loader = {
