@@ -25,7 +25,7 @@
 
   imports = [
     ## System configuration
-    ../modules/bootloader.nix
+    ../modules/boot.nix
     ../modules/swap.nix
     ../modules/filesystem.nix
     ../modules/graphics.nix
