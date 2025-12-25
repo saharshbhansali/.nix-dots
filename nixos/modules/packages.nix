@@ -58,6 +58,7 @@
     tealdeer
     tree
     pciutils
+    usbutils
     lshw
     procs
     dust
@@ -187,6 +188,9 @@
     lua51Packages.lua
     lua51Packages.luarocks
     lua51Packages.luarocks-nix
+
+    ## Android utils
+    android-tools
 
     ## Security utils
     minisign
