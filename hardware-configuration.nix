@@ -37,6 +37,12 @@
       options = [ "bind" ];
     };
 
+  fileSystems."/swap" =
+    { device = "/dev/disk/by-uuid/38cc3a86-d6bd-4ab1-b372-df6f346eb213";
+      fsType = "btrfs";
+      options = [ "subvol=swap" "noatime" ];
+    };
+
   swapDevices = [ ];
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
