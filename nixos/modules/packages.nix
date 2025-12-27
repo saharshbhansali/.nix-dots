@@ -27,6 +27,7 @@
     fish
     zsh
     git
+    jujutsu
     # tmux
     zellij
     # neovim

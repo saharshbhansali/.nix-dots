@@ -16,7 +16,6 @@
     ## VCS
     graphite-cli
     mercurial
-    jujutsu
     lazyjj
     jjui
     jj-fzf
