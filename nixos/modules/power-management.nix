@@ -2,6 +2,13 @@
 
 {
 
+  # one of "ignore", "poweroff", "reboot", "halt", "kexec", "suspend", "hibernate", "hybrid-sleep", "suspend-then-hibernate", "lock"
+  services.logind.settings.Login = {
+    HandleLidSwitch = "hybrid-sleep";
+    HandleLidSwitchExternalPower = "lock";
+    HandleLidSwitchDocked = "ignore";
+  };
+
   powerManagement.powertop.enable = true; # enable powertop auto tuning on startup.
 
   services.system76-scheduler.settings.cfsProfiles.enable = true; # Better scheduling for CPU cycles - thanks System76!!!
