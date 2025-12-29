@@ -177,6 +177,9 @@
     asdf-vm                         # asdf version manager
     mise                            # mise version manager
     volta                           # node version manager
+    bun                             # fast javascript bundler
+    yarn                            # fast javascript dependency manager
+    pnpm                            # fast and disk-space efficient javascript package manager
     go                              # go programming language
     rustc                           # rust compiler
     rustup                          # rust toolchain installer
