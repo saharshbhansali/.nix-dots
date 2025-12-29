@@ -75,6 +75,12 @@
     oterm
     litellm
 
+    # AI Coding agents
+    opencode
+    claude-code
+    # vimPlugins.opencode-nvim
+    # vimPlugins.claudecode-nvim
+
     ## Media
     mpv
     vlc
