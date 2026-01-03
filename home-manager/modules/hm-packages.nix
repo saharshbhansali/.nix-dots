@@ -86,6 +86,7 @@
     vlc
     # stremio
     obs-studio
+    pulsemeeter
 
     ## Notes
     obsidian
