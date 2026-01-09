@@ -31,6 +31,7 @@
     ../modules/graphics.nix
     ../modules/networking.nix
     ../modules/power-management.nix
+    ../modules/bluetooth.nix
     ## Application installation
     # System
     ../modules/packages.nix
