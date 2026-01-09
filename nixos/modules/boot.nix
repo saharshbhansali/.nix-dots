@@ -21,6 +21,7 @@
       useOSProber = true;
       #efiInstallAsRemovable = true; # in case canTouchEfiVariables doesn't work for your system
       devices = ["nodev"];
+      default = "saved";
       theme = pkgs.catppuccin-grub;
       # theme = pkgs.stdenv.mkDerivation {
       #   pname = "distro-grub-themes";
