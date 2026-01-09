@@ -65,6 +65,12 @@
     dust
     strace
 
+    ## Container utils and tools
+    lazydocker
+    minikube
+    # kubernetes
+    kubernetes-helm
+
     ## Zip utils
     gzip
     zip
