@@ -114,6 +114,11 @@
     albert
     # wox
 
+    ## Chat Applications
+    # whatsie
+    wasistlos
+    whatsapp-electron
+
   ];
 
 }
