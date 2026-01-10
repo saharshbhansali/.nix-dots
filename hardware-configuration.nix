@@ -38,6 +38,12 @@
     options = [ "fmask=0077" "dmask=0077" ];
   };
 
+  fileSystems."/boot" = {
+    device = "/dev/disk/by-uuid/2737ba92-9c09-422e-8420-56793ddea51c";
+    fsType = "ext4";
+    options = [ "defaults" "noatime" ];
+  };
+
   fileSystems."/swap" = {
     device = "/dev/disk/by-uuid/38cc3a86-d6bd-4ab1-b372-df6f346eb213";
     fsType = "btrfs";
