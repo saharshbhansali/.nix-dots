@@ -7,6 +7,7 @@
   environment.systemPackages = with pkgs; [
 
     ## Nix utils and compatibility layers
+    util-linux
     cachix
     # nix-ld
     steam-run
