@@ -33,25 +33,25 @@
   # DO NOT dedupe /nix/store and /boot, and use CAUTION while deduping /var
 
   ## Beesd
-  # services.beesd.filesystems = {
-  #   root = {
-  #     # spec = "LABEL=root"; # Or "/dev/disk/by-uuid/..." or subvol path
-  #     spec = "/"; # mount point
-  #     hashTableSizeMB = 128; # ~128MiB per TiB of data
-  #     verbosity = "crit";
-  #     extraOptions = [ "--thread-count=2" "--loadavg-target" "2.0" ];
-  #   };
-  #   home = {
-  #     # spec = "LABEL=nix-home";
-  #     spec = "/home";
-  #     hashTableSizeMB = 128;
-  #     verbosity = "crit";
-  #     extraOptions = [ "--thread-count=2" "--loadavg-target" "2.0" ];
-  #   };
-  # };
+  services.beesd.filesystems = {
+    root = {
+      # spec = "LABEL=root"; # or "/dev/disk/by-uuid/..." or subvol path
+      spec = "/"; # mount point
+      hashTableSizeMB = 128; # ~128MiB per TiB of data
+      verbosity = "crit";
+      extraOptions = [ "--thread-count=2" "--loadavg-target" "2.0" ];
+    };
+    home = {
+      # spec = "LABEL=nix-home";
+      spec = "/home";
+      hashTableSizeMB = 128;
+      verbosity = "crit";
+      extraOptions = [ "--thread-count=2" "--loadavg-target" "2.0" ];
+    };
+  };
   ## To disable autostart, run the following for each filesystem
-  # systemd.services."beesd@root".wantedBy = lib.mkForce [];
-  # systemd.services."beesd@home".wantedBy = lib.mkForce [];
+  systemd.services."beesd@root".wantedBy = lib.mkForce [];
+  systemd.services."beesd@home".wantedBy = lib.mkForce [];
   ## Start manually by running: systemctl start beesd@<filesystem>
 
   ## Duperemove
