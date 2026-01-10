@@ -146,6 +146,7 @@
     xbacklight
 
     ## Disk utils
+    e2fsprogs
     kdePackages.partitionmanager
     parted
     gparted
