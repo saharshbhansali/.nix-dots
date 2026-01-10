@@ -146,6 +146,7 @@
     xbacklight
 
     ## Disk utils
+    kdePackages.partitionmanager
     parted
     gparted
     efibootmgr
