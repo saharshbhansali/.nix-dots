@@ -64,7 +64,12 @@
           enableOffloadCmd = lib.mkForce false;
         };
         powerManagement.finegrained = lib.mkForce false;
+
       };
+
+      boot.extraModprobeConfig = ''
+        options nvidia NVreg_PreserveVideoMemoryAllocations=0
+      '';
     };
   };
 
