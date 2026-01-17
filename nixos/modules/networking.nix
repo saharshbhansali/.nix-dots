@@ -12,7 +12,7 @@ in
 
   # Networking services
   networking.hostName = "nixos";
-  networking.wireless.enable = false;
+  networking.wireless.enable = lib.mkDefault false;
 
   # Network Manager
   networking.networkmanager.enable = true;
