@@ -20,6 +20,9 @@
     jjui
     jj-fzf
 
+    ## Terminal emulators
+    wezterm
+
     # ## Disk utils
     # ventoy-full
 
