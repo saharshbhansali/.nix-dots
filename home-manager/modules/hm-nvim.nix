@@ -331,6 +331,7 @@
   #     supermaven.enable = true;
   #
   #     # Other Plugins
+  #     vim-visual-multi.enable = true;
   #     leap.enable = true;
   #     overseer.enable = true;
   #     # # tailwind-tools.enable = true;
