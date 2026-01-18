@@ -19,7 +19,7 @@
     mercurial
     lazyjj
     jjui
-    jj-fzf
+    # jj-fzf
 
     ## Terminal emulators
     wezterm
