@@ -14,6 +14,7 @@
     tdf
 
     ## VCS
+    oh-my-git
     graphite-cli
     mercurial
     lazyjj
