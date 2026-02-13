@@ -5,6 +5,31 @@ desktopsrule=2
 wmclass=kitty
 wmclassmatch=1
 
+[Picture in Picture - Enhancer for YouTube]
+Description=Picture in Picture - Enhancer for YouTube
+above=true
+aboverule=2
+desktops=\\0
+desktopsrule=3
+ignoregeometry=true
+ignoregeometryrule=2
+layer=above
+layerrule=2
+minimizerule=2
+noborder=true
+noborderrule=4
+size=400,300
+sizerule=2
+skippager=true
+skippagerrule=3
+skipswitcher=true
+skipswitcherrule=3
+title=Enhancer for YouTube™ - Vivaldi
+titlematch=1
+wmclass=vivaldi-stable
+wmclasscomplete=true
+wmclassmatch=1
+
 [Picture in Picture - Vivaldi]
 Description=Picture in Picture - Vivaldi
 above=true
@@ -63,4 +88,22 @@ Description=Steam: Pin to desktop 5
 desktops=43e2dbdb-803f-4a67-818c-c045edbf20c5
 desktopsrule=2
 wmclass=steam
+wmclassmatch=1
+
+[Vivaldi - PiP]
+Description=Vivaldi - PiP
+above=true
+aboverule=6
+desktops=\\0
+desktopsrule=2
+ignoregeometry=true
+ignoregeometryrule=3
+position=1475,825
+positionrule=3
+size=450,250
+sizerule=6
+title=Picture in picture
+titlematch=2
+wmclass=vivaldi-bin vivaldi-bin
+wmclasscomplete=true
 wmclassmatch=1
