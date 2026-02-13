@@ -39,7 +39,7 @@
         oldLikeButton
 
         powerBar
-        seekSong
+        # seekSong
         playlistIcons
         # phraseToPlaylist
         volumePercentage
