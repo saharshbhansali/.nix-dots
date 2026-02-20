@@ -123,17 +123,17 @@
     ## Keyboard and Clipboard utils
     wl-clipboard
     xclip
-    xorg.xcbutil
-    xorg.xmodmap
-    xorg.setxkbmap
-    xorg.xev
+    xcbutil
+    xmodmap
+    setxkbmap
+    xev
 
     ## Input utils
     libinput
     libinput-gestures
     wmctrl
     xdotool
-    xorg.xinput
+    xinput
     gamepad-tool
     # xpad
     SDL2
@@ -233,8 +233,8 @@
 
     ## File Management software
     kdePackages.filelight
-    xfce.thunar
-    xfce.thunar-archive-plugin
+    thunar
+    thunar-archive-plugin
 
     ## VM Software
     vmware-workstation

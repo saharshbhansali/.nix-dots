@@ -24,7 +24,7 @@
 
     # Proton & Wine
     protonup-ng
-    wineWowPackages.stable
+    wineWow64Packages.stable
     # wine
     # wine64
 
