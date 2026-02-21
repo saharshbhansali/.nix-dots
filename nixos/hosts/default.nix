@@ -91,8 +91,11 @@
   hardware.usb-modeswitch.enable = true;
   hardware.enableAllFirmware = true;
   # Optional: Use latest kernel for better Realtek driver support
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  # boot.kernelPackages = pkgs.linuxPackages_latest;
   # boot.kernelPackages = pkgs.linuxPackages_6_12;
   # boot.kernelPackages = pkgs.linuxPackages_zen;
+  # boot.kernelPackages = pkgs.linuxPackages_xanmod;
+  boot.kernelPackages = pkgs.linuxPackages_lqx;
+  # boot.kernelPackages = pkgs.linuxPackages_hardened;
 
 }
