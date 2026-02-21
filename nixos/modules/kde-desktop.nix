@@ -18,6 +18,7 @@
   environment.systemPackages = with pkgs; [
     kdePackages.krohnkite
     kdePackages.plasma-browser-integration
+    kdePackages.kdeconnect-kde
   ];
 
 }
