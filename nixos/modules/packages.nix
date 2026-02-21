@@ -45,6 +45,7 @@
     pm2
 
     ## Networking utils
+    net-tools
     wget
     curl
     dig
