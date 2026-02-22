@@ -112,6 +112,7 @@
     konsave
 
     ## Document viewers
+    calibre
     zathura
 
     ## Launcher
