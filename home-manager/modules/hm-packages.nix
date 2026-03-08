@@ -94,6 +94,8 @@
 
     ## Notes
     obsidian
+    appflowy
+    notion-app-enhanced
 
     ## TUI apps
     # ytui-music
