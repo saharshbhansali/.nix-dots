@@ -47,6 +47,12 @@
 
     # Controllers
     dualsensectl
+
+    # Vulkan tools
+    vulkan-tools
+    vulkan-loader
+    vulkan-validation-layers
+    vulkan-extension-layer
   ];
 
   environment.sessionVariables = {
