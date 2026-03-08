@@ -44,6 +44,7 @@
     gpt-cli
     # aider-chat
     aider-chat-full
+    cursor-cli
 
   ];
 
