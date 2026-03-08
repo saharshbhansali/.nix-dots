@@ -65,10 +65,10 @@
     w3m
 
     ## VPN software
-    # protonvpn-gui
-    # cloudflare-warp
-    # cloudflare-cli
-    # wgcf
+    protonvpn-gui
+    cloudflare-warp
+    cloudflare-cli
+    wgcf
 
     ## LLMs
     aichat
