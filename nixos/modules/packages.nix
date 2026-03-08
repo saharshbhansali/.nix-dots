@@ -178,12 +178,12 @@
     cmake                           # cmake build system
     python-launcher                 # python version manager
     pipx                            # install python packages globally
+    python314                       # python 3.14 interpreter
+    python314Packages.pip           # python 3.14 package manager
+    python314Packages.virtualenv    # python 3.14 virtual environment
     python313                       # python 3.13 interpreter
     python313Packages.pip           # python 3.13 package manager
     python313Packages.virtualenv    # python 3.13 virtual environment
-    python312                       # python 3.12 interpreter
-    python312Packages.pip           # python 3.12 package manager
-    python312Packages.virtualenv    # python 3.12 virtual environment
     asdf-vm                         # asdf version manager
     mise                            # mise version manager
     volta                           # node version manager
