@@ -119,7 +119,7 @@
     ## Fetch utils
     pfetch
     fastfetch
-    neofetch
+    # neofetch
 
     ## Keyboard and Clipboard utils
     wl-clipboard
