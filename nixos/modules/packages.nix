@@ -17,6 +17,7 @@
     nh
     nix-output-monitor
     darling-dmg
+    winboat
 
     ## Hypr utils
     hyprlock
