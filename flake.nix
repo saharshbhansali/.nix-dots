@@ -66,6 +66,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    browseros-ai = {
+      url = "github:Hill-Brandon-M/browseros-ai";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
 
   outputs = { self, nixpkgs, home-manager, nur, nixvim, ... } @ inputs:

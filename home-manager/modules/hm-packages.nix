@@ -52,6 +52,7 @@
       proprietaryCodecs = true;
       enableWidevine = true;
     })
+    inputs.browseros-ai.packages.${stdenv.hostPlatform.system}.browseros-ai
     # firefox and chromium
     firefox
     chromium
