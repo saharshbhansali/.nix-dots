@@ -73,7 +73,9 @@
     ## LLMs
     aichat
     ollama
+    lmstudio
     # ollama-cuda
+    open-webui
     kdePackages.alpaka
     alpaca
     oterm
