@@ -1,8 +1,14 @@
-{ pkgs, nixpkgs, lib, config, ... }:
+{ pkgs, nixpkgs, lib, config, inputs, ... }:
 
 {
 
   # nixpkgs.config.allowUnfree = true;
+
+  # Nix Index database (pre-populated nix-index)
+  imports = [
+    inputs.nix-index-database.nixosModules.default
+  ];
+  programs.nix-index-database.comma.enable = true;
 
   environment.systemPackages = with pkgs; [
 
@@ -13,7 +19,7 @@
     steam-run
     appimage-run
     nix-inspect
-    nix-index
+    # nix-index ## using nix-index-database (pre-populated nix-index) instead
     nh
     nix-output-monitor
     darling-dmg
