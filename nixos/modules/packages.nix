@@ -242,6 +242,11 @@
     vmware-workstation
     qemu
 
+    ## RDP Software
+    freerdp
+    xrdp
+    # rdpgw
+
     ## Cursors and icons
     catppuccin-cursors.mochaRed
     catppuccin-cursors.mochaMauve
