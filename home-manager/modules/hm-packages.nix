@@ -84,7 +84,7 @@
 
     # AI Coding agents
     opencode
-    claude-code
+    # claude-code
     # vimPlugins.opencode-nvim
     # vimPlugins.claudecode-nvim
 

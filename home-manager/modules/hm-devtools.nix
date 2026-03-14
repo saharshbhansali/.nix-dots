@@ -40,7 +40,7 @@
 
     # AI code assistant
     opencode
-    claude-code
+    # claude-code
     gpt-cli
     # aider-chat
     aider-chat-full
