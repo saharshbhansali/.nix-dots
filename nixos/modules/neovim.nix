@@ -5,7 +5,7 @@
 
   environment.systemPackages = [
     inputs.nixCatsNvim.packages.${pkgs.stdenv.hostPlatform.system}.nvim
-    inputs.nixPatchNvim.packages.${pkgs.stdenv.hostPlatform.system}.default
+    # inputs.nixPatchNvim.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 
   # Mount custom config directory
