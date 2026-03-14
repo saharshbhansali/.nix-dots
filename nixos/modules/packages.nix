@@ -172,6 +172,8 @@
     mpv
     vlc
     playerctl
+    uxplay
+    owntone
 
     ## Development utils
     devenv                          # development environment manager
