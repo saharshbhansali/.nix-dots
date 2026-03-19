@@ -71,6 +71,10 @@ in
   home.file.".config/pay-respects/config.toml".source = ../../configs/pay-respects/config.toml;
 
   home.file.".config/libinput-gestures.conf".source = ../../configs/gestures/libinput-gestures.conf;
+  home.file.".config/gestures/alt_tab_switcher" = {
+    source = ../../configs/gestures/alt_tab_switcher;
+    recursive = true;
+  };
 
   home.file.".config/konsave/kde-profile.knsv".source = ../../configs/konsave/kde-profile.knsv;
   home.file.".config/konsave/keyboard-shortcuts.kksrc".source = ../../configs/konsave/keyboard-shortcuts.kksrc;
