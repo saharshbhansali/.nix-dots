@@ -77,8 +77,11 @@
     ## Container utils and tools
     lazydocker
     minikube
-    # kubernetes
-    kubernetes-helm
+    kubernetes
+    # kubernetes-helm
+    kubernetes-helm-wrapped
+    kubectl
+    kubernix
 
     ## Zip utils
     gzip
