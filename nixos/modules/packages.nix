@@ -175,8 +175,11 @@
     mpv
     vlc
     playerctl
-    uxplay
-    owntone
+    # uxplay
+    # owntone
+    gnome-network-displays
+    mkchromecast
+    # gnomecast
 
     ## Development utils
     devenv                          # development environment manager
