@@ -19,6 +19,7 @@
     kdePackages.krohnkite
     kdePackages.plasma-browser-integration
     kdePackages.kdeconnect-kde
+    kdePackages.kdbusaddons
   ];
 
 }
