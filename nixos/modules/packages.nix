@@ -172,6 +172,7 @@
     ## Media utils
     ffmpeg
     pamixer
+    pavucontrol
     mpv
     vlc
     playerctl
