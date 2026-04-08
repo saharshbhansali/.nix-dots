@@ -221,6 +221,9 @@
     lua51Packages.luarocks          # lua package manager
     lua51Packages.luarocks-nix      # lua package manager for nix
     lua51Packages.tree-sitter-cli   # lua tree-sitter cli
+    ghostscript                     # postscript interpreter
+    ## Extra dev tools
+    mermaid-cli                     # generate diagrams
 
     ## Android utils
     android-tools
