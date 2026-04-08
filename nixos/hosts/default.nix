@@ -8,7 +8,6 @@
 
   # System settings
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
-  nix.settings.download-buffer-size = 524288000;
 
   # # Trusted-users list
   nix.settings.trusted-users = [ "root" "saharsh" ];
