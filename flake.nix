@@ -34,11 +34,11 @@
     };
 
     nixCatsNvim = {
-      url = "path:./nixos/modules/nixCats-nvim";
+      url = "github:saharshbhansali/nixCatsNvim/dev";
     };
 
     nixPatchNvim = {
-      url = "path:./nixos/modules/nixPatch-nvim";
+      url = "github:saharshbhansali/nixPatchNvim/dev";
     };
 
     # # Required, nvf works best and only directly supports flakes
