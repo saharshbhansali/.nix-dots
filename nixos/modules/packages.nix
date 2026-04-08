@@ -148,7 +148,7 @@
     gamepad-tool
     # xpad
     SDL2
-    opengamepadui
+    # opengamepadui
     antimicrox
     moltengamepad
     qjoypad
