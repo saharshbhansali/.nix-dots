@@ -217,9 +217,10 @@
     # luajit                        # lua programming language
     # luajitPackages.luarocks
     # luajitPackages.luarocks-nix
-    lua51Packages.lua
-    lua51Packages.luarocks
-    lua51Packages.luarocks-nix
+    lua51Packages.lua               # lua programming language
+    lua51Packages.luarocks          # lua package manager
+    lua51Packages.luarocks-nix      # lua package manager for nix
+    lua51Packages.tree-sitter-cli   # lua tree-sitter cli
 
     ## Android utils
     android-tools
