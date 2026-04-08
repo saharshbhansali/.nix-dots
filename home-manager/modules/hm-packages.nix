@@ -66,7 +66,7 @@
     w3m
 
     ## VPN software
-    protonvpn-gui
+    proton-vpn
     cloudflare-warp
     cloudflare-cli
     wgcf
