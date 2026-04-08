@@ -24,6 +24,7 @@
 
   imports = [
     ## System configuration
+    ../modules/lix.nix
     ../modules/boot.nix
     ../modules/swap.nix
     ../modules/filesystem.nix
