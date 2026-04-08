@@ -4,6 +4,8 @@
 [submodule "nixos/modules/nixPatch-nvim"]
 	path = nixos/modules/nixPatch-nvim
 	url = https://github.com/saharshbhansali/nixPatchNvim
+  branch = dev
 [submodule "nixos/modules/nixCats-nvim"]
 	path = nixos/modules/nixCats-nvim
 	url = https://github.com/saharshbhansali/nixCatsNvim
+	branch = dev
