@@ -254,6 +254,9 @@
     ## Office software
     onlyoffice-desktopeditors
 
+    # Email software
+    thunderbird
+
     ## File Management software
     kdePackages.filelight
     thunar
