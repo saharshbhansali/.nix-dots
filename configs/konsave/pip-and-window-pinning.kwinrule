@@ -30,6 +30,37 @@ wmclass=vivaldi-stable
 wmclasscomplete=true
 wmclassmatch=1
 
+[Picture in Picture - Firefox]
+Description=Picture in Picture - Firefox
+above=true
+aboverule=2
+desktops=\\0
+desktopsrule=2
+fullscreenrule=3
+ignoregeometry=true
+ignoregeometryrule=2
+layer=above
+layerrule=2
+minimizerule=2
+minsize=320,180
+minsizerule=2
+noborder=true
+noborderrule=4
+position=1509,843
+positionrule=4
+size=400,225
+sizerule=3
+skippager=true
+skippagerrule=3
+skipswitcher=true
+skipswitcherrule=3
+title=Picture-in-Picture
+titlematch=2
+types=1
+wmclass=firefox firefox
+wmclasscomplete=true
+wmclassmatch=1
+
 [Picture in Picture - Vivaldi]
 Description=Picture in Picture - Vivaldi
 above=true
@@ -79,9 +110,9 @@ skipswitcherrule=3
 title=Picture in-Picture
 titlematch=2
 types=1
-wmclass=vivaldi-bin vivaldi-bin
+wmclass=zen
 wmclasscomplete=true
-wmclassmatch=1
+wmclassmatch=2
 
 [Steam: Pin to desktop 5]
 Description=Steam: Pin to desktop 5
@@ -92,8 +123,6 @@ wmclassmatch=1
 
 [Vivaldi - PiP]
 Description=Vivaldi - PiP
-above=true
-aboverule=6
 desktops=\\0
 desktopsrule=2
 ignoregeometry=true
@@ -101,7 +130,6 @@ ignoregeometryrule=3
 position=1475,825
 positionrule=3
 size=450,250
-sizerule=6
 title=Picture in picture
 titlematch=2
 wmclass=vivaldi-bin vivaldi-bin
