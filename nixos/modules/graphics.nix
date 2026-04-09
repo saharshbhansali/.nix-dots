@@ -9,6 +9,9 @@
   # # AMD
   # boot.kernelParams = [ "module_blacklist=amdgpu" ];
 
+  ## Force video memory allocation to be preserved
+  boot.kernelParams = [ "nvidia.NVreg_PreserveVideoMemoryAllocations=1" ];
+
   hardware = {
     graphics = {
       enable = true;
