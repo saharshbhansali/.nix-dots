@@ -9,6 +9,11 @@ let
   StateDirectory = "dnscrypt-proxy";
 in
 {
+  # Turn off PCIe ASPM
+  # boot.kernelParams = [ "pcie_aspm=off" ];
+  boot.extraModprobeConfig = ''
+    options rtw89_pci disable_clkreq=1 disable_aspm_l1=1 disable_aspm_l1ss=1
+  '';
 
   # Networking services
   networking.hostName = "nixos";
@@ -17,6 +22,7 @@ in
   # Network Manager
   networking.networkmanager.enable = true;
   networking.networkmanager.dns = "none"; # prevent DHCP DNS override
+  networking.networkmanager.wifi.powersave = false;
 
   users.users.saharsh.extraGroups = lib.mkAfter [ "networkmanager" ];
 
