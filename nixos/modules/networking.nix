@@ -145,4 +145,9 @@ in
     };
   };
 
+  # udev rule to modeswitch external usb wifi dongle
+  services.udev.extraRules = ''
+    ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="0bda", ATTRS{idProduct}=="1a2b", RUN+="${pkgs.usb-modeswitch}/bin/usb_modeswitch -KW -v 0bda -p 1a2b"
+  '';
+
 }
