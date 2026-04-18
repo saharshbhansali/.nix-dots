@@ -91,6 +91,10 @@
   hardware.usb-modeswitch.enable = true;
   services.udev.packages = [ pkgs.usb-modeswitch-data ];
   hardware.enableAllFirmware = true;
+  hardware.firmware = with pkgs; [
+    linux-firmware
+    wireless-regdb
+  ];
   # Optional: Use latest kernel for better Realtek driver support
   boot.kernelPackages = pkgs.linuxPackages_latest;
   # boot.kernelPackages = pkgs.linuxPackages_6_12;
