@@ -85,7 +85,7 @@
 
   ## Miscellaneous settings
 
-  # Wi-Fi support
+  # Firmware and kernel settings
   hardware.enableRedistributableFirmware = true;
   boot.kernelModules = [ "kvm-amd" "rtw89" ];
   hardware.usb-modeswitch.enable = true;
