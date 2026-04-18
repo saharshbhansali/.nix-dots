@@ -164,6 +164,10 @@
     gparted
     efibootmgr
 
+    ## USB utils
+    usb-modeswitch
+    usb-modeswitch-data
+
     ## Backup utils
     vorta
     borgbackup
