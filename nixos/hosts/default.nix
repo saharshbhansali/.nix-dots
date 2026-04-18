@@ -89,6 +89,7 @@
   hardware.enableRedistributableFirmware = true;
   boot.kernelModules = [ "kvm-amd" "rtw89" ];
   hardware.usb-modeswitch.enable = true;
+  services.udev.packages = [ pkgs.usb-modeswitch-data ];
   hardware.enableAllFirmware = true;
   # Optional: Use latest kernel for better Realtek driver support
   boot.kernelPackages = pkgs.linuxPackages_latest;
