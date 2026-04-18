@@ -13,6 +13,7 @@ in
   # boot.kernelParams = [ "pcie_aspm=off" ];
   boot.extraModprobeConfig = ''
     options rtw89_pci disable_clkreq=1 disable_aspm_l1=1 disable_aspm_l1ss=1
+    options rtw89_core disable_ps_mode=1
   '';
 
   # Networking services
