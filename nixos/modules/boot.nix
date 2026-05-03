@@ -15,6 +15,21 @@
   ## Config hibernate/suspend/resume settings (via systemd)
   boot.initrd.systemd.enable = true;
 
+  ## Gaming specialization: optimize kernel parameters for gaming
+  # NOTE: Hibernate (S4) saves system state - resume must use same specialization
+  specialisation = {
+    gaming.configuration = {
+      # Gaming-optimized kernel params
+      boot.kernelParams = [
+        "iommu=pt"              # Pass-through IOMMU
+        "queue_depth=32"        # Better I/O for games
+      ];
+
+      # Increase VM max map count for some games (default: 65530)
+      boot.kernel.sysctl."vm.max_map_count" = 524288;  # 512k - sufficient for games without excessive limits
+    };
+  };
+
   ## Configure bootloader - GRUB
   boot.loader.systemd-boot.enable = lib.mkForce false;
   boot.loader = {

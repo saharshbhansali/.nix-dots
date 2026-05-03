@@ -62,9 +62,15 @@
   # 3. Dedupe
   # # sudo duperemove -r --limit=2G -h --hashfile=/var/lib/duperemove-home.hash /home
   environment.systemPackages = with pkgs; [
-    duperemove 
+    duperemove
     bees
   ];
 
+  ## Gaming specialization: disable BTRFS scrub during gaming
+  specialisation = {
+    gaming.configuration = {
+      services.btrfs.autoScrub.enable = lib.mkForce false;
+    };
+  };
 
 }

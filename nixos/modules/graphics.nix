@@ -60,7 +60,7 @@
   };
 
   specialisation = {
-    gaming-time.configuration = {
+    gaming.configuration = {
       hardware.nvidia = {
         prime.sync.enable = lib.mkForce true;
         prime.offload = {

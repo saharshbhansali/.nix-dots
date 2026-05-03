@@ -78,6 +78,7 @@
   # NOTE: Hibernate (S4) saves system state - resume must use same specialization
   specialisation = {
     gaming.configuration = {
+      services.tlp.enable = lib.mkForce false;
       # Gaming mode: longer hibernate delay (1.5 hours) for mid-game pauses
       systemd.sleep.settings.Sleep.HibernateDelaySec = lib.mkForce 1200;  # 20 minutes
     };

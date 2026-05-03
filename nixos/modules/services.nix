@@ -19,4 +19,14 @@
     wantedBy = [ "default.target" ];
   };
 
+  ## Gaming specialization: reduce logging overhead
+  specialisation = {
+    gaming.configuration = {
+      services.journald.extraConfig = ''
+        SystemMaxUse=50M
+        RuntimeMaxUse=10M
+      '';
+    };
+  };
+
 }
