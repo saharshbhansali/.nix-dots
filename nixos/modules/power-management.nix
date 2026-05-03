@@ -4,10 +4,24 @@
 
   # one of "ignore", "poweroff", "reboot", "halt", "kexec", "suspend", "hibernate", "hybrid-sleep", "suspend-then-hibernate", "lock"
   services.logind.settings.Login = {
-    HandleLidSwitch = "hybrid-sleep";
-    HandleLidSwitchExternalPower = "lock";
-    HandleLidSwitchDocked = "ignore";
+    HandleLidSwitch = "suspend-then-hibernate";  # Battery: S3 → S4 after 30min
+    HandleLidSwitchExternalPower = "lock";       # AC: lock only
+    HandleLidSwitchDocked = "lock";              # Docked: lock only
+    PowerKey = "suspend";                        # Power key: suspend (becomes hybrid-sleep)
   };
+
+  # Configure sleep modes
+  systemd.sleep.settings.Sleep = {
+    AllowHybridSleep = true;              # Enable hybrid-sleep mode (power key on AC/docked)
+    AllowSuspendThenHibernate = true;     # Enable suspend-then-hibernate (battery lid close)
+    HibernateDelaySec = 1800;             # 30 minutes before hibernating (battery mode)
+    SuspendState = "mem";                 # Deep sleep (s3) when suspending
+  };
+
+  # Kernel parameter for deep sleep
+  boot.kernelParams = [
+    "mem_sleep_default=deep"  # Use deep sleep (s3) as default suspend mode
+  ];
 
   powerManagement.powertop.enable = true; # enable powertop auto tuning on startup.
 
@@ -59,5 +73,14 @@
   #   charger.governor = "powersave";
   #   charger.turbo = "never";
   # };
+
+  ## Gaming specialization: disable power management for max performance
+  # NOTE: Hibernate (S4) saves system state - resume must use same specialization
+  specialisation = {
+    gaming.configuration = {
+      # Gaming mode: longer hibernate delay (1.5 hours) for mid-game pauses
+      systemd.sleep.settings.Sleep.HibernateDelaySec = lib.mkForce 1200;  # 20 minutes
+    };
+  };
 
 }
