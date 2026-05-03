@@ -76,12 +76,17 @@
   ## Enable services
 
   # Virtualisation and docker
-  virtualisation.docker.enable = true;
-  virtualisation.docker.storageDriver = "btrfs";
-  virtualisation.docker.rootless = {
+  virtualisation.docker = {
     enable = true;
-    setSocketVariable = true;
+    storageDriver = "btrfs";
+    rootless = {
+      enable = true;
+      setSocketVariable = true;
+    };
   };
+  # Prevent Docker from auto-starting
+  systemd.services.docker.wantedBy = lib.mkForce [];  # Don't auto-start
+  # Manual activation: sudo systemctl start docker
 
   ## Miscellaneous settings
 
