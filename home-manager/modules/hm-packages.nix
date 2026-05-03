@@ -89,8 +89,7 @@
     # vimPlugins.claudecode-nvim
 
     ## Media
-    mpv
-    vlc
+    # mpv and vlc are in system packages (nixos/modules/packages.nix)
     # stremio
     obs-studio
     pulsemeeter
