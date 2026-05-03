@@ -22,7 +22,7 @@
   ## Scrubbing
   services.btrfs.autoScrub = {
     enable = true;
-    interval = "weekly";
+    interval = "monthly";  # Reduced from weekly for less I/O interference
   };
 
   ## Deduping
