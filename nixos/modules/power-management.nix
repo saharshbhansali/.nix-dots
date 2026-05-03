@@ -17,7 +17,10 @@
   services.tlp = {
     enable = true; # Enable TLP (better than gnomes internal power manager)
     settings = {
+      # CPU performance mode (AC power)
       CPU_BOOST_ON_AC = 1;
+      CPU_MAX_PERF_ON_AC = 100;      # Maximum CPU performance on AC
+      CPU_MIN_PERF_ON_AC = 20;       # Minimum CPU performance on AC
       CPU_BOOST_ON_BAT = 1;
       CPU_HWP_DYN_BOOST_ON_AC = 1;
       CPU_HWP_DYN_BOOST_ON_BAT = 1;
@@ -27,6 +30,22 @@
       CPU_ENERGY_PERF_POLICY_ON_BAT = "balance_power";
       PLATFORM_PROFILE_ON_AC = "performance";
       PLATFORM_PROFILE_ON_BAT = "balanced";
+
+      # Disable aggressive power saving on AC (desktop performance mode)
+      SATA_LINKPWR_ON_AC = "max_performance";  # Full SATA performance
+      WIFI_PWR_ON_AC = "off";                  # Disable WiFi power saving
+      PCIE_ASPM_ON_AC = "performance";         # PCIe performance mode
+
+      # USB autosuspend: disabled on AC, aggressive on battery
+      USB_AUTOSUSPEND = 1;                     # Enable feature
+      USB_BLACKLIST = "*";                     # Blacklist all on AC
+      USB_AUTOSUSPEND_ON_AC = 0;               # Disabled on AC (no lag)
+      USB_AUTOSUSPEND_ON_BAT = 1;              # Aggressive on battery (save power)
+
+      # Disable disk power management (desktops don't need it)
+      DISK_DEVICES = "none";
+
+      # Battery charging thresholds (laptop-specific)
       START_CHARGE_THRESH_BAT0 = 75;
       STOP_CHARGE_THRESH_BAT0 = 85;
     };
