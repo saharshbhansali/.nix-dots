@@ -96,8 +96,10 @@ in
   ## captive-browser --interface $(ip route | awk '/default/ {print $5; exit}')
   programs.captive-browser.interface = "wlo1";
 
-  # Enable the WARP daemon
+  # Enable the WARP daemon (manual start only)
   services.cloudflare-warp.enable = true;
+  systemd.services.cloudflare-warp.wantedBy = lib.mkForce [];  # Don't auto-start
+  # Manual activation: warp-cli enable or systemctl start cloudflare-warp
 
   # ## Temporary fix (disable autoconnect) for broken Realtek PCI WiFi card
   # systemd.services."disable-wlo1-on-boot" = {
