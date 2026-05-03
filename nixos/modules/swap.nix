@@ -20,7 +20,7 @@
   zramSwap = {
     enable = true;
     algorithm = "zstd";
-    memoryPercent = 30;
+    memoryPercent = 5;  # 1.6GB on 32GB system - optimal for fast swap cushion
     priority = 1;
     # writebackDevice = "/swapfile";
   };
