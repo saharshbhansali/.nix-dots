@@ -5,6 +5,13 @@
     catppuccin-grub
   ];
 
+  ## Performance-optimized kernel parameters
+  boot.kernelParams = [
+    "iommu=pt"              # Pass-through IOMMU for better device performance
+    "schedutil"             # Better CPU governor for desktop responsiveness
+    "debug=0"               # Disable kernel debugging overhead
+  ];
+
   ## Config hibernate/suspend/resume settings (via systemd)
   boot.initrd.systemd.enable = true;
 
