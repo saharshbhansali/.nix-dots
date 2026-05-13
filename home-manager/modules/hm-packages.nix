@@ -121,6 +121,7 @@
     zathura
 
     ## Launcher
+    vicinae
     albert
     # wox
 

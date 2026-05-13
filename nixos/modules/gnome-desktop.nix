@@ -65,6 +65,6 @@
     gnomeExtensions.wallhub
     gnomeExtensions.dev-container-manager
     gnomeExtensions.unblank
-
+    gnomeExtensions.vicinae
   ];
 }
