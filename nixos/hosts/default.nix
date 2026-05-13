@@ -67,7 +67,7 @@
 
   users.users.saharsh = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "video" "audio" "input" ];
+    extraGroups = [ "wheel" "video" "audio" "input" "docker" ];
     shell = pkgs.zsh;
   };
 
