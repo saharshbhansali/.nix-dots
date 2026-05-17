@@ -90,8 +90,8 @@
 
     ## Media
     # mpv and vlc are in system packages (nixos/modules/packages.nix)
-    obs-studio
     # stremio-linux-shell
+    # obs-studio
     pulsemeeter
 
     ## Notes
@@ -120,7 +120,7 @@
     zathura
 
     ## Launcher
-    vicinae
+    # vicinae
     # albert
     # wox
 
