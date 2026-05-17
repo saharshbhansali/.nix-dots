@@ -77,6 +77,7 @@
     ## Container utils and tools
     lazydocker
     minikube
+    kind
     kubernetes
     # kubernetes-helm
     kubernetes-helm-wrapped
