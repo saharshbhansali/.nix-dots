@@ -46,6 +46,8 @@
     aider-chat-full
     cursor-cli
 
+    # AWS CLI
+    awscli2
   ];
 
 }
