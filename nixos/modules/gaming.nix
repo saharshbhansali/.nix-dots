@@ -2,9 +2,6 @@
 
 {
 
-  ## GPU drivers
-  services.xserver.videoDrivers = [ "nvidia" "amdgpu" ];
-
   ## Enable gamemode
   programs.gamemode.enable = true;
 
@@ -17,16 +14,22 @@
     extraCompatPackages = [ pkgs.proton-ge-bin];
   };
 
+  # Hardware support
+  hardware.steam-hardware.enable = true;
+
   ## Gaming packages
   environment.systemPackages = with pkgs; [
+    steam
+    steam-unwrapped
     steam-run
+    steam-devices-udev-rules
 
     # HUD for system performance
     mangohud
 
     # Proton & Wine
     protonup-ng
-    wineWowPackages.stable
+    wineWow64Packages.stable
     # wine
     # wine64
 
@@ -41,11 +44,29 @@
     protonplus
     protonup-qt
     winetricks
+
+    # Controllers
+    dualsensectl
+
+    # Vulkan tools
+    vulkan-tools
+    vulkan-loader
+    vulkan-validation-layers
+    vulkan-extension-layer
+
+    # OpenGL Tools
+    libGLU
   ];
 
   environment.sessionVariables = {
     STEAM_EXTRA_COMPAT_TOOLS_PATHS = "$HOME/.steam/root/compatibilitytools.d";
   };
+
+  # Hidraw rules for PS5 controller
+  # ATTRS{idVendor}=="054c", ATTRS{idProduct}=="0ce6", TAG+="uaccess"
+  services.udev.extraRules = ''
+    KERNEL=="hidraw*", SUBSYSTEM=="hidraw", MODE="0666"
+  '';
 
 }
 

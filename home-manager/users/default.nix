@@ -1,13 +1,11 @@
-{ nixpkgs, inputs, config, lib, pkgs, ... }:
-# let
-#   nixvim = inputs.nixvim.legacyPackages.${pkgs.system};
-# in
+{ nixpkgs, inputs, config, lib, pkgs, ... }@args:
+
 {
 
   home.stateVersion = "24.11";
 
-  home.username = "saharsh";
-  home.homeDirectory = "/home/saharsh";
+  home.username = "${args.username}";
+  home.homeDirectory = "/home/${args.username}";
 
 
   ## Starting user services via systemd
@@ -23,11 +21,12 @@
     ../modules/hm-flatpaks.nix
     ../modules/hm-devtools.nix
     # Specific
-    ../modules/hm-nixvim.nix
+    ../modules/hm-nvim.nix
     ../modules/hm-nushell.nix
     ../modules/hm-spicetify.nix
     # Feature
     ../modules/hm-gaming.nix
+    ../modules/hm-networking.nix
     ## System environment configurations
     ../modules/hm-environment-variables.nix
     ## Application configurations

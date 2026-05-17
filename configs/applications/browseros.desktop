@@ -1,0 +1,24 @@
+[Desktop Entry]
+Name=BrowserOS AI
+GenericName=Web Browser
+Comment=AI powered web browser
+Exec=appimage-run $HOME/Applications/BrowserOS.AppImage %u
+Icon=browseros-ai
+Type=Application
+MimeType=text/html;text/xml;application/xhtml+xml;x-scheme-handler/http;x-scheme-handler/https;application/x-xpinstall;application/pdf;application/json;
+StartupWMClass=browseros-ai
+Categories=Network;WebBrowser;
+StartupNotify=true
+Terminal=false
+X-MultipleArgs=false
+Keywords=Internet;WWW;Browser;Web;Explorer;
+Actions=Remove;Update;
+
+[Desktop Action new-window]
+Name=Open a New Window
+Exec=appimage-run $HOME/Applications/BrowserOS.AppImage %u
+
+[Desktop Action new-private-window]
+Name=Open a New Private Window
+Exec=appimage-run $HOME/Applications/BrowserOS.AppImage --private-window %u
+

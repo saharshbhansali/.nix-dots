@@ -5,6 +5,7 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-25.11";
 
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -23,13 +24,22 @@
       # inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    nix-index-database = {
+      url = "github:nix-community/nix-index-database";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     nixvim = {
       url = "github:nix-community/nixvim";
       # inputs.nixpkgs.follows = "nixpkgs";
     };
 
     nixCatsNvim = {
-      url = "path:./nixos/modules/nvim";
+      url = "github:saharshbhansali/nixCatsNvim/dev";
+    };
+
+    nixPatchNvim = {
+      url = "github:saharshbhansali/nixPatchNvim/dev";
     };
 
     # # Required, nvf works best and only directly supports flakes
@@ -59,23 +69,33 @@
 
     spicetify-nix = {
       url = "github:Gerg-L/spicetify-nix";
-      # inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    browseros-ai = {
+      url = "github:Hill-Brandon-M/browseros-ai";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
   };
 
-  outputs = { self, nixpkgs, home-manager, nur, nixvim, ... } @ inputs:
+  outputs = { self, nixpkgs, nixpkgs-stable, home-manager, nur,  ... } @ inputs:
     let
       system = "x86_64-linux";
       pkgs = import nixpkgs {
         inherit system;
         config.allowUnfree = true;
       };
+      pkgs-stable = import nixpkgs-stable {
+        inherit system;
+        config.allowUnfree = true;
+      };
+      username = "saharsh";
     in
     {
       nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
         inherit system;
-        specialArgs = { inherit inputs pkgs; };
+        specialArgs = { inherit inputs pkgs pkgs-stable username; };
         modules = [
           ./hardware-configuration.nix
           ./nixos/hosts/default.nix
@@ -85,14 +105,14 @@
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-            home-manager.users.saharsh = import ./home-manager/users/default.nix;
+            home-manager.users.${username} = import ./home-manager/users/default.nix;
 
             ## Set backup file extension
             home-manager.backupFileExtension = "hm.bak";
 
             # Pass flake inputs to home-manager modules
             home-manager.extraSpecialArgs = {
-              inherit inputs home-manager;
+              inherit inputs home-manager username;
             };
           }
         ];

@@ -30,10 +30,10 @@ in
 
   home.file.".config/fish/config.fish".source = ../../configs/fish/config.fish;
 
-  home.file.".config/nvim" = {
-    source = ../../configs/nvim;
-    recursive = true;
-  };
+  # home.file.".config/nvim" = {
+  #   source = ../../configs/nvim;
+  #   recursive = true;
+  # };
 
   # Your tmux directory (contains patch + symlink)
   home.file.".config/tmux" = {
@@ -62,13 +62,24 @@ in
     recursive = true;
   };
 
+  home.file.".config/wezterm" = {
+    source = ../../configs/wezterm;
+    recursive = true;
+  };
+
   home.file.".config/atuin/config.toml".source = ../../configs/atuin/config.toml;
   home.file.".config/pay-respects/config.toml".source = ../../configs/pay-respects/config.toml;
 
   home.file.".config/libinput-gestures.conf".source = ../../configs/gestures/libinput-gestures.conf;
+  home.file.".config/gestures/alt_tab_switcher" = {
+    source = ../../configs/gestures/alt_tab_switcher;
+    recursive = true;
+  };
 
   home.file.".config/konsave/kde-profile.knsv".source = ../../configs/konsave/kde-profile.knsv;
   home.file.".config/konsave/keyboard-shortcuts.kksrc".source = ../../configs/konsave/keyboard-shortcuts.kksrc;
+
+  home.file."configs/vicinae/settings.json".source = ../../configs/vicinae/settings.json;
 
   home.file.".newsboat" = {
     source = ../../configs/newsboat;

@@ -16,7 +16,7 @@
       # spicePkgs = spicetify-nix.packages;
 
       ## With flakes:
-      spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.system};
+      spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.stdenv.hostPlatform.system};
     in
     {
       enable = true;
@@ -39,7 +39,7 @@
         oldLikeButton
 
         powerBar
-        seekSong
+        # seekSong
         playlistIcons
         # phraseToPlaylist
         volumePercentage

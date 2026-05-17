@@ -14,12 +14,15 @@
     tdf
 
     ## VCS
+    oh-my-git
     graphite-cli
     mercurial
-    jujutsu
     lazyjj
     jjui
-    jj-fzf
+    # jj-fzf
+
+    ## Terminal emulators
+    wezterm
 
     # ## Disk utils
     # ventoy-full
@@ -34,7 +37,7 @@
 
     ## Browsers
     # zen
-    inputs.zen-browser.packages.${system}.twilight
+    inputs.zen-browser.packages.${stdenv.hostPlatform.system}.twilight
     # vivaldi
     ((vivaldi.overrideAttrs
       (oldattrs: {
@@ -49,9 +52,11 @@
       proprietaryCodecs = true;
       enableWidevine = true;
     })
+    inputs.browseros-ai.packages.${stdenv.hostPlatform.system}.browseros-ai
     # firefox and chromium
     firefox
     chromium
+    tor-browser
     # text-based/terminal web browser
     chawan
     browsh
@@ -61,8 +66,7 @@
     w3m
 
     ## VPN software
-    protonvpn-cli
-    protonvpn-gui
+    proton-vpn
     cloudflare-warp
     cloudflare-cli
     wgcf
@@ -70,20 +74,30 @@
     ## LLMs
     aichat
     ollama
+    lmstudio
     # ollama-cuda
+    open-webui
     kdePackages.alpaka
     alpaca
     oterm
     litellm
 
+    # AI Coding agents
+    opencode
+    claude-code
+    # vimPlugins.opencode-nvim
+    # vimPlugins.claudecode-nvim
+
     ## Media
-    mpv
-    vlc
-    # stremio
-    obs-studio
+    # mpv and vlc are in system packages (nixos/modules/packages.nix)
+    # stremio-linux-shell
+    # obs-studio
+    pulsemeeter
 
     ## Notes
     obsidian
+    appflowy
+    notion-app-enhanced
 
     ## TUI apps
     # ytui-music
@@ -102,11 +116,18 @@
     konsave
 
     ## Document viewers
+    calibre
     zathura
 
     ## Launcher
-    albert
+    # vicinae
+    # albert
     # wox
+
+    ## Chat Applications
+    # whatsie
+    wasistlos
+    whatsapp-electron
 
   ];
 

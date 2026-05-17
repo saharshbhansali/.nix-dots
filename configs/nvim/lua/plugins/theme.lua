@@ -3,8 +3,8 @@ return {
         "folke/tokyonight.nvim",
         lazy = true,
         opts = {
-            transparent = true;
-            style = "moon"
+            transparent = true,
+            style = "moon",
             -- styles = {
             --     sidebars = "transparent",
             --     floats = "transparent",
@@ -17,7 +17,8 @@ return {
         lazy = true,
         name = "catppuccin",
         opts = {
-            transparent_background = true;
+            flavor = "mocha",
+            transparent_background = true,
             dim_inactive = {
                 enabled = false, -- dims the background color of inactive window
                 shade = "dark",
@@ -29,9 +30,18 @@ return {
             --         Normal = { bg = nil , fg = colors.base },
             --     }
             -- end,
+            lsp_styles = {
+                underlines = {
+                    errors = { "undercurl" },
+                    hints = { "undercurl" },
+                    warnings = { "undercurl" },
+                    information = { "undercurl" },
+                },
+            },
             integrations = {
                 aerial = true,
                 alpha = true,
+                bufferline = true,
                 cmp = true,
                 dashboard = true,
                 flash = true,
@@ -46,15 +56,6 @@ return {
                 mason = true,
                 markdown = true,
                 mini = true,
-                native_lsp = {
-                    enabled = true,
-                    underlines = {
-                        errors = { "undercurl" },
-                        hints = { "undercurl" },
-                        warnings = { "undercurl" },
-                        information = { "undercurl" },
-                    },
-                },
                 navic = { enabled = true, custom_bg = "lualine" },
                 neotest = true,
                 neotree = true,
@@ -74,7 +75,7 @@ return {
                 optional = true,
                 opts = function(_, opts)
                     if (vim.g.colors_name or ""):find("catppuccin") then
-                        opts.highlights = require("catppuccin.groups.integrations.bufferline").get()
+                        opts.highlights = require("catppuccin.special.bufferline").get_theme()
                     end
                 end,
             },
@@ -86,7 +87,7 @@ return {
         optional = true,
         opts = function(_, opts)
             if (vim.g.colors_name or ""):find("catppuccin") then
-                opts.highlights = require("catppuccin.groups.integrations.bufferline").get()
+                opts.highlights = require("catppuccin.special.bufferline").get_theme()
             end
         end,
     },
@@ -95,7 +96,7 @@ return {
     {
         "LazyVim/LazyVim",
         opts = {
-            colorscheme = "catppuccin-mocha",
+            colorscheme = "catppuccin",
         },
     },
 }

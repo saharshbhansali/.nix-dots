@@ -1,11 +1,19 @@
 { config, lib, pkgs, ... }:
 {
 
+  ## Swap config in hardware-configuration.nix
+  # fileSystems."/swap" =
+  #   { device = "/dev/disk/by-uuid/38cc3a86-d6bd-4ab1-b372-df6f346eb213";
+  #     fsType = "btrfs";
+  #     options = [ "subvol=swap" "noatime" ];
+  #   };
+
   # Configure swapfile
   swapDevices = [
     {
-      device = "/var/lib/swapfile";
-      size = 8*1024;
+      device = "/swap/swapfile";
+      size = 32*1024;
+      priority = -1;
     }
   ];
 
@@ -13,9 +21,13 @@
   zramSwap = {
     enable = true;
     algorithm = "zstd";
-    memoryPercent = 30;
-    priority = 1;
+    memoryPercent = 50;
+    priority = 10;
     # writebackDevice = "/swapfile";
+  };
+
+  boot.kernel.sysctl = {
+    "vm.swappiness" = 60;
   };
 
 }

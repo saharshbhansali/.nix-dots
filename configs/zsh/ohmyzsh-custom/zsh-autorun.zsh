@@ -25,6 +25,9 @@ GO_ALL="$GOPATH:$GO_BIN"
 # Node Setup
 # NODE="$HOME/.nvm/versions/node/v16.17.0/bin:"
 
+# Bun bin setup
+BUN_BIN="$HOME/.cache/.bun/bin/"
+
 # volta
 export VOLTA_PATH="$HOME/.volta/bin/"
 case ":$PATH:" in
@@ -45,7 +48,7 @@ export SYSTEM_BINS="/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin
 # Set all home related paths
 export HOME_BINS="$HOME/bin:$HOME/.local/bin"
 export XDG_CONFIG_HOME="$HOME/.config/"
-BINS="$HOME_BINS:$GO_ALL:$CARGO_HOME:$VOLTA_HOME"
+BINS="$HOME_BINS:$GO_ALL:$CARGO_HOME:$VOLTA_HOME:$BUN_BIN"
 
 # export PATH="$PATH:$SYSTEM_BINS:$HOME_BINS:$XDG_CONFIG_HOME:$SPICETIFY:$RBENV_PATH:$GO_ALL"
 # export PATH="$PATH:$SYSTEM_BINS:$HOME_BINS:$XDG_CONFIG_HOME:$SPICETIFY"

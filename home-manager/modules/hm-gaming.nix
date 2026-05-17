@@ -24,7 +24,7 @@
 
     # Proton & Wine
     protonup-ng
-    wineWowPackages.stable
+    wineWow64Packages.stable
     # wine
     # wine64
 
@@ -39,6 +39,15 @@
     protonplus
     protonup-qt
     winetricks
+
+    # Controllers
+    dualsensectl
+
+    # Vulkan tools
+    vulkan-tools
+    vulkan-loader
+    vulkan-validation-layers
+    vulkan-extension-layer
   ];
 
   home.sessionVariables = {

@@ -4,7 +4,8 @@
 { config, lib, pkgs, modulesPath, ... }:
 
 {
-  imports = [ 
+
+  imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
   ];
 
@@ -13,28 +14,41 @@
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
 
-  fileSystems."/" =
-    { device = "/dev/disk/by-uuid/38cc3a86-d6bd-4ab1-b372-df6f346eb213";
-      fsType = "btrfs";
-      options = [ "subvol=@" ];
-    };
+  fileSystems."/" = {
+    device = "/dev/disk/by-uuid/38cc3a86-d6bd-4ab1-b372-df6f346eb213";
+    fsType = "btrfs";
+    options = [ "subvol=@" "compress=zstd" ];
+  };
 
-  fileSystems."/home" =
-    { device = "/dev/disk/by-uuid/e0572b63-98b6-41c9-a596-85d45a55ec1e";
-      fsType = "btrfs";
-    };
+  fileSystems."/nix" = {
+    device = "/dev/disk/by-uuid/38cc3a86-d6bd-4ab1-b372-df6f346eb213";
+    fsType = "btrfs";
+    options = [ "subvol=nix" "compress=zstd" "noatime" ];
+  };
 
-  fileSystems."/boot/efi" =
-    { device = "/dev/disk/by-uuid/33F8-4597";
-      fsType = "vfat";
-      options = [ "fmask=0077" "dmask=0077" ];
-    };
+  fileSystems."/home" = {
+    device = "/dev/disk/by-uuid/e0572b63-98b6-41c9-a596-85d45a55ec1e";
+    fsType = "btrfs";
+    options = [ "compress=zstd" ];
+  };
 
-  fileSystems."/var/lib/docker/btrfs" =
-    { device = "/@/var/lib/docker/btrfs";
-      fsType = "none";
-      options = [ "bind" ];
-    };
+  fileSystems."/boot/efi" = {
+    device = "/dev/disk/by-uuid/33F8-4597";
+    fsType = "vfat";
+    options = [ "fmask=0077" "dmask=0077" ];
+  };
+
+  fileSystems."/boot" = {
+    device = "/dev/disk/by-uuid/2737ba92-9c09-422e-8420-56793ddea51c";
+    fsType = "ext4";
+    options = [ "defaults" "noatime" ];
+  };
+
+  fileSystems."/swap" = {
+    device = "/dev/disk/by-uuid/38cc3a86-d6bd-4ab1-b372-df6f346eb213";
+    fsType = "btrfs";
+    options = [ "subvol=swap" "noatime" ];
+  };
 
   swapDevices = [ ];
 
