@@ -31,6 +31,7 @@
     ../modules/graphics.nix
     ../modules/networking.nix
     ../modules/power-management.nix
+    ../modules/virtualization.nix
     ../modules/bluetooth.nix
     ## Application installation
     # System
@@ -75,18 +76,6 @@
 
   ## Enable services
 
-  # Virtualisation and docker
-  virtualisation.docker = {
-    enable = true;
-    storageDriver = "btrfs";
-    rootless = {
-      enable = true;
-      setSocketVariable = true;
-    };
-  };
-  # Prevent Docker from auto-starting
-  systemd.services.docker.wantedBy = lib.mkForce [];  # Don't auto-start
-  # Manual activation: sudo systemctl start docker
 
   ## Miscellaneous settings
 
