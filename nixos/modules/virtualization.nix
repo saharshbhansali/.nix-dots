@@ -27,6 +27,11 @@
     };
   };
 
+  boot.binfmt = {
+    emulatedSystems = [ "aarch64-linux" ];
+    preferStaticEmulators = true; # required to work with podman
+  };
+
   # Prevent Docker from auto-starting
   systemd.services.docker.wantedBy = lib.mkForce [ ]; # Don't auto-start
   # Manual activation: sudo systemctl start docker
