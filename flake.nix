@@ -90,11 +90,12 @@
         inherit system;
         config.allowUnfree = true;
       };
+      username = "saharsh";
     in
     {
       nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
         inherit system;
-        specialArgs = { inherit inputs pkgs pkgs-stable; };
+        specialArgs = { inherit inputs pkgs pkgs-stable username; };
         modules = [
           ./hardware-configuration.nix
           ./nixos/hosts/default.nix
@@ -104,14 +105,14 @@
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-            home-manager.users.saharsh = import ./home-manager/users/default.nix;
+            home-manager.users.${username} = import ./home-manager/users/default.nix;
 
             ## Set backup file extension
             home-manager.backupFileExtension = "hm.bak";
 
             # Pass flake inputs to home-manager modules
             home-manager.extraSpecialArgs = {
-              inherit inputs home-manager;
+              inherit inputs home-manager username;
             };
           }
         ];

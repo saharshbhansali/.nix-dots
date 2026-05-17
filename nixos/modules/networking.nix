@@ -2,8 +2,9 @@
   config,
   lib,
   pkgs,
+  inputs,
   ...
-}:
+}@args:
 let
   hasIPv6Internet = true;
   StateDirectory = "dnscrypt-proxy";
@@ -25,7 +26,7 @@ in
   networking.networkmanager.dns = "none"; # prevent DHCP DNS override
   networking.networkmanager.wifi.powersave = false;
 
-  users.users.saharsh.extraGroups = lib.mkAfter [ "networkmanager" ];
+  users.users.${args.username}.extraGroups = lib.mkAfter [ "networkmanager" ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's

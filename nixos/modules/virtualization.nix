@@ -1,7 +1,7 @@
-{ config, lib, pkgs, inputs, ... }:
+{ config, lib, pkgs, inputs, ... }@args:
 {
   # Add user to groups for containerization
-  users.users.saharsh.extraGroups = [ "podman" ];
+  users.users.${args.username}.extraGroups = [ "podman" ];
 
   # Enable containerization
   virtualisation.containers.enable = true;

@@ -1,4 +1,4 @@
-{ config, lib, pkgs, inputs, ... }:
+{ config, lib, pkgs, inputs, ... }@args:
 
 {
 
@@ -10,7 +10,7 @@
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   # # Trusted-users list
-  nix.settings.trusted-users = [ "root" "saharsh" ];
+  nix.settings.trusted-users = [ "root" "${args.username}" ];
 
   # Extra options
   nix.extraOptions = ''
@@ -66,7 +66,7 @@
 
   ## User setup
 
-  users.users.saharsh = {
+  users.users.${args.username} = {
     isNormalUser = true;
     extraGroups = [ "wheel" "video" "audio" "input" ];
     shell = pkgs.zsh;

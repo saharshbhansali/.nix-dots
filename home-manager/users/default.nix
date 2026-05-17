@@ -1,11 +1,11 @@
-{ nixpkgs, inputs, config, lib, pkgs, ... }:
+{ nixpkgs, inputs, config, lib, pkgs, ... }@args:
 
 {
 
   home.stateVersion = "24.11";
 
-  home.username = "saharsh";
-  home.homeDirectory = "/home/saharsh";
+  home.username = "${args.username}";
+  home.homeDirectory = "/home/${args.username}";
 
 
   ## Starting user services via systemd
