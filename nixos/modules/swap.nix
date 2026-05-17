@@ -13,6 +13,7 @@
     {
       device = "/swap/swapfile";
       size = 32*1024;
+      priority = -1;
     }
   ];
 
@@ -20,9 +21,13 @@
   zramSwap = {
     enable = true;
     algorithm = "zstd";
-    memoryPercent = 5;  # 1.6GB on 32GB system - optimal for fast swap cushion
-    priority = 1;
+    memoryPercent = 50;
+    priority = 10;
     # writebackDevice = "/swapfile";
+  };
+
+  boot.kernel.sysctl = {
+    "vm.swappiness" = 60;
   };
 
 }
