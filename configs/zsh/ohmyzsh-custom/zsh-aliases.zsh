@@ -7,10 +7,10 @@ alias 'pm-hib'='sudo pm-hibernate'
 
 # Information and Movement Aliases
 
-alias 'lsx'='exa --color=auto --icons'
+alias 'lsx'='exa --color=auto --icons=auto'
 alias 'ls'='ls --color=auto'
-alias 'lss'='exa -lahg --color=auto --icons'
-alias 'la'='exa -lahg --color=auto --git --icons'
+alias 'lss'='exa -lahg --color=auto --icons=auto'
+alias 'la'='exa -lahg --color=auto --git --icons=auto'
 # alias 'cat'='bat'
 alias '..'='cd ..'
 alias '.1'='cd ..'
@@ -23,16 +23,13 @@ alias '.Dw'='~/Downloads/'
 alias '.Dp'='~/Downloads/packages/'
 alias '..d'='~/.dotfiles'
 alias '..c'='~/.config'
-alias '.CS'='~/Downloads/packages/CyberSecurity/'
+# alias '.CS'='~/Downloads/packages/CyberSecurity/'
 
-# VIT WiFi login aliases
+# Cloudflare VPN aliases
 
-alias 'vwifi'='~/login-vit-wifi.sh'
-alias 'vwifi-off'='~/logout-vit-wifi.sh'
-alias 'vpn-on'='~/login-vit-wifi.sh && ~/vpn-vit-connect.sh'
-alias 'cf-on'='~/login-vit-wifi.sh && warp-cli connect && ping 8.8.8.8 -c 5'
-alias 'cf-off'='warp-cli disconnect'
-# alias 'cf-on'='~/login-vit-wifi.sh && wg-quick up cloudflare && ping 8.8.8.8 -c 5'
+# alias 'cf-on'='warp-cli connect && ping 8.8.8.8 -c 5'
+# alias 'cf-off'='warp-cli disconnect'
+# alias 'cf-on'='wg-quick up cloudflare && ping 8.8.8.8 -c 5'
 # alias 'cf-off'='wg-quick down cloudflare'
 
 ## Git Aliases
@@ -58,7 +55,7 @@ alias 'vdiff'="diff --color -EZy"
 diff_so_fancy() { 
   diff -u $1 $2 | diff-so-fancy
 }
-alias dsf='diff_so_fancy'
+alias 'dsf'='diff_so_fancy'
 
 # Creating directories
 
@@ -82,20 +79,16 @@ alias 'egrep'='grep -iE'
 
 # Picom
 
-alias 'effects'='picom --experimental-backends -b'
+# alias 'effects'='picom --experimental-backends -b'
 
 # Rofi
 
 # alias 'menu'='rofi -show run'
-alias 'menu'='rofi -combi-modi window,drun,ssh -theme Arc-Dark -font "hack 12" -show combi 2>&1 /dev/null &'
+# alias 'menu'='rofi -combi-modi window,drun,ssh -theme Arc-Dark -font "hack 12" -show combi 2>&1 /dev/null &'
 
 # Brightness
 
-alias 'brightness'='xrandr --brightness'
-
-## VIM customizations - can't autogenerate .vimrc rip
-
-# alias 'vim'='vim "+set nu"'
+# alias 'brightness'='xrandr --brightness'
 
 # Weather Report
 
@@ -107,6 +100,12 @@ alias 'sptui'='spotifyd --no-daemon &> /dev/null &; spt'
 
 # Export all aliases 
 alias 'export-aliases'='alias | sed -E "s/([^=]*)=(.*)/alias '\1'=\2/; p" > aliases.zsh'
+
+# Zed Editor
+alias 'zed'='zeditor'
+
+# Obsidian MainVault Alias
+alias 'OMV'="~/obsidian-MainVault/"
 
 # Logging into NotEC2 VPS
 
@@ -120,61 +119,19 @@ alias 'export-aliases'='alias | sed -E "s/([^=]*)=(.*)/alias '\1'=\2/; p" > alia
 # CyberSec Lists Shortcuts
 
 ## SecLists Shortcut
-
-# SecLists="/opt/SecTools/SecLists/"
-
 ## KaliLists Shortcut
-
-# KaliLists="/opt/SecTools/KaliLists/"
-
 ## Auto_Wordlists Shortcut
-
-# AutoWordlists="/opt/SecTools/AutoWordlists/"
 
 # CyberSec Tools Aliases
 
 ## Metasploit Alias
-
-# alias 'Metasploit'="/opt/SecTools/metasploit-framework/bin/msfconsole"
-alias 'Metasploit'="/opt/SecTools/metasploit/bin/msfconsole"
-
 ## Ghidra Alias
-
-# alias 'Ghidra'="/opt/SecTools/ghidra/ghidraRun"
-
 ## ZAP Alias
-
-# alias 'ZAP'="/opt/SecTools/zaproxy/zap.sh &> /dev/null &"
-
 ## IDA Free Alias
-
-alias 'IDA'="/opt/SecTools/idafree-8.2/ida64 &> /dev/null &"
-
 ## John The Ripper Alias 
-
-# alias 'John'="/opt/SecTools/john/run/john"
-
 ## Gobuster Alias
-
-# alias 'Gobuster'="go run /opt/SecTools/gobuster/main.go"
-
-## Postman Alias
-
-# alias 'Postman'="/opt/SecTools/Postman/Postman &> /dev/null &"
-
-## Obsidian MainVault Alias
-
-alias 'OMV'="~/obsidian-MainVault/"
-
 ## Nessus Alias
 
-# alias 'Nessus'="/opt/SecTools/nessus/"
-
-## asdf Alias
-
-# alias 'asdf'="/opt/asdf-vm/bin/asdf"
-
-## X Alias
-
-# alias 'X'="/opt/SecTools/X/"
+# Other Tool Aliases
+## Postman Alias
 

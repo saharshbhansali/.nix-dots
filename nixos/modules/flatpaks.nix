@@ -4,4 +4,7 @@
 
   imports = [ inputs.nix-flatpak.nixosModules.nix-flatpak ];
 
+  # Flatpak
+  services.flatpak.enable = true;
+
 }

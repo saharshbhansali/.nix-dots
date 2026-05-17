@@ -4,8 +4,8 @@
   # imports = [ inputs.nixCatsNvim.nixosModules.default ];
 
   environment.systemPackages = [
-    inputs.nixCatsNvim.packages.${pkgs.system}.default
-    pkgs.fd
+    inputs.nixCatsNvim.packages.${pkgs.stdenv.hostPlatform.system}.nvim
+    # inputs.nixPatchNvim.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 
   # Mount custom config directory

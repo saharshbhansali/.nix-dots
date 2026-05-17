@@ -13,18 +13,31 @@
     grc
     tdf
 
+    ## VCS
+    oh-my-git
+    graphite-cli
+    mercurial
+    lazyjj
+    jjui
+    # jj-fzf
+
+    ## Terminal emulators
+    wezterm
+
     # ## Disk utils
     # ventoy-full
 
     ## Spotify
-    spotify
-    spicetify-cli
+    # spotify
+    # spicetify-cli
+    spotifyd
+    spotify-player
+    spotify-cli-linux
     # spotify-tui
-    # spotifyd
 
     ## Browsers
     # zen
-    inputs.zen-browser.packages.${system}.twilight
+    inputs.zen-browser.packages.${stdenv.hostPlatform.system}.twilight
     # vivaldi
     ((vivaldi.overrideAttrs
       (oldattrs: {
@@ -39,43 +52,82 @@
       proprietaryCodecs = true;
       enableWidevine = true;
     })
+    inputs.browseros-ai.packages.${stdenv.hostPlatform.system}.browseros-ai
     # firefox and chromium
     firefox
     chromium
-
-    ## Other Programs
-    # Media
-    vlc
-    # stremio
-    obsidian
-
-    # Torrent
-    qbittorrent
-
-    # Document viewers
-    zathura
-
-    # ## Launcher
-    # wox
-    albert
+    tor-browser
+    # text-based/terminal web browser
+    chawan
+    browsh
+    elinks
+    links2
+    lynx
+    w3m
 
     ## VPN software
-    protonvpn-cli
-    protonvpn-gui
+    proton-vpn
     cloudflare-warp
     cloudflare-cli
     wgcf
 
-    ## KDE Utils
-    konsave
-
     ## LLMs
+    aichat
     ollama
+    lmstudio
     # ollama-cuda
+    open-webui
     kdePackages.alpaka
     alpaca
     oterm
     litellm
+
+    # AI Coding agents
+    opencode
+    claude-code
+    # vimPlugins.opencode-nvim
+    # vimPlugins.claudecode-nvim
+
+    ## Media
+    # mpv and vlc are in system packages (nixos/modules/packages.nix)
+    # stremio-linux-shell
+    # obs-studio
+    pulsemeeter
+
+    ## Notes
+    obsidian
+    appflowy
+    notion-app-enhanced
+
+    ## TUI apps
+    # ytui-music
+    youtube-tui
+    wiki-tui
+    systemctl-tui
+
+    # Torrent
+    qbittorrent
+
+    ## Other Programs
+    ## RSS Feed
+    newsboat
+
+    ## KDE Utils
+    konsave
+
+    ## Document viewers
+    calibre
+    zathura
+
+    ## Launcher
+    # vicinae
+    # albert
+    # wox
+
+    ## Chat Applications
+    # whatsie
+    wasistlos
+    whatsapp-electron
 
   ];
 

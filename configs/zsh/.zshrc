@@ -8,8 +8,8 @@
 #-----------------------------------------------------------------------------------------------------------
 
 # Set the directory we want to store zinit, plugins, and custom scripts
-ZINIT_HOME="${XDG_DATA_HOME:-${HOME}}/.config/zinit"
-ZINIT_CUSTOM="${XDG_DATA_HOME:-${HOME}}/.config/ohmyzsh-custom"
+ZINIT_HOME="${XDG_CONFIG_HOME:-${HOME}/.config}/zinit"
+ZINIT_CUSTOM="${XDG_CONFIG_HOME:-${HOME}/.config}/ohmyzsh-custom"
 
 # Download Zinit, if it's not there yet
 if [ ! -d "$ZINIT_HOME" ]; then
@@ -19,25 +19,6 @@ fi
 
 ## Source/Load zinit
 source "${ZINIT_HOME}/zinit.zsh"
-
-#-----------------------------------------------------------------------------------------------------------
-
-### Customize prompt
-
-# ## Add in Powerlevel10k
-# zinit ice depth=1; zinit light romkatv/powerlevel10k
-
-# # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-# [[ ! -f $HOME/.p10k.zsh ]] || source $HOME/.p10k.zsh
-
-## Add in Starship
-eval "$(starship init zsh)"
-
-# zinit ice as"command" from"gh-r" \
-#           atclone"./starship init zsh > init.zsh; ./starship completions zsh > _starship" \
-#           atpull"%atclone" src"init.zsh"
-#
-# zinit light starship/starship
 
 #-----------------------------------------------------------------------------------------------------------
 
@@ -59,10 +40,12 @@ eval "$(starship init zsh)"
 
 ## Add in zsh plugins
 zinit light zsh-users/zsh-syntax-highlighting
-zinit light zsh-users/zsh-completions
+# zinit light zsh-users/zsh-completions
 zinit light zsh-users/zsh-autosuggestions
 zinit light Aloxaf/fzf-tab
 zinit light akash329d/zsh-alias-finder
+# zinit light rkh/zsh-jj
+zinit light Freed-Wu/fzf-tab-source
 
 ## Add in snippets
 # OMZ plugins
@@ -72,6 +55,25 @@ for plugin in $(echo "$plugins"); do
   zinit snippet OMZP::${plugin}
 done
 zinit snippet OMZL::git.zsh
+
+#-----------------------------------------------------------------------------------------------------------
+
+### Customize prompt
+
+# ## Add in Powerlevel10k
+# zinit ice depth=1; zinit light romkatv/powerlevel10k
+
+# # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+# [[ ! -f $HOME/.p10k.zsh ]] || source $HOME/.p10k.zsh
+
+## Add in Starship
+eval "$(starship init zsh)"
+
+# zinit ice as"command" from"gh-r" \
+#           atclone"./starship init zsh > init.zsh; ./starship completions zsh > _starship" \
+#           atpull"%atclone" src"init.zsh"
+#
+# zinit light starship/starship
 
 #-----------------------------------------------------------------------------------------------------------
 
@@ -150,25 +152,65 @@ setopt hist_find_no_dups
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 zstyle ':completion:*' menu no
-zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --almost-all --group-directories-first --color $realpath'
-zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --almost-all --group-directories-first --color $realpath'
-zstyle ':fzf-tab:complete:ls:*' fzf-preview 'ls --almost-all --group-directories-first --color $realpath'
-zstyle ':fzf-tab:complete:nvim:*' fzf-preview 'ls --almost-all --group-directories-first --color $realpath'
-zstyle ':fzf-tab:complete:bat:*' fzf-preview 'ls --almost-all --group-directories-first --color $realpath'
-zstyle ':fzf-tab:complete:cat:*' fzf-preview 'ls --almost-all --group-directories-first --color $realpath'
-zstyle ':fzf-tab:complete:chezmoi:*' fzf-preview 'ls --almost-all --group-directories-first --color $realpath'
 
-# Carapace completions
-export CARAPACE_BRIDGES='zsh' # optional
-zstyle ':completion:*' format $'\e[2;37mCompleting %d\e[m'
-# Define the list of command exceptions
-CARAPACE_EXCEPTIONS=(nvim ls la exa eza rm rem rip cat bat cd mv cp mkdir md vscode)
-# Join the list into a regex pattern: (nvim|ls|la|...)
-CARAPACE_PATTERN="($(printf '%s|' "${CARAPACE_EXCEPTIONS[@]}" | sed 's/|$//'))"
-# Run carapace and apply the regex pattern via sed
-source <(carapace _carapace | sed -E "s/(^|\\s)${CARAPACE_PATTERN}(\\s|$)/ /g")
-# source <(carapace _carapace | sed -E 's/(^|\s)(nvim|ls|la|rm|rem|cd|vscode)(\s|$)/ /g')
+zstyle ':fzf-tab:*' switch-group '<' '>'
+zstyle ':fzf-tab:*' prefix '·'
+
+# zstyle ':fzf-tab:*' query-string prefix longest
+# zstyle ':fzf-tab:*' query-string prefix first
+# zstyle ':fzf-tab:*' query-string prefix input first
+
+zstyle ':fzf-tab:complete:nvim:*' fzf-preview 'fzf-preview $realpath'
+
+zstyle ':fzf-tab:complete:bat:*' fzf-preview 'fzf-preview $realpath'
+# zstyle ':fzf-tab:complete:cat:*' fzf-preview 'fzf-preview $realpath'
+
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'fzf-preview $realpath'
+zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'fzf-preview $realpath'
+
+# zstyle ':fzf-tab:complete:ls:*' fzf-preview 'fzf-preview $realpath'
+# zstyle ':fzf-tab:complete:la:*' fzf-preview 'fzf-preview $(realpath $PWD/$word)'
+zstyle ':fzf-tab:complete:la:*' fzf-preview 'fzf-preview $realpath'
+# zstyle ':fzf-tab:complete:ll:*' fzf-preview 'fzf-preview $(realpath $PWD/$word)'
+zstyle ':fzf-tab:complete:ll:*' fzf-preview 'fzf-preview $realpath'
+zstyle ':fzf-tab:complete:exa:*' fzf-preview 'fzf-preview $realpath'
+
+# zstyle ':fzf-tab:complete:mv:*' fzf-preview 'fzf-preview $realpath'
+
+# zstyle ':fzf-tab:complete:cp:*' fzf-preview 'fzf-preview $realpath'
+
+# zstyle ':fzf-tab:complete:rm:*' fzf-preview 'fzf-preview $realpath'
+zstyle ':fzf-tab:complete:rem:*' fzf-preview 'fzf-preview $realpath'
+zstyle ':fzf-tab:complete:rip:*' fzf-preview 'fzf-preview $realpath'
+#
+# zstyle ':fzf-tab:complete:mkdir:*' fzf-preview 'fzf-preview $realpath'
+zstyle ':fzf-tab:complete:md:*' fzf-preview 'fzf-preview $realpath'
+
+# zstyle ':fzf-tab:complete:diff:*' fzf-preview 'fzf-preview $realpath'
+zstyle ':fzf-tab:complete:vdiff:*' fzf-preview 'fzf-preview $realpath'
+
+# zstyle ':fzf-tab:complete:find:*' fzf-preview 'fzf-preview $realpath'
+zstyle ':fzf-tab:complete:fd:*' fzf-preview 'fzf-preview $realpath'
+
+# zstyle ':fzf-tab:complete:grep:*' fzf-preview 'fzf-preview $realpath'
+zstyle ':fzf-tab:complete:rg:*' fzf-preview 'fzf-preview $realpath'
+# zstyle ':fzf-tab:complete:egrep:*' fzf-preview 'fzf-preview $realpath'
+
+zstyle ':fzf-tab:complete:chezmoi:*' fzf-preview 'fzf-preview $realpath'
+
+# # Carapace completions
+# export CARAPACE_BRIDGES='zsh' # optional
+# zstyle ':completion:*' format $'\e[2;37mCompleting %d\e[m'
+# # Define the list of command exceptions
+# CARAPACE_EXCEPTIONS=(nvim ls la exa eza rm rem rip cat bat cd mv cp mkdir md vscode)
+# # Join the list into a regex pattern: (nvim|ls|la|...)
+# CARAPACE_PATTERN="($(printf '%s|' "${CARAPACE_EXCEPTIONS[@]}" | sed 's/|$//'))"
+# # Run carapace and apply the regex pattern via sed
+# source <(carapace _carapace | sed -E "s/(^|\\s)${CARAPACE_PATTERN}(\\s|$)/ /g")
+# # source <(carapace _carapace | sed -E 's/(^|\s)(nvim|ls|la|rm|rem|cd|vscode)(\s|$)/ /g')
+
 zstyle ':completion:*:git:*' group-order 'main commands' 'alias commands' 'external commands'
+zstyle ':completion:*:jj:*' group-order 'main commands' 'alias commands' 'external commands'
 
 # Shell integrations
 eval "$(fzf --zsh)"
@@ -184,5 +226,6 @@ eval "$(atuin init zsh)"
 source "$ZINIT_CUSTOM/zsh-aliases.zsh"
 source "$ZINIT_CUSTOM/zsh-autorun.zsh"
 source "$ZINIT_CUSTOM/zsh-pastebin.zsh"
+source "$ZINIT_CUSTOM/zsh-youtube-player.zsh"
 
 #-----------------------------------------------------------------------------------------------------------

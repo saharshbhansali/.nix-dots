@@ -1,0 +1,5 @@
+max-items 100
+
+browser w3m
+
+include ~/.newsboat/dark

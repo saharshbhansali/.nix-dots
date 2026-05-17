@@ -1,4 +1,4 @@
-{ config, lib, pkgs, inputs, ... }:
+{ config, lib, pkgs, inputs, ... }@args:
 
 {
 
@@ -8,10 +8,9 @@
 
   # System settings
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
-  nix.settings.download-buffer-size = 524288000;
 
   # # Trusted-users list
-  nix.settings.trusted-users = [ "root" "saharsh" ];
+  nix.settings.trusted-users = [ "root" "${args.username}" ];
 
   # Extra options
   nix.extraOptions = ''
@@ -25,35 +24,51 @@
 
   imports = [
     ## System configuration
-    ../modules/bootloader.nix
+    ../modules/lix.nix
+    ../modules/boot.nix
     ../modules/swap.nix
     ../modules/filesystem.nix
-    ../modules/shell.nix
+    ../modules/graphics.nix
+    ../modules/networking.nix
+    ../modules/power-management.nix
+    ../modules/virtualization.nix
+    ../modules/bluetooth.nix
     ## Application installation
+    # System
     ../modules/packages.nix
     ../modules/programs.nix
-    ../modules/services.nix
     ../modules/flatpaks.nix
-    ## Application configurations
+    ../modules/appimages.nix
+    # Specific
     # ../modules/nixvim.nix
+    ../modules/shell.nix
+    # Feature
+    ../modules/gaming.nix
+    ## Application configurations
     ../modules/neovim.nix
     ../modules/tmux.nix
     ## Service configurations
+    ../modules/services.nix
     ../modules/gestures.nix
-    ## Desktop Environment configurations
+    ## System environment configurations
+    ../modules/environment-variables.nix
+    ## Desktop Environments
+    # GNOME
     ../modules/gnome-desktop.nix
     # ../modules/gdm.nix
+    # KDE
     ../modules/kde-desktop.nix
     ../modules/sddm.nix
+    # Cosmic
     # ../modules/cosmic-desktop.nix
   ];
 
 
   ## User setup
 
-  users.users.saharsh = {
+  users.users.${args.username} = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" "video" "audio" "input" ];
+    extraGroups = [ "wheel" "video" "audio" "input" ];
     shell = pkgs.zsh;
   };
 
@@ -61,30 +76,25 @@
 
   ## Enable services
 
-  # Networking services
-  networking.networkmanager.enable = true;
-  networking.wireless.enable = false;
-  networking.hostName = "nixos";
-
-  # Flatpak
-  services.flatpak.enable = true;
-
-  # Virtualisation and docker
-  virtualisation.docker.enable = true;
-  virtualisation.docker.storageDriver = "btrfs";
-  virtualisation.docker.rootless = {
-    enable = true;
-    setSocketVariable = true;
-  };
 
   ## Miscellaneous settings
 
-  # Wi-Fi support
+  # Firmware and kernel settings
   hardware.enableRedistributableFirmware = true;
-  boot.kernelModules = [ "rtw89" ];
+  boot.kernelModules = [ "kvm-amd" "rtw89" ];
   hardware.usb-modeswitch.enable = true;
+  services.udev.packages = [ pkgs.usb-modeswitch-data ];
   hardware.enableAllFirmware = true;
+  hardware.firmware = with pkgs; [
+    linux-firmware
+    wireless-regdb
+  ];
   # Optional: Use latest kernel for better Realtek driver support
   boot.kernelPackages = pkgs.linuxPackages_latest;
+  # boot.kernelPackages = pkgs.linuxPackages_6_12;
+  # boot.kernelPackages = pkgs.linuxPackages_zen;
+  # boot.kernelPackages = pkgs.linuxPackages_xanmod;
+  # boot.kernelPackages = pkgs.linuxPackages_lqx;
+  # boot.kernelPackages = pkgs.linuxPackages_hardened;
 
 }

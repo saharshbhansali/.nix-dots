@@ -61,10 +61,10 @@
     # gnomeExtensions.volume-boost
     gnomeExtensions.boost-volume
     gnomeExtensions.yakuake
-    gnomeExtensions.zilence
+    # gnomeExtensions.zilence
     gnomeExtensions.wallhub
     gnomeExtensions.dev-container-manager
     gnomeExtensions.unblank
-
+    gnomeExtensions.vicinae
   ];
 }

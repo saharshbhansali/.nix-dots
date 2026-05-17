@@ -3,12 +3,14 @@
 {
 
   ## Core programs
+  # git
   programs.git.enable = true;
 
-  # Other programs
-  programs = {
-    appimage.enable = true;
-    appimage.binfmt = true;
-  };
+  # nix-ld - to run unpatched binaries
+  programs.nix-ld.enable = true;
+
+  ## Other programs
+  # KDE connect
+  programs.kdeconnect.enable = true;
 
 }

@@ -4,64 +4,55 @@
 { config, lib, pkgs, modulesPath, ... }:
 
 {
-  imports =
-    [ (modulesPath + "/installer/scan/not-detected.nix")
-    ];
+
+  imports = [
+    (modulesPath + "/installer/scan/not-detected.nix")
+  ];
 
   boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usb_storage" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
 
-  fileSystems."/" =
-    { device = "/dev/disk/by-uuid/38cc3a86-d6bd-4ab1-b372-df6f346eb213";
-      fsType = "btrfs";
-      options = [ "subvol=@" ];
-    };
+  fileSystems."/" = {
+    device = "/dev/disk/by-uuid/38cc3a86-d6bd-4ab1-b372-df6f346eb213";
+    fsType = "btrfs";
+    options = [ "subvol=@" "compress=zstd" ];
+  };
 
-  fileSystems."/home" =
-    { device = "/dev/disk/by-uuid/e0572b63-98b6-41c9-a596-85d45a55ec1e";
-      fsType = "btrfs";
-    };
+  fileSystems."/nix" = {
+    device = "/dev/disk/by-uuid/38cc3a86-d6bd-4ab1-b372-df6f346eb213";
+    fsType = "btrfs";
+    options = [ "subvol=nix" "compress=zstd" "noatime" ];
+  };
 
-  fileSystems."/boot/efi" =
-    { device = "/dev/disk/by-uuid/33F8-4597";
-      fsType = "vfat";
-      options = [ "fmask=0077" "dmask=0077" ];
-    };
+  fileSystems."/home" = {
+    device = "/dev/disk/by-uuid/e0572b63-98b6-41c9-a596-85d45a55ec1e";
+    fsType = "btrfs";
+    options = [ "compress=zstd" ];
+  };
 
-  fileSystems."/var/lib/docker/btrfs" =
-    { device = "/@/var/lib/docker/btrfs";
-      fsType = "none";
-      options = [ "bind" ];
-    };
+  fileSystems."/boot/efi" = {
+    device = "/dev/disk/by-uuid/33F8-4597";
+    fsType = "vfat";
+    options = [ "fmask=0077" "dmask=0077" ];
+  };
+
+  fileSystems."/boot" = {
+    device = "/dev/disk/by-uuid/2737ba92-9c09-422e-8420-56793ddea51c";
+    fsType = "ext4";
+    options = [ "defaults" "noatime" ];
+  };
+
+  fileSystems."/swap" = {
+    device = "/dev/disk/by-uuid/38cc3a86-d6bd-4ab1-b372-df6f346eb213";
+    fsType = "btrfs";
+    options = [ "subvol=swap" "noatime" ];
+  };
 
   swapDevices = [ ];
 
-  # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
-  # (the default) this is the recommended approach. When using systemd-networkd it's
-  # still possible to use this option, but it's recommended to use it in conjunction
-  # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
-  networking.useDHCP = lib.mkDefault true;
-  # networking.interfaces.docker0.useDHCP = lib.mkDefault true;
-  # networking.interfaces.eno1.useDHCP = lib.mkDefault true;
-  # networking.interfaces.wlo1.useDHCP = lib.mkDefault true;
-  # networking.interfaces.wlp5s0f4u1.useDHCP = lib.mkDefault true;
-
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
-
-  hardware = {
-    nvidia = {
-      modesetting.enable = true;
-      powerManagement.enable = true;
-      prime = {
-        amdgpuBusId = "PCI:5:0:0";     # AMD iGPU
-        nvidiaBusId = "PCI:1:0:0";     # NVIDIA dGPU
-      };
-      # Use the open kernel module (required for driver >= 560 on Turing+ GPUs)
-      open = true;
-    };
-  };
 
 }

@@ -7,25 +7,24 @@
   home.packages = with pkgs; [
 
     # ## VS Code
-    # vscode-fhs
+    vscode-fhs
     # vscodium
-    (vscode-with-extensions.override {
-      vscodeExtensions = with vscode-extensions; [
-        github.copilot
-        github.copilot-chat
-        supermaven.supermaven
-        tabnine.tabnine-vscode
-
-        ms-azuretools.vscode-docker
-
-        bbenoist.nix
-        ms-python.python
-        ms-python.debugpy
-
-        # catppuccin.cattppuccin-vscode
-      ];
-    })
-    vimPlugins.supermaven-nvim
+    # (vscode-with-extensions.override {
+    #   vscodeExtensions = with vscode-extensions; [
+    #     github.copilot
+    #     github.copilot-chat
+    #     supermaven.supermaven
+    #     tabnine.tabnine-vscode
+    #
+    #     ms-azuretools.vscode-docker
+    #
+    #     bbenoist.nix
+    #     ms-python.python
+    #     ms-python.debugpy
+    #
+    #     # catppuccin.cattppuccin-vscode
+    #   ];
+    # })
 
     # ## Helix editor
     helix
@@ -45,6 +44,7 @@
     gpt-cli
     # aider-chat
     aider-chat-full
+    cursor-cli
 
   ];
 
