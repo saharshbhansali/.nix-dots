@@ -20,6 +20,7 @@
     ../modules/hm-programs.nix
     ../modules/hm-flatpaks.nix
     ../modules/hm-devtools.nix
+    ../modules/hm-services.nix
     # Specific
     ../modules/hm-nvim.nix
     ../modules/hm-nushell.nix
