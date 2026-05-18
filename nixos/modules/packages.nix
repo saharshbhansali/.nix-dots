@@ -12,6 +12,9 @@
 
   environment.systemPackages = with pkgs; [
 
+    ## UNIX utils
+    toybox
+
     ## Nix utils and compatibility layers
     util-linux
     cachix
