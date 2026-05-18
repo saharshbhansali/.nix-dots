@@ -25,11 +25,11 @@
     darling-dmg
     winboat
 
-    ## Hypr utils
-    hyprlock
-    hypridle
-    hyprcursor
-    numlockx
+    # ## Hypr utils
+    # hyprlock
+    # hypridle
+    # hyprcursor
+    # numlockx
 
     ## Terminal essentials
     fish
