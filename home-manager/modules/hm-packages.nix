@@ -126,7 +126,8 @@
 
     ## Chat Applications
     # whatsie
-    wasistlos
+    # wasistlos
+    karere
     whatsapp-electron
 
   ];
