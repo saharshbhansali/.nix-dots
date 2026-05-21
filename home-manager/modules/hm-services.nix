@@ -21,11 +21,11 @@
       # The single quotes around the command ensure the whole string is passed to bash -c.
       ExecStart = "${pkgs.bash}/bin/bash -c '${pkgs.vicinae}/bin/vicinae server --replace || ${pkgs.vicinae}/bin/vicinae server'";
 
-      # Set a working directory for the service. This can be important for
-      # applications that look for configuration files or write logs relative
-      # to their current working directory. Defaults to the user's home directory
-      # for user services if not specified, but being explicit is often better.
-      WorkingDirectory = "%h"; # %h expands to the user's home directory
+      # # Set a working directory for the service. This can be important for
+      # # applications that look for configuration files or write logs relative
+      # # to their current working directory. Defaults to the user's home directory
+      # # for user services if not specified, but being explicit is often better.
+      # WorkingDirectory = "%h"; # %h expands to the user's home directory
 
       # Recommended for daemons to ensure they restart if they crash.
       Restart = "on-failure";
