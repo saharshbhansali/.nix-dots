@@ -14,7 +14,7 @@
     Service = {
       # Path to the executable. If using an AppImage, replace with the absolute path, 
       # e.g., "/home/username/Applications/vicinae.AppImage --server"
-      ExecStart = "${pkgs.vicinae}/bin/vicinae server";
+      ExecStart = "${pkgs.vicinae}/bin/vicinae server --replace || ${pkgs.vicinae}/bin/vicinae server";
       
       Restart = "on-failure";
       RestartSec = "5s";
