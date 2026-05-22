@@ -24,8 +24,12 @@
     ## Terminal emulators
     wezterm
 
-    # ## Disk utils
+    ## Disk utils
     # ventoy-full
+    # ventoy
+    # ventoy-full-qt
+    # ventoy-full-gtk
+    spacedrive
 
     ## Spotify
     # spotify
