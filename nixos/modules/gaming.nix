@@ -1,4 +1,4 @@
-{ config, lib, pkgs, inputs, ... }:
+{ config, lib, pkgs, inputs, ... }@args:
 
 {
 
@@ -18,7 +18,7 @@
   hardware.steam-hardware.enable = true;
 
   ## Gaming packages
-  environment.systemPackages = with pkgs; [
+  environment.systemPackages = (with pkgs; [
     steam
     steam-unwrapped
     steam-run
@@ -34,9 +34,9 @@
     # wine64
 
     # Launchers
-    lutris
+    # lutris
     heroic
-    bottles
+    # bottles
 
     # Extras
     playonlinux
@@ -56,7 +56,11 @@
 
     # OpenGL Tools
     libGLU
-  ];
+  ]) ++ (with args.pkgs-stable; [
+    # Launchers
+    lutris
+    bottles
+  ]);
 
   environment.sessionVariables = {
     STEAM_EXTRA_COMPAT_TOOLS_PATHS = "$HOME/.steam/root/compatibilitytools.d";
