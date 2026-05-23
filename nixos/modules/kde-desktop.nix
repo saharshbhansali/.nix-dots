@@ -20,6 +20,7 @@
     kdePackages.plasma-browser-integration
     kdePackages.kdeconnect-kde
     kdePackages.kdbusaddons
+    kontainer
   ];
 
 }

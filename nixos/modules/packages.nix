@@ -25,6 +25,8 @@
     # nix-index ## using nix-index-database (pre-populated nix-index) instead
     nh
     nix-output-monitor
+    distrobox
+    toolbox
     darling-dmg
     winboat
 

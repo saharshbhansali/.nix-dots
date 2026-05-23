@@ -20,6 +20,8 @@
     lazyjj
     jjui
     # jj-fzf
+    distrobox-tui
+    distroshelf
 
     ## Terminal emulators
     wezterm
