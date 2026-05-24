@@ -78,6 +78,7 @@
     procs
     dust
     strace
+    file
 
     ## Container utils and tools
     lazydocker
