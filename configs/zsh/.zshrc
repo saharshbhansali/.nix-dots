@@ -50,7 +50,7 @@ zinit light Freed-Wu/fzf-tab-source
 ## Add in snippets
 # OMZ plugins
 # source "$ZINIT_CUSTOM/plugins/plugins.zsh"
-plugins="common-aliases git asdf aliases colored-man-pages colorize ssh-agent timer"
+plugins="common-aliases git asdf aliases colored-man-pages colorize ssh-agent timer" # fzf
 for plugin in $(echo "$plugins"); do 
   zinit snippet OMZP::${plugin}
 done
@@ -149,16 +149,28 @@ setopt hist_find_no_dups
 # setopt correct
 
 ## Completion styling
-zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
-zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
-zstyle ':completion:*' menu no
 
+# completion settings
+zstyle ':completion:*' menu no
+zstyle ':completion:*' group-order 'main commands' 'alias commands' 'external commands'
+zstyle ':completion:*:^:fzf-tab:*' matcher-list 'm:{a-z}={A-Za-z}'
+zstyle ':completion:*:^:fzf-tab:*' list-colors "${(s.:.)LS_COLORS}"
+
+# fzf-tab settings
+zstyle ':fzf-tab:*' use-fzf-default-opts no
+zstyle ':fzf-tab:*' list-colors "${(s.:.)LS_COLORS}"
 zstyle ':fzf-tab:*' switch-group '<' '>'
 zstyle ':fzf-tab:*' prefix '·'
-
+zstyle ':fzf-tab:*' fzf-flags --style=full --preview='fzf-preview $realpath' --bind='focus:transform-header:file --brief $realpath' --ansi --ignore-case
+zstyle ':fzf-tab:*' matcher-list \
+  'm:{a-z}={A-Za-z}' \
+  'r:|[._-]=* r:|=*'
 # zstyle ':fzf-tab:*' query-string prefix longest
 # zstyle ':fzf-tab:*' query-string prefix first
 # zstyle ':fzf-tab:*' query-string prefix input first
+
+# colorized previews
+zstyle ':fzf-tab:complete:*' fzf-preview 'fzf-preview $realpath --bind="focus:transform-header:file --brief" --ansi --ignore-case'
 
 zstyle ':fzf-tab:complete:nvim:*' fzf-preview 'fzf-preview $realpath'
 
@@ -208,9 +220,6 @@ zstyle ':fzf-tab:complete:chezmoi:*' fzf-preview 'fzf-preview $realpath'
 # # Run carapace and apply the regex pattern via sed
 # source <(carapace _carapace | sed -E "s/(^|\\s)${CARAPACE_PATTERN}(\\s|$)/ /g")
 # # source <(carapace _carapace | sed -E 's/(^|\s)(nvim|ls|la|rm|rem|cd|vscode)(\s|$)/ /g')
-
-zstyle ':completion:*:git:*' group-order 'main commands' 'alias commands' 'external commands'
-zstyle ':completion:*:jj:*' group-order 'main commands' 'alias commands' 'external commands'
 
 # Shell integrations
 eval "$(fzf --zsh)"
