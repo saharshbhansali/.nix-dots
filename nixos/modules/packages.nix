@@ -185,6 +185,7 @@
     pavucontrol
     mpv
     vlc
+    chafa
     playerctl
     # uxplay
     # owntone
