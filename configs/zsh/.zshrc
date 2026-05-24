@@ -177,9 +177,20 @@ zstyle ':fzf-tab:*' matcher-list \
 # zstyle ':fzf-tab:*' query-string prefix first
 # zstyle ':fzf-tab:*' query-string prefix input first
 
-# colorized previews
-# zstyle ':fzf-tab:complete:*'              fzf-preview 'fzf-preview $realpath --bind="focus:transform-header:file --brief" --ansi --ignore-case'
-zstyle ':fzf-tab:complete:*'              fzf-preview 'fzf-preview $realpath'
+# Smart fzf preview
+# zstyle ':fzf-tab:complete:*' fzf-preview 'fzf-preview $realpath --bind="focus:transform-header:file --brief" --ansi --ignore-case'
+# zstyle ':fzf-tab:complete:*' fzf-preview 'fzf-preview $realpath'
+preview='
+  mime=$(file -b --mime-type $realpath)
+  if [[ $mime == image/* ]]; then
+    chafa --format=symbols --size=${FZF_PREVIEW_COLUMNS}x${FZF_PREVIEW_LINES} $realpath
+  elif [[ -d $realpath ]]; then
+    eza -1 --color=always --icons=always $realpath
+  else
+    bat --color=always --style=numbers $realpath
+  fi
+'
+zstyle ':fzf-tab:complete:*' fzf-preview "${preview}"
 
 # # Carapace completions
 # export CARAPACE_BRIDGES='zsh' # optional
