@@ -180,17 +180,38 @@ zstyle ':fzf-tab:*' matcher-list \
 # Smart fzf preview
 # zstyle ':fzf-tab:complete:*' fzf-preview 'fzf-preview $realpath --bind="focus:transform-header:file --brief" --ansi --ignore-case'
 # zstyle ':fzf-tab:complete:*' fzf-preview 'fzf-preview $realpath'
-preview='
-  mime=$(file -b --mime-type $realpath)
+fzf_preview_util='
+  mime=$(file -b --mime-type "$realpath")
+  
+  # 1. Images
   if [[ $mime == image/* ]]; then
-    chafa --format=symbols --size=${FZF_PREVIEW_COLUMNS}x${FZF_PREVIEW_LINES} $realpath
+    chafa --format=symbols --size=${FZF_PREVIEW_COLUMNS}x${FZF_PREVIEW_LINES} "$realpath"
+  
+  # 2. PDFs (Safely ignored for tmux compatibility)
+  elif [[ $mime == application/pdf ]]; then
+    echo "PDF File: $(basename "$realpath")"
+    echo "(Preview disabled)"
+  
+  # 3. Video and Audio
+  elif [[ $mime == video/* || $mime == audio/* ]]; then
+    mediainfo "$realpath" 2>/dev/null || echo "Media file: $realpath"
+  
+  # 4. Archives
+  elif [[ $mime == application/zip ]]; then
+    unzip -l "$realpath"
+  elif [[ $mime == application/gzip || $mime == application/x-tar || $mime == application/x-bzip2 ]]; then
+    tar -tvf "$realpath"
+  
+  # 5. Directories
   elif [[ -d $realpath ]]; then
-    eza -1 --color=always --icons=always $realpath
+    eza -1 --color=always --icons=always "$realpath"
+  
+  # 6. Everything else (Code, text, configs)
   else
-    bat --color=always --style=numbers $realpath
+    bat --color=always --style=numbers "$realpath"
   fi
 '
-zstyle ':fzf-tab:complete:*' fzf-preview "${preview}"
+zstyle ':fzf-tab:complete:*' fzf-preview "${fzf_preview_util}"
 
 # # Carapace completions
 # export CARAPACE_BRIDGES='zsh' # optional
