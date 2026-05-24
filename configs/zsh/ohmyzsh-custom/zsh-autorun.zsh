@@ -1,4 +1,12 @@
 ## Environmental Variable Setup
+# fzf styling
+export FZF_DEFAULT_OPTS="
+  --style=full
+  --ansi
+  --ignore-case
+  --preview='fzf-preview {}'
+  --bind='focus:transform-header:file --brief {}'
+"
 
 # Gradle Setup
 # GRADLE="/opt/gradle/gradle-7.5.1/bin:"

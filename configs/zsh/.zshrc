@@ -149,6 +149,14 @@ setopt hist_find_no_dups
 # setopt correct
 
 ## Completion styling
+# # fzf styling
+# export FZF_DEFAULT_OPTS="
+#   --style=full
+#   --ansi
+#   --ignore-case
+#   --preview='fzf-preview {}'
+#   --bind='focus:transform-header:file --brief {}'
+# "
 
 # completion settings
 zstyle ':completion:*' menu no
