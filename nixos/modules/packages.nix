@@ -194,6 +194,7 @@
     # owntone
     gnome-network-displays
     mkchromecast
+    mediainfo
     # gnomecast
 
     ## Development utils

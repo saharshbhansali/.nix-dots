@@ -98,6 +98,7 @@
     # stremio-linux-shell
     # obs-studio
     pulsemeeter
+    mediainfo-gui
 
     ## Notes
     obsidian
