@@ -178,45 +178,48 @@ zstyle ':fzf-tab:*' matcher-list \
 # zstyle ':fzf-tab:*' query-string prefix input first
 
 # colorized previews
-zstyle ':fzf-tab:complete:*' fzf-preview 'fzf-preview $realpath --bind="focus:transform-header:file --brief" --ansi --ignore-case'
+# zstyle ':fzf-tab:complete:*'              fzf-preview 'fzf-preview $realpath --bind="focus:transform-header:file --brief" --ansi --ignore-case'
+zstyle ':fzf-tab:complete:*'              fzf-preview 'fzf-preview $realpath'
 
-zstyle ':fzf-tab:complete:nvim:*' fzf-preview 'fzf-preview $realpath'
-
-zstyle ':fzf-tab:complete:bat:*' fzf-preview 'fzf-preview $realpath'
-# zstyle ':fzf-tab:complete:cat:*' fzf-preview 'fzf-preview $realpath'
-
-zstyle ':fzf-tab:complete:cd:*' fzf-preview 'fzf-preview $realpath'
-zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'fzf-preview $realpath'
-
-# zstyle ':fzf-tab:complete:ls:*' fzf-preview 'fzf-preview $realpath'
-# zstyle ':fzf-tab:complete:la:*' fzf-preview 'fzf-preview $(realpath $PWD/$word)'
-zstyle ':fzf-tab:complete:la:*' fzf-preview 'fzf-preview $realpath'
-# zstyle ':fzf-tab:complete:ll:*' fzf-preview 'fzf-preview $(realpath $PWD/$word)'
-zstyle ':fzf-tab:complete:ll:*' fzf-preview 'fzf-preview $realpath'
-zstyle ':fzf-tab:complete:exa:*' fzf-preview 'fzf-preview $realpath'
-
-# zstyle ':fzf-tab:complete:mv:*' fzf-preview 'fzf-preview $realpath'
-
-# zstyle ':fzf-tab:complete:cp:*' fzf-preview 'fzf-preview $realpath'
-
-# zstyle ':fzf-tab:complete:rm:*' fzf-preview 'fzf-preview $realpath'
-zstyle ':fzf-tab:complete:rem:*' fzf-preview 'fzf-preview $realpath'
-zstyle ':fzf-tab:complete:rip:*' fzf-preview 'fzf-preview $realpath'
+# zstyle ':fzf-tab:complete:nvim:*'         fzf-preview 'fzf-preview $realpath'
 #
-# zstyle ':fzf-tab:complete:mkdir:*' fzf-preview 'fzf-preview $realpath'
-zstyle ':fzf-tab:complete:md:*' fzf-preview 'fzf-preview $realpath'
-
-# zstyle ':fzf-tab:complete:diff:*' fzf-preview 'fzf-preview $realpath'
-zstyle ':fzf-tab:complete:vdiff:*' fzf-preview 'fzf-preview $realpath'
-
-# zstyle ':fzf-tab:complete:find:*' fzf-preview 'fzf-preview $realpath'
-zstyle ':fzf-tab:complete:fd:*' fzf-preview 'fzf-preview $realpath'
-
-# zstyle ':fzf-tab:complete:grep:*' fzf-preview 'fzf-preview $realpath'
-zstyle ':fzf-tab:complete:rg:*' fzf-preview 'fzf-preview $realpath'
-# zstyle ':fzf-tab:complete:egrep:*' fzf-preview 'fzf-preview $realpath'
-
-zstyle ':fzf-tab:complete:chezmoi:*' fzf-preview 'fzf-preview $realpath'
+# zstyle ':fzf-tab:complete:bat:*'          fzf-preview 'fzf-preview $realpath'
+# zstyle ':fzf-tab:complete:cat:*'          fzf-preview 'fzf-preview $realpath'
+#
+# zstyle ':fzf-tab:complete:__zoxide_z:*'   fzf-preview 'fzf-preview $realpath'
+# zstyle ':fzf-tab:complete:cd:*'           fzf-preview 'fzf-preview $realpath'
+#
+# zstyle ':fzf-tab:complete:ls:*'           fzf-preview 'fzf-preview $realpath'
+# zstyle ':fzf-tab:complete:la:*'           fzf-preview 'fzf-preview $(realpath $PWD/$word)'
+# zstyle ':fzf-tab:complete:la:*'           fzf-preview 'fzf-preview $realpath'
+# zstyle ':fzf-tab:complete:ll:*'           fzf-preview 'fzf-preview $(realpath $PWD/$word)'
+# zstyle ':fzf-tab:complete:ll:*'           fzf-preview 'fzf-preview $realpath'
+#
+# zstyle ':fzf-tab:complete:exa:*'          fzf-preview 'fzf-preview $realpath'
+#
+# zstyle ':fzf-tab:complete:mv:*'           fzf-preview 'fzf-preview $realpath'
+#
+# zstyle ':fzf-tab:complete:cp:*'           fzf-preview 'fzf-preview $realpath'
+#
+# zstyle ':fzf-tab:complete:rm:*'           fzf-preview 'fzf-preview $realpath'
+# zstyle ':fzf-tab:complete:rem:*'          fzf-preview 'fzf-preview $realpath'
+# zstyle ':fzf-tab:complete:rip:*'          fzf-preview 'fzf-preview $realpath'
+#
+# zstyle ':fzf-tab:complete:md:*'           fzf-preview 'fzf-preview $realpath'
+# zstyle ':fzf-tab:complete:mkdir:*'        fzf-preview 'fzf-preview $realpath'
+# zstyle ':fzf-tab:complete:rmdir:*'        fzf-preview 'fzf-preview $realpath'
+#
+# zstyle ':fzf-tab:complete:diff:*'         fzf-preview 'fzf-preview $realpath'
+# zstyle ':fzf-tab:complete:vdiff:*'        fzf-preview 'fzf-preview $realpath'
+#
+# zstyle ':fzf-tab:complete:find:*'         fzf-preview 'fzf-preview $realpath'
+# zstyle ':fzf-tab:complete:fd:*'           fzf-preview 'fzf-preview $realpath'
+#
+# zstyle ':fzf-tab:complete:rg:*'           fzf-preview 'fzf-preview $realpath'
+# zstyle ':fzf-tab:complete:grep:*'         fzf-preview 'fzf-preview $realpath'
+# zstyle ':fzf-tab:complete:egrep:*'        fzf-preview 'fzf-preview $realpath'
+#
+# zstyle ':fzf-tab:complete:chezmoi:*'      fzf-preview 'fzf-preview $realpath'
 
 # # Carapace completions
 # export CARAPACE_BRIDGES='zsh' # optional
