@@ -123,6 +123,8 @@
     jq
     sd
     btop
+    meowpdf
+    tdf
 
     ## Terminal customization
     zoxide

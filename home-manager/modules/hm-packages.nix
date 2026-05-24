@@ -11,7 +11,6 @@
     ## Terminal programs
     chezmoi
     grc
-    tdf
 
     ## VCS
     oh-my-git
