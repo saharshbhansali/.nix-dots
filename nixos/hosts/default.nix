@@ -50,6 +50,7 @@
     # Specific
     # ../modules/nixvim.nix
     ../modules/shell.nix
+    ../modules/nix.nix
     # Feature
     ../modules/gaming.nix
     ## Application configurations
