@@ -1,8 +1,8 @@
-{ pkgs, ... }:
-{
+{pkgs, ...}: {
   nixpkgs.overlays = [
     (final: prev: {
-      inherit (prev.lixPackageSets.stable)
+      inherit
+        (prev.lixPackageSets.stable)
         nixpkgs-review
         nix-eval-jobs
         nix-fast-build
@@ -12,5 +12,5 @@
   ];
 
   nix.package = pkgs.lixPackageSets.stable.lix;
-  nix.settings.experimental-features = [ "flake-self-attrs" ];
+  nix.settings.experimental-features = ["flake-self-attrs"];
 }

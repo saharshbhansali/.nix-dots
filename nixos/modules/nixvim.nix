@@ -1,6 +1,10 @@
-{ config, pkgs, lib, inputs, ... }:
-
 {
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}: {
   # imports = [ inputs.nixvim.nixosModules.nixvim ];
   #
   # programs.nixvim = {
@@ -43,26 +47,25 @@
   #   };
   # };
 
-
   environment.systemPackages = with pkgs; [
-      neovim
-      # Language servers
-      lua-language-server
-      stylua
-      python3Packages.python-lsp-server
-      rust-analyzer
-      gopls
-      # jdtls
-      clang-tools
-      zls
-      nixd
-      bash-language-server
-      typescript-language-server
-      tailwindcss-language-server
-      marksman
-      # Dev tools
-      ripgrep
-      fzf
+    neovim
+    # Language servers
+    lua-language-server
+    stylua
+    python3Packages.python-lsp-server
+    rust-analyzer
+    gopls
+    # jdtls
+    clang-tools
+    zls
+    nixd
+    bash-language-server
+    typescript-language-server
+    tailwindcss-language-server
+    marksman
+    # Dev tools
+    ripgrep
+    fzf
   ];
 
   # Mount custom config directory
@@ -70,8 +73,7 @@
 
   # Create a symlink to ~/.config/nvim → /etc/lazyvim
   systemd.user.tmpfiles.rules = [
-      "L+ /root/.config/nvim - - - - /etc/lazyvim"
-      "L+ /etc/nvim - - - - /etc/lazyvim"
+    "L+ /root/.config/nvim - - - - /etc/lazyvim"
+    "L+ /etc/nvim - - - - /etc/lazyvim"
   ];
-
 }

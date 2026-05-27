@@ -1,7 +1,12 @@
-{ config, lib, pkgs, inputs, ... }@args:
 {
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+} @ args: {
   # Add user to groups for containerization
-  users.users.${args.username}.extraGroups = [ "podman" ];
+  users.users.${args.username}.extraGroups = ["podman"];
 
   # Enable containerization
   virtualisation.containers.enable = true;
@@ -28,12 +33,12 @@
   };
 
   boot.binfmt = {
-    emulatedSystems = [ "aarch64-linux" ];
+    emulatedSystems = ["aarch64-linux"];
     preferStaticEmulators = true; # required to work with podman
   };
 
   # Prevent Docker from auto-starting
-  systemd.services.docker.wantedBy = lib.mkForce [ ]; # Don't auto-start
+  systemd.services.docker.wantedBy = lib.mkForce []; # Don't auto-start
   # Manual activation: sudo systemctl start docker
 
   # Useful other development tools

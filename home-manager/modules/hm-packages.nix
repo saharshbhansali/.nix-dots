@@ -1,13 +1,15 @@
-{ config, lib, pkgs, inputs, ... }:
-
 {
-
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}: {
   ## Install packages
   # nixpkgs.config.allowUnfree = true;
 
   ## User level packages
   home.packages = with pkgs; [
-
     ## Terminal programs
     chezmoi
     grc
@@ -44,19 +46,21 @@
     # zen
     inputs.zen-browser.packages.${stdenv.hostPlatform.system}.twilight
     # vivaldi
-    ((vivaldi.overrideAttrs
-      (oldattrs: {
+    (
+      (vivaldi.overrideAttrs (oldattrs: {
         dontwrapqtapps = false;
         dontpatchelf = true;
         nativeBuildInputs = oldattrs.nativeBuildInputs ++ [pkgs.kdePackages.wrapQtAppsHook];
-    })).override {
-      commandLineArgs = [
-        "--enable-features=TouchpadOverscrollHistoryNavigation"
-        "--password-store=kwallet5"
-      ];
-      proprietaryCodecs = true;
-      enableWidevine = true;
-    })
+      })).override
+      {
+        commandLineArgs = [
+          "--enable-features=TouchpadOverscrollHistoryNavigation"
+          "--password-store=kwallet5"
+        ];
+        proprietaryCodecs = true;
+        enableWidevine = true;
+      }
+    )
     inputs.browseros-ai.packages.${stdenv.hostPlatform.system}.browseros-ai
     # firefox and chromium
     firefox
@@ -135,7 +139,5 @@
     # wasistlos
     karere
     whatsapp-electron
-
   ];
-
 }

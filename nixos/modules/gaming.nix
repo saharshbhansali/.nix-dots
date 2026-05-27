@@ -1,7 +1,10 @@
-{ config, lib, pkgs, inputs, ... }@args:
-
 {
-
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+} @ args: {
   ## Enable gamemode
   programs.gamemode.enable = true;
 
@@ -11,56 +14,58 @@
     gamescopeSession.enable = true;
     remotePlay.openFirewall = true;
     dedicatedServer.openFirewall = true;
-    extraCompatPackages = [ pkgs.proton-ge-bin];
+    extraCompatPackages = [pkgs.proton-ge-bin];
   };
 
   # Hardware support
   hardware.steam-hardware.enable = true;
 
   ## Gaming packages
-  environment.systemPackages = (with pkgs; [
-    steam
-    steam-unwrapped
-    steam-run
-    steam-devices-udev-rules
+  environment.systemPackages =
+    (with pkgs; [
+      steam
+      steam-unwrapped
+      steam-run
+      steam-devices-udev-rules
 
-    # HUD for system performance
-    mangohud
+      # HUD for system performance
+      mangohud
 
-    # Proton & Wine
-    protonup-ng
-    wineWow64Packages.stable
-    # wine
-    # wine64
+      # Proton & Wine
+      protonup-ng
+      wineWow64Packages.stable
+      # wine
+      # wine64
 
-    # Launchers
-    # lutris
-    heroic
-    # bottles
+      # Launchers
+      # lutris
+      heroic
+      # bottles
 
-    # Extras
-    playonlinux
-    protontricks
-    protonplus
-    protonup-qt
-    winetricks
+      # Extras
+      playonlinux
+      protontricks
+      protonplus
+      protonup-qt
+      winetricks
 
-    # Controllers
-    dualsensectl
+      # Controllers
+      dualsensectl
 
-    # Vulkan tools
-    vulkan-tools
-    vulkan-loader
-    vulkan-validation-layers
-    vulkan-extension-layer
+      # Vulkan tools
+      vulkan-tools
+      vulkan-loader
+      vulkan-validation-layers
+      vulkan-extension-layer
 
-    # OpenGL Tools
-    libGLU
-  ]) ++ (with args.pkgs-stable; [
-    # Launchers
-    lutris
-    bottles
-  ]);
+      # OpenGL Tools
+      libGLU
+    ])
+    ++ (with args.pkgs-stable; [
+      # Launchers
+      lutris
+      bottles
+    ]);
 
   environment.sessionVariables = {
     STEAM_EXTRA_COMPAT_TOOLS_PATHS = "$HOME/.steam/root/compatibilitytools.d";
@@ -71,6 +76,4 @@
   services.udev.extraRules = ''
     KERNEL=="hidraw*", SUBSYSTEM=="hidraw", MODE="0666"
   '';
-
 }
-

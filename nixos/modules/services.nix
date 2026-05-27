@@ -1,7 +1,9 @@
-{ config, lib, pkgs, ... }:
-
 {
-
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
   ## Enable services
   # XDG
   xdg.autostart.enable = true;
@@ -15,8 +17,8 @@
     serviceConfig = {
       ExecStart = "${pkgs.atuin}/bin/atuin daemon";
     };
-    after = [ "network.target" ];
-    wantedBy = [ "default.target" ];
+    after = ["network.target"];
+    wantedBy = ["default.target"];
   };
 
   ## Gaming specialization: reduce logging overhead
@@ -28,5 +30,4 @@
       '';
     };
   };
-
 }

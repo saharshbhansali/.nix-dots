@@ -1,13 +1,17 @@
-{ config, pkgs, lib, inputs, ... }:
 {
-
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}: {
   # imports = [
   #   ./sddm.nix
   # ];
 
   xdg.portal = {
     enable = true;
-    extraPortals = [ pkgs.kdePackages.xdg-desktop-portal-kde ];
+    extraPortals = [pkgs.kdePackages.xdg-desktop-portal-kde];
   };
   xdg.portal.config.common.default = "*";
 
@@ -22,5 +26,4 @@
     kdePackages.kdbusaddons
     kontainer
   ];
-
 }

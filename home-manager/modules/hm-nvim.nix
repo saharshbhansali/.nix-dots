@@ -1,7 +1,10 @@
-{ config, lib, pkgs, inputs, ... }:
-
 {
-
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}: {
   imports = [
     inputs.nixvim.homeModules.nixvim
     inputs.nixCatsNvim.homeModules.default
@@ -353,5 +356,4 @@
   #     vim-dadbod-completion.enable = true;
   #   };
   # };
-
 }

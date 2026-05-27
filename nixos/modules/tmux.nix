@@ -1,7 +1,10 @@
-{ config, pkgs, lib, inputs, ... }:
-
 {
-
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}: {
   environment.systemPackages = with pkgs; [
     tmux
   ];
@@ -15,5 +18,4 @@
     "L+ /root/.config/tmux - - - - /etc/tmux"
     "L+ /root/.config/oh-my-tmux - - - - /etc/oh-my-tmux"
   ];
-
 }

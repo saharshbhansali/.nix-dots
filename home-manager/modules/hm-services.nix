@@ -1,14 +1,17 @@
-{ config, lib, pkgs, inputs, ... }:
-
 {
-
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}: {
   # Services
   # Autostart vicinae via systemd
   systemd.user.services.vicinae-autostart = {
     Unit = {
       Description = "Vicinae Server Daemon";
-      After = [ "graphical-session-pre.target" ];
-      PartOf = [ "graphical-session.target" ];
+      After = ["graphical-session-pre.target"];
+      PartOf = ["graphical-session.target"];
     };
 
     Service = {
@@ -40,8 +43,7 @@
 
     Install = {
       # Ensure the service is enabled and starts with the graphical session.
-      WantedBy = [ "graphical-session.target" ];
+      WantedBy = ["graphical-session.target"];
     };
   };
-
 }

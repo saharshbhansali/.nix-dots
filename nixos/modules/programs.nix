@@ -1,7 +1,10 @@
-{ pkgs, nixpkgs, lib, config, ... }:
-
 {
-
+  pkgs,
+  nixpkgs,
+  lib,
+  config,
+  ...
+}: {
   ## Core programs
   # git
   programs.git.enable = true;
@@ -12,5 +15,4 @@
   ## Other programs
   # KDE connect
   programs.kdeconnect.enable = true;
-
 }

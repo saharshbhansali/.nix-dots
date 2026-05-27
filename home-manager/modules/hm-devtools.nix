@@ -1,8 +1,10 @@
-
-{ config, lib, pkgs, inputs, ... }:
-
 {
-
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}: {
   ## User level packages
   home.packages = with pkgs; [
     # Omnix: improved DevEx on nixos - https://omnix.page
@@ -51,5 +53,4 @@
     # AWS CLI
     awscli2
   ];
-
 }

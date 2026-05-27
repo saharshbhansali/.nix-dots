@@ -1,14 +1,17 @@
-{ pkgs, config, lib, inputs, ... }:
-
 {
-
+  pkgs,
+  config,
+  lib,
+  inputs,
+  ...
+}: {
   # imports = [
   #   ./gdm.nix
   # ];
 
   xdg.portal = {
     enable = true;
-    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+    extraPortals = [pkgs.xdg-desktop-portal-gtk];
   };
   xdg.portal.config.common.default = "*";
 
@@ -21,7 +24,6 @@
 
   # GNOME Tweaks
   environment.systemPackages = with pkgs; [
-
     gdm-settings
     # gsettings
     nwg-look

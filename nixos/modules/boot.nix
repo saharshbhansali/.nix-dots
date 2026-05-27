@@ -1,15 +1,18 @@
-{ config, lib, pkgs, ... }:
 {
-
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
   environment.systemPackages = with pkgs; [
     catppuccin-grub
   ];
 
   ## Performance-optimized kernel parameters
   boot.kernelParams = [
-    "iommu=pt"              # Pass-through IOMMU for better device performance
-    "schedutil"             # Better CPU governor for desktop responsiveness
-    "debug=0"               # Disable kernel debugging overhead
+    "iommu=pt" # Pass-through IOMMU for better device performance
+    "schedutil" # Better CPU governor for desktop responsiveness
+    "debug=0" # Disable kernel debugging overhead
   ];
 
   ## Config hibernate/suspend/resume settings (via systemd)
@@ -21,12 +24,12 @@
     gaming.configuration = {
       # Gaming-optimized kernel params
       boot.kernelParams = [
-        "iommu=pt"              # Pass-through IOMMU
-        "queue_depth=32"        # Better I/O for games
+        "iommu=pt" # Pass-through IOMMU
+        "queue_depth=32" # Better I/O for games
       ];
 
       # Increase VM max map count for some games (default: 65530)
-      boot.kernel.sysctl."vm.max_map_count" = 524288;  # 512k - sufficient for games without excessive limits
+      boot.kernel.sysctl."vm.max_map_count" = 524288; # 512k - sufficient for games without excessive limits
     };
   };
 
@@ -58,5 +61,4 @@
       # };
     };
   };
-
 }
