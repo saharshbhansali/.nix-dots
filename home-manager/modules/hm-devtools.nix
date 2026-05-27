@@ -5,6 +5,8 @@
 
   ## User level packages
   home.packages = with pkgs; [
+    # Omnix: improved DevEx on nixos - https://omnix.page
+    omnix
 
     # ## VS Code
     vscode-fhs
