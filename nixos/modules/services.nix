@@ -8,6 +8,22 @@
   # XDG
   xdg.autostart.enable = true;
 
+  # Allow unprivileged users to manage their own cgroup hierarchies
+  systemd.services."user@".serviceConfig.Delegate = "cpu cpuset io memory pids";
+
+  systemd.packages = [
+    (
+      pkgs.writeTextFile {
+        name = "delegate.conf";
+        text = ''
+          [Service]
+          Delegate=yes
+        '';
+        destination = "/etc/systemd/system/user@.service.d/delegate.conf";
+      }
+    )
+  ];
+
   # Atuin daemon
   systemd.user.services.atuind = {
     enable = true;
