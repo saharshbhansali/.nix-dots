@@ -451,11 +451,11 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1775653219,
-        "narHash": "sha256-u1u114cvZ1mJGLP5cX2mxJWV99pnOGuuK+gdGmZaZJk=",
+        "lastModified": 1780212548,
+        "narHash": "sha256-EvcgiWu1wVY7+3VHBJXCnNb5c2SNfvIo2Wqv35ku6uM=",
         "owner": "saharshbhansali",
         "repo": "nixCatsNvim",
-        "rev": "3bda5e769a3212b465c99dcb3c4572104c07f651",
+        "rev": "159f85aa796e51202f64d670613039ae1bf6ff80",
         "type": "github"
       },
       "original": {
@@ -493,11 +493,11 @@
         "nixpkgs": "nixpkgs_3"
       },
       "locked": {
-        "lastModified": 1773510963,
-        "narHash": "sha256-SaJGZgCTlXVlj0bhjTcQ3LPUP/RpDp/O7h8toRz5AVc=",
+        "lastModified": 1780211734,
+        "narHash": "sha256-xtlawbvlUmo1gRDpGaI5I2Gq42ck3AfA6ZX5IYNjrmM=",
         "owner": "saharshbhansali",
         "repo": "nixPatchNvim",
-        "rev": "8abe9944f62a87cf61e2789ef6208df8292331aa",
+        "rev": "c374b945b3a060cc4426c7e3827f1b5a298538b8",
         "type": "github"
       },
       "original": {
