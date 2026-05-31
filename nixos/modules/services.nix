@@ -37,6 +37,12 @@
     wantedBy = ["default.target"];
   };
 
+  # Plocate - system-wide file search
+  services.locate = {
+    enable = true;
+    interval = "daily";
+  };
+
   ## Gaming specialization: reduce logging overhead
   specialisation = {
     gaming.configuration = {
