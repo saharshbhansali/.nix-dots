@@ -84,6 +84,9 @@
     file
 
     ## Container utils and tools
+    runc
+    crun
+    containerd
     lazydocker
     minikube
     kind
