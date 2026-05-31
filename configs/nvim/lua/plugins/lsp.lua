@@ -55,6 +55,22 @@ return {
         end,
     },
     {
+        "stevearc/conform.nvim",
+        event = { "BufWritePre" },
+        cmd = { "ConformInfo" },
+        opts = {
+            formatters_by_ft = {
+                -- Assign alejandra to format all .nix files
+                nix = { "alejandra" },
+            },
+            -- -- Optional: Enable format-on-save
+            -- format_on_save = {
+            --     timeout_ms = 500,
+            --     lsp_format = "fallback",
+            -- },
+        },
+    },
+    {
         "mason-org/mason.nvim",
         opts = function(_, opts)
             opts.ensure_installed = { "pyrefly", "jupytext" }
