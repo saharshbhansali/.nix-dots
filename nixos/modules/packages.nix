@@ -87,6 +87,8 @@
     lazydocker
     minikube
     kind
+    k3s
+    k3d
     kubernetes
     # kubernetes-helm
     kubernetes-helm-wrapped
