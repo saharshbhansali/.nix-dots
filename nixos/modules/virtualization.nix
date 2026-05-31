@@ -29,6 +29,12 @@
         enable = true;
         setSocketVariable = true;
       };
+      autoPrune = {
+        enable = true;
+        persistent = true;
+        randomizedDelaySec = "15min";
+        dates = "monthly";
+      };
     };
   };
 
