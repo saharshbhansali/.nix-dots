@@ -39,6 +39,9 @@
   ## Nix store optimisation on every build
   nix.settings.auto-optimise-store = true;
 
+  ## Auto clean /tmp on boot
+  boot.tmp.cleanOnBoot = true;
+
   ## BTRFS optimizations
 
   ## Scrubbing
