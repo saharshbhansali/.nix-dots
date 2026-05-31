@@ -36,6 +36,9 @@
     options = "--delete-older-than 30d";
   };
 
+  ## Nix store optimisation on every build
+  nix.settings.auto-optimise-store = true;
+
   ## BTRFS optimizations
 
   ## Scrubbing
