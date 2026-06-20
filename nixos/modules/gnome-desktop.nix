@@ -64,7 +64,7 @@
     gnomeExtensions.boost-volume
     gnomeExtensions.yakuake
     # gnomeExtensions.zilence
-    gnomeExtensions.wallhub
+    # gnomeExtensions.wallhub
     gnomeExtensions.dev-container-manager
     gnomeExtensions.unblank
     gnomeExtensions.vicinae
