@@ -92,6 +92,7 @@
     kind
     k3s
     k3d
+    k0sctl
     kubernetes
     # kubernetes-helm
     kubernetes-helm-wrapped
