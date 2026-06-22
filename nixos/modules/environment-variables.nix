@@ -9,5 +9,6 @@
   environment.sessionVariables = {
     EDITOR = "nvim";
     DOTNET_SYSTEM_GLOBALIZATION_INVARIANT = "1";
+    KIND_EXPERIMENTAL_PROVIDER = "podman";
   };
 }

@@ -10,5 +10,6 @@
     EDITOR = "nvim";
     # QT_QPA_PLATFORMTHEME = "kvantum";
     DOTNET_SYSTEM_GLOBALIZATION_INVARIANT = "1";
+    KIND_EXPERIMENTAL_PROVIDER = "podman";
   };
 }
