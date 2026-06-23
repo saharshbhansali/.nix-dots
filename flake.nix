@@ -123,7 +123,7 @@
 
           # Pass flake inputs to home-manager modules
           home-manager.extraSpecialArgs = {
-            inherit inputs home-manager username;
+            inherit inputs home-manager username pkgs-stable;
           };
         }
       ];
