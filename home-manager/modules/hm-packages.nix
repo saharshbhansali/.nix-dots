@@ -32,6 +32,7 @@
     # ventoy
     # ventoy-full-qt
     # ventoy-full-gtk
+    impression
     spacedrive
 
     ## Spotify
