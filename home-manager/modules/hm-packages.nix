@@ -9,8 +9,8 @@
   # nixpkgs.config.allowUnfree = true;
 
   ## User level packages
-  home.packages =
-    with pkgs; [
+  home.packages = with pkgs;
+    [
       ## Terminal programs
       chezmoi
       grc
@@ -34,7 +34,7 @@
       # ventoy-full-qt
       # ventoy-full-gtk
       impression
-      spacedrive
+      # spacedrive
 
       ## Spotify
       # spotify
@@ -151,9 +151,9 @@
       # ])
       anki
     ]
-    # ++ (
-    #   with args.pkgs-stable; [
-    #   ]
-    # )
-    ;
+    ++ (
+      with args.pkgs-stable; [
+        spacedrive
+      ]
+    );
 }
