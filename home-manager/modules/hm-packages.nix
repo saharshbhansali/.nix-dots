@@ -143,12 +143,13 @@
       whatsapp-electron
 
       # Anki
-      (anki.withAddons [
-        ankiAddons.passfail2
-        ankiAddons.anki-connect
-        ankiAddons.review-heatmap
-        ankiAddons.fsrs4anki-helper
-      ])
+      # (anki.withAddons [
+      #   ankiAddons.passfail2
+      #   ankiAddons.anki-connect
+      #   ankiAddons.review-heatmap
+      #   ankiAddons.fsrs4anki-helper
+      # ])
+      anki
     ]
     # ++ (
     #   with args.pkgs-stable; [
