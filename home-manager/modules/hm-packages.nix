@@ -141,6 +141,14 @@
       # wasistlos
       karere
       whatsapp-electron
+
+      # Anki
+      (anki.withAddons [
+        ankiAddons.passfail2
+        ankiAddons.anki-connect
+        ankiAddons.review-heatmap
+        ankiAddons.fsrs4anki-helper
+      ])
     ]
     # ++ (
     #   with args.pkgs-stable; [
