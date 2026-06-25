@@ -274,7 +274,7 @@
 
       ## Security
       bitwarden-cli
-      bitwarden-desktop
+      (bitwarden-desktop.override {electron_39 = electron_39-bin;})
       bitwarden-menu
       ente-auth
       tor-browser
