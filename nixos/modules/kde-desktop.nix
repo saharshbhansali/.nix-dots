@@ -26,4 +26,8 @@
     kdePackages.kdbusaddons
     kontainer
   ];
+
+  environment.plasma6.excludePackages = with pkgs.kdePackages; [
+    elisa
+  ];
 }
