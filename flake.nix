@@ -87,10 +87,6 @@
     ...
   } @ inputs: let
     system = "x86_64-linux";
-    pkgs = import nixpkgs {
-      inherit system;
-      config.allowUnfree = true;
-    };
     pkgs-stable = import nixpkgs-stable {
       inherit system;
       config.allowUnfree = true;
@@ -102,7 +98,6 @@
       specialArgs = {
         inherit
           inputs
-          pkgs
           pkgs-stable
           username
           ;
@@ -110,6 +105,12 @@
       modules = [
         ./hardware-configuration.nix
         ./nixos/hosts/default.nix
+
+        {
+          nixpkgs.config = {
+            allowUnfree = true;
+          };
+        }
 
         # Home Manager as NixOS module
         home-manager.nixosModules.home-manager
