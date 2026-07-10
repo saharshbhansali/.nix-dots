@@ -7,6 +7,7 @@
 }: {
   ## Set cursor configuration and theme in home-manager
   home.pointerCursor = {
+    enable = true;
     gtk.enable = true;
     x11.enable = true;
     hyprcursor.enable = true;
