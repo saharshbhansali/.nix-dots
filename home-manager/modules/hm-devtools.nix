@@ -38,7 +38,7 @@
     ## AI editors
     # code-cursor
     code-cursor-fhs
-    windsurf
+    devin-desktop # formerly: windsurf
     # zed-editor
     zed-editor-fhs
 
