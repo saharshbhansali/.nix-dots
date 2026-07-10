@@ -87,7 +87,7 @@
       ollama
       lmstudio
       # ollama-cuda
-      open-webui
+      # open-webui
       kdePackages.alpaka
       alpaca
       oterm
@@ -154,6 +154,7 @@
     ++ (
       with args.pkgs-stable; [
         spacedrive
+        # open-webui
       ]
     );
 }
