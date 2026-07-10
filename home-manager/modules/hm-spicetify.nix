@@ -23,9 +23,9 @@
     alwaysEnableDevTools = true;
 
     ## Example
-    # theme = spicePkgs.themes.catppuccin;
-    # colorScheme = "mocha";
-    theme = spicePkgs.themes.text;
+    theme = spicePkgs.themes.catppuccin;
+    colorScheme = "mocha";
+    # theme = spicePkgs.themes.text;
 
     enabledExtensions = with spicePkgs.extensions; [
       ## Example
