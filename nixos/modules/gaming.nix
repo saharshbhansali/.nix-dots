@@ -55,7 +55,6 @@
       # Vulkan tools
       vulkan-tools
       vulkan-loader
-      vulkan-validation-layers
       vulkan-extension-layer
 
       # OpenGL Tools
@@ -65,6 +64,7 @@
       # Launchers
       lutris
       bottles
+      vulkan-validation-layers
     ]);
 
   environment.sessionVariables = {
