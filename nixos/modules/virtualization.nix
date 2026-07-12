@@ -55,5 +55,6 @@
     podman-tui # status of containers in the terminal
     podman-desktop # graphical tool for developing on containers and Kubernetes
     pods # podman desktop application
+    slirp4netns
   ];
 }
