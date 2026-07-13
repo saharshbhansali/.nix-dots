@@ -89,7 +89,7 @@
       # ollama-cuda
       # open-webui
       kdePackages.alpaka
-      alpaca
+      # alpaca
       oterm
       litellm
 
