@@ -42,13 +42,13 @@
     gnomeExtensions.workspace-indicator
     gnomeExtensions.unmess
     gnomeExtensions.clipboard-indicator
-    gnomeExtensions.pano
+    # gnomeExtensions.pano
     gnomeExtensions.clipboard-history
     gnomeExtensions.vitals
     # gnomeExtensions.cmud
     gnomeExtensions.forge
     gnomeExtensions.tiling-shell
-    gnomeExtensions.tilingnome
+    # gnomeExtensions.tilingnome
     gnomeExtensions.paperwm
     gnomeExtensions.focus
     # gnomeExtensions.freon
