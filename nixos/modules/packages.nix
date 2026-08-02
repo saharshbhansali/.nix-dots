@@ -8,7 +8,8 @@
 } @ args: {
   # nixpkgs.config.allowUnfree = true;
   nixpkgs.config.permittedInsecurePackages = [
-    "electron-39.8.10"
+    # "electron-39.8.10"
+    "electron-40.10.5"
   ];
 
   # Nix Index database (pre-populated nix-index)
@@ -274,7 +275,8 @@
 
       ## Security
       bitwarden-cli
-      (bitwarden-desktop.override {electron_39 = electron_39-bin;})
+      bitwarden-desktop
+      # (bitwarden-desktop.override {electron_39 = electron_39-bin;})
       bitwarden-menu
       ente-auth
       tor-browser
