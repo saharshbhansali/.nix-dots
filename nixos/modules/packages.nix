@@ -222,15 +222,17 @@
       gnumake # make build tool
       cmake # cmake build system
       python-launcher # python version manager
-      pipx # install python packages globally
+      # pipx # install python packages globally
       python314 # python 3.14 interpreter
       python314Packages.uv # python 3.14 package manager
       python314Packages.pip # python 3.14 package manager
       python314Packages.virtualenv # python 3.14 virtual environment
+      # python314Packages.pipx # python 3.14 global package installer
       python313 # python 3.13 interpreter
       python313Packages.uv # python 3.14 package manager
       python313Packages.pip # python 3.13 package manager
       python313Packages.virtualenv # python 3.13 virtual environment
+      python313Packages.pipx # python 3.13 global package installer
       asdf-vm # asdf version manager
       mise # mise version manager
       volta # node version manager
