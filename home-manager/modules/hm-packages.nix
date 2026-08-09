@@ -98,6 +98,7 @@
       claude-code
       # vimPlugins.opencode-nvim
       # vimPlugins.claudecode-nvim
+      inputs.perplexityai-bumblebee.packages.${stdenv.hostPlatform.system}.default
 
       ## Media
       # mpv and vlc are in system packages (nixos/modules/packages.nix)

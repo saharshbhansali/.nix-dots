@@ -676,6 +676,26 @@
         "type": "github"
       }
     },
+    "perplexityai-bumblebee": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1779898399,
+        "narHash": "sha256-IaAWhSy//gTF6whvhBXiTp71mJnJSrPspjYeOvFEQBI=",
+        "owner": "saharshbhansali",
+        "repo": "perplexityai-bumblebee-flake",
+        "rev": "fa2d1682f18f0efe7b48703727746b97b064f2f6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "saharshbhansali",
+        "repo": "perplexityai-bumblebee-flake",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "browseros-ai": "browseros-ai",
@@ -689,6 +709,7 @@
         "nixpkgs-stable": "nixpkgs-stable",
         "nixvim": "nixvim",
         "nur": "nur",
+        "perplexityai-bumblebee": "perplexityai-bumblebee",
         "spicetify-nix": "spicetify-nix",
         "zen-browser": "zen-browser"
       }

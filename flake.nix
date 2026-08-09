@@ -76,6 +76,11 @@
       url = "github:Hill-Brandon-M/browseros-ai";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    perplexityai-bumblebee = {
+      url = "github:saharshbhansali/perplexityai-bumblebee-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
