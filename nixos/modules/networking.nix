@@ -96,7 +96,7 @@ in {
   programs.captive-browser.interface = "wlo1";
 
   # Enable the WARP daemon (manual start only)
-  services.cloudflare-warp.enable = true;
+  services.cloudflare-warp.enable = false;
   systemd.services.cloudflare-warp.wantedBy = lib.mkForce []; # Don't auto-start
   # Manual activation: warp-cli enable or systemctl start cloudflare-warp
 

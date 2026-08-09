@@ -78,7 +78,7 @@
 
       ## VPN software
       proton-vpn
-      cloudflare-warp
+      # cloudflare-warp
       cloudflare-cli
       wgcf
 
