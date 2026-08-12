@@ -96,6 +96,7 @@
       # AI Coding agents
       opencode
       claude-code
+      docker-sbx
       # vimPlugins.opencode-nvim
       # vimPlugins.claudecode-nvim
       inputs.perplexityai-bumblebee.packages.${stdenv.hostPlatform.system}.default
