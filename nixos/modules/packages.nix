@@ -101,7 +101,7 @@
       kubernetes
       # kubernetes-helm
       kubernetes-helm-wrapped
-      kubectl
+      (lib.hiPrio kubectl)
       kubernix
 
       ## Zip utils
