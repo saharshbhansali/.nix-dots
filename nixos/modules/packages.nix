@@ -294,10 +294,6 @@
       thunar
       thunar-archive-plugin
 
-      ## VM Software
-      vmware-workstation
-      qemu
-
       ## RDP Software
       freerdp
       xrdp

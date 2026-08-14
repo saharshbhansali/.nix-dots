@@ -6,7 +6,7 @@
   ...
 } @ args: {
   # Add user to groups for containerization
-  users.users.${args.username}.extraGroups = ["podman"];
+  users.users.${args.username}.extraGroups = ["podman" "libvirtd" "kvm"];
 
   # Enable containerization
   virtualisation.containers.enable = true;
@@ -36,7 +36,15 @@
         dates = "monthly";
       };
     };
+
+    libvirtd = {
+      enable = true;
+      qemu.swtpm.enable = true; # Optional: TPM support (e.g., for Windows 11)
+    };
+    spiceUSBRedirection.enable = true;
   };
+
+  programs.virt-manager.enable = true;
 
   boot.binfmt = {
     emulatedSystems = ["aarch64-linux"];
@@ -60,5 +68,20 @@
     # Misc utils
     dive # look into docker image layers
     slirp4netns # user-mode TCP/IP networking (via slirp) for unprivileged Linux network namespaces
+    ## Virtualization
+    # VMWare
+    vmware-workstation
+    # QEMU
+    qemu
+    qemu-user # QEMU userspace emulator
+    qemu-utils
+    # Virt-Manager
+    virt-manager
+    virt-viewer
+    # Misc
+    spice
+    spice-gtk
+    spice-protocol
+    virtio-win
   ];
 }
