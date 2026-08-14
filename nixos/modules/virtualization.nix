@@ -49,12 +49,16 @@
 
   # Useful other development tools
   environment.systemPackages = with pkgs; [
-    dive # look into docker image layers
+    ## Containerization
+    # Docker
     docker-compose # docker - start group of containers for dev
+    # Podman
     podman-compose # podman - start group of containers for dev
     podman-tui # status of containers in the terminal
     podman-desktop # graphical tool for developing on containers and Kubernetes
     pods # podman desktop application
-    slirp4netns
+    # Misc utils
+    dive # look into docker image layers
+    slirp4netns # user-mode TCP/IP networking (via slirp) for unprivileged Linux network namespaces
   ];
 }
