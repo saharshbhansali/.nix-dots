@@ -65,9 +65,14 @@
     podman-tui # status of containers in the terminal
     podman-desktop # graphical tool for developing on containers and Kubernetes
     pods # podman desktop application
-    # Misc utils
+    ## Container utils and tools
     dive # look into docker image layers
     slirp4netns # user-mode TCP/IP networking (via slirp) for unprivileged Linux network namespaces
+    runc
+    crun
+    containerd
+    lazydocker
+
     ## Virtualization
     # VMWare
     vmware-workstation
@@ -83,5 +88,17 @@
     spice-gtk
     spice-protocol
     virtio-win
+
+    ## Kubernetes
+    minikube
+    kind
+    k3s
+    k3d
+    k0sctl
+    kubernetes
+    # kubernetes-helm
+    kubernetes-helm-wrapped
+    (lib.hiPrio kubectl)
+    kubernix
   ];
 }

@@ -88,22 +88,6 @@
       strace
       file
 
-      ## Container utils and tools
-      runc
-      crun
-      containerd
-      lazydocker
-      minikube
-      kind
-      k3s
-      k3d
-      k0sctl
-      kubernetes
-      # kubernetes-helm
-      kubernetes-helm-wrapped
-      (lib.hiPrio kubectl)
-      kubernix
-
       ## Zip utils
       gzip
       zip
