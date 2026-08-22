@@ -48,6 +48,11 @@ in {
     recursive = true;
   };
 
+  home.file.".config/tmux-which-key" = {
+    source = ../../configs/tmux-which-key;
+    recursive = true;
+  };
+
   home.file.".config/kitty" = {
     source = ../../configs/kitty;
     recursive = true;
