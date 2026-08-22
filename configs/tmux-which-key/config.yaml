@@ -71,6 +71,10 @@ items:
   - name: +Copy
     key: c
     menu:
+      - name: Back
+        key: Bspace
+        command: 'show-wk-menu #{@wk_menu_root}'
+      - separator: true
       - name: List buffers
         key: l
         command: lsb
@@ -104,6 +108,10 @@ items:
   - name: +Windows
     key: w
     menu:
+      - name: Back
+        key: Bspace
+        command: 'show-wk-menu #{@wk_menu_root}'
+      - separator: true
       - name: Last
         key: tab
         command: last-window
@@ -193,6 +201,10 @@ items:
       - name: +Layout
         key: l
         menu:
+          - name: Back
+            key: Bspace
+            command: 'show-wk-menu #{@wk_menu_windows}'
+          - separator: true
           - name: Next
             key: l
             command: nextl
@@ -264,6 +276,10 @@ items:
   - name: +Panes
     key: p
     menu:
+      - name: Back
+        key: Bspace
+        command: 'show-wk-menu #{@wk_menu_root}'
+      - separator: true
       - name: Last
         key: tab
         command: lastp
@@ -331,6 +347,10 @@ items:
       - name: +Resize
         key: r
         menu:
+          - name: Back
+            key: Bspace
+            command: 'show-wk-menu #{@wk_menu_panes}'
+          - separator: true
           # Single step resize
           - name: Left
             key: h
@@ -408,6 +428,10 @@ items:
   - name: +Buffers
     key: b
     menu:
+      - name: Back
+        key: Bspace
+        command: 'show-wk-menu #{@wk_menu_root}'
+      - separator: true
       - name: Choose
         key: c
         command: choose-buffer -Z
@@ -437,6 +461,10 @@ items:
   - name: +Sessions
     key: s
     menu:
+      - name: Back
+        key: Bspace
+        command: 'show-wk-menu #{@wk_menu_root}'
+      - separator: true
       - name: Choose
         key: s
         command: choose-tree -Zs
@@ -482,6 +510,10 @@ items:
   - name: +Client
     key: C
     menu:
+      - name: Back
+        key: Bspace
+        command: 'show-wk-menu #{@wk_menu_root}'
+      - separator: true
       - name: List clients
         key: l
         command: listc
@@ -517,6 +549,10 @@ items:
       - name: +Plugins
         key: P
         menu:
+          - name: Back
+            key: Bspace
+            command: 'show-wk-menu #{@wk_menu_client}'
+          - separator: true
           - name: Install
             key: i
             command: run-shell ~/.tmux/plugins/tpm/scripts/install_plugins.sh
@@ -535,6 +571,10 @@ items:
   - name: +Git
     key: g
     menu:
+      - name: Back
+        key: Bspace
+        command: 'show-wk-menu #{@wk_menu_root}'
+      - separator: true
       - name: Status
         key: s
         command: run-shell -b "git status"
@@ -571,6 +611,10 @@ items:
   - name: +Layouts
     key: l
     menu:
+      - name: Back
+        key: Bspace
+        command: 'show-wk-menu #{@wk_menu_root}'
+      - separator: true
       - name: Next layout
         key: n
         command: nextl
@@ -616,6 +660,10 @@ items:
   - name: +Options
     key: o
     menu:
+      - name: Back
+        key: Bspace
+        command: 'show-wk-menu #{@wk_menu_root}'
+      - separator: true
       - name: Show global options
         key: g
         command: show-options -g
@@ -647,6 +695,10 @@ items:
   - name: +Navigation
     key: n
     menu:
+      - name: Back
+        key: Bspace
+        command: 'show-wk-menu #{@wk_menu_root}'
+      - separator: true
       # Alt-arrow pane navigation
       - name: Left Alt+Left
         key: h
