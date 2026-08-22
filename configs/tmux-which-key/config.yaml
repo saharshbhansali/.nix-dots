@@ -1,8 +1,8 @@
 # yaml-language-server: $schema=config.schema.yaml
 command_alias_start_index: 200
 keybindings:
-  # root_table: C-Space
   prefix_table: Space
+  root_table: M-w
 title:
   style: align=centre,bold
   prefix: tmux
@@ -23,9 +23,13 @@ macros:
     commands:
       - display "#{log_info} Restarting pane"
       - 'respawnp -k -c #{pane_current_path}'
+  - name: maximize-pane
+    commands:
+      - run-shell "resize-pane -Z"
 items:
-  - name: Run
-    key: space
+  # === CORE BINDINGS ===
+  - name: Command prompt
+    key: ':'
     command: command-prompt
   - name: Last window
     key: tab
@@ -33,15 +37,69 @@ items:
   - name: Last pane
     key: '`'
     command: last-pane
-  - name: Copy
+
+  # === SYSTEM & INFO ===
+  - name: Time
+    key: t
+    command: clock-mode
+  - name: Show messages
+    key: '~'
+    command: show-messages
+  - name: List keys
+    key: '?'
+    command: list-keys -N
+  - name: Display panes
+    key: d
+    command: display-panes
+  - name: Toggle mouse
+    key: m
+    command: set -g option mouse
+  - name: Clear screen
+    key: K
+    command: run-shell "clear"
+
+  # === CONFIGURATION ===
+  - name: Reload config
+    key: r
+    command: run-shell "tmux source-file ~/.tmux.conf"
+
+  # === COPY & BUFFERS ===
+  - separator: true
+  - name: Copy mode
+    key: y
+    command: copy-mode
+  - name: +Copy
     key: c
     menu:
-      - name: Copy
-        key: c
-        command: copy-mode
       - name: List buffers
-        key: '#'
-        command: list-buffers
+        key: l
+        command: lsb
+      - name: Paste
+        key: p
+        command: pasteb
+      - name: Choose buffer
+        key: b
+        command: choose-buffer -Z
+      - name: Delete buffer
+        key: d
+        command: command-prompt -p "Delete buffer:" "delete-buffer -b '%%'"
+      - name: Save buffer
+        key: s
+        command: command-prompt -p "Save to:" "save-buffer '%%'"
+      - name: Load buffer
+        key: L
+        command: command-prompt -p "Load from:" "load-buffer '%%'"
+      - name: Show buffer
+        key: v
+        command: run-shell "tmux show-buffer | less"
+      - name: Copy to clipboard
+        key: y
+        command: run-shell "tmux save-buffer - | wl-copy"
+      - name: Capture pane
+        key: C
+        command: capture-pane
+
+  # === WINDOWS ===
   - separator: true
   - name: +Windows
     key: w
@@ -52,16 +110,86 @@ items:
       - name: Choose
         key: w
         command: choose-tree -Zw
+      # Must stay quoted: unquoted, YAML treats " #" before #{window_name}
+      # as a comment and truncates this command (breaks @wk_menu_windows).
+      # Inner single quotes are doubled ('') per YAML escaping.
+      - name: Find window
+        key: f
+        command: 'run-shell "tmux list-windows -a -F ''#S:#I  #{window_name}  [#{pane_current_command}]'' | less"'
+      - separator: true
+      # Navigation (oh-my-tmux defaults + custom)
       - name: Previous
-        key: p
+        key: ','
         command: previous-window
       - name: Next
-        key: n
+        key: '.'
         command: next-window
+      # Custom prefix-free navigation (from patch)
+      - name: Previous Alt+H
+        key: '[M-H]'
+        command: previous-window
+      - name: Next Alt+L
+        key: '[M-L]'
+        command: next-window
+      - name: Previous Shift+Left
+        key: '[S-Left]'
+        command: previous-window
+      - name: Next Shift+Right
+        key: '[S-Right]'
+        command: next-window
+      - name: Previous Ctrl+H
+        key: '[C-h]'
+        command: previous-window
+      - name: Next Ctrl+L
+        key: '[C-l]'
+        command: next-window
+      - name: Swap left Ctrl+Shift+H
+        key: '[C-S-H]'
+        command: 'swap-window -t -1 \; select-window -t -1'
+      - name: Swap right Ctrl+Shift+L
+        key: '[C-S-L]'
+        command: 'swap-window -t +1 \; select-window -t +1'
+      - separator: true
+      - name: New
+        key: n
+        command: 'neww -c #{pane_current_path}'
       - name: New
         key: c
         command: 'neww -c #{pane_current_path}'
       - separator: true
+      # Window selection 1-10
+      - name: Select window 1
+        key: '1'
+        command: select-window -t :=1
+      - name: Select window 2
+        key: '2'
+        command: select-window -t :=2
+      - name: Select window 3
+        key: '3'
+        command: select-window -t :=3
+      - name: Select window 4
+        key: '4'
+        command: select-window -t :=4
+      - name: Select window 5
+        key: '5'
+        command: select-window -t :=5
+      - name: Select window 6
+        key: '6'
+        command: select-window -t :=6
+      - name: Select window 7
+        key: '7'
+        command: select-window -t :=7
+      - name: Select window 8
+        key: '8'
+        command: select-window -t :=8
+      - name: Select window 9
+        key: '9'
+        command: select-window -t :=9
+      - name: Select window 10
+        key: '0'
+        command: select-window -t :=10
+      - separator: true
+      # Layouts
       - name: +Layout
         key: l
         menu:
@@ -69,14 +197,36 @@ items:
             key: l
             command: nextl
             transient: true
+          - name: Previous
+            key: p
+            command: previousl
+            transient: true
+          - separator: true
+          # Numbered layouts like JSON
+          - name: Layout 1 - Even horizontal
+            key: '1'
+            command: selectl even-horizontal
+          - name: Layout 2 - Even vertical
+            key: '2'
+            command: selectl even-vertical
+          - name: Layout 3 - Main horizontal
+            key: '3'
+            command: selectl main-horizontal
+          - name: Layout 4 - Main vertical
+            key: '4'
+            command: selectl main-vertical
+          - name: Layout 5 - Tiled
+            key: '5'
+            command: selectl tiled
+          - separator: true
           - name: Tiled
             key: t
-            command: selectnl tiled
-          - name: Horizontal
-            key: h
+            command: selectl tiled
+          - name: Even horizontal
+            key: e
             command: selectl even-horizontal
-          - name: Vertical
-            key: v
+          - name: Even vertical
+            key: E
             command: selectl even-vertical
           - name: Horizontal main
             key: H
@@ -84,27 +234,33 @@ items:
           - name: Vertical main
             key: V
             command: selectl main-vertical
+      # Splitting
       - name: Split horizontal
-        key: /
+        key: '_'
         command: 'splitw -h -c #{pane_current_path}'
       - name: Split vertical
         key: '-'
         command: 'splitw -v -c #{pane_current_path}'
+      # Operations
       - name: Rotate
-        key: o
+        key: R
         command: rotatew
-        transient: true
-      - name: Rotate reverse
-        key: O
-        command: rotatew -D
         transient: true
       - separator: true
       - name: Rename
-        key: R
+        key: r
         command: command-prompt -p "Rename window:" -I "#W" "renamew -- \"%%\""
+      - name: Move
+        key: m
+        command: command-prompt -p "Move to:" "movew -t \"%%\""
+      - name: Swap
+        key: s
+        command: command-prompt -p "Swap with:" "swapw -t \"%%\""
       - name: Kill
         key: X
         command: 'confirm -p "Kill window #W? (y/n)" killw'
+
+  # === PANES ===
   - name: +Panes
     key: p
     menu:
@@ -112,9 +268,13 @@ items:
         key: tab
         command: lastp
       - name: Choose
-        key: p
+        key: P
         command: displayp -d 0
+      - name: Join pane
+        key: J
+        command: command-prompt -p "Join from pane:" "join-pane -s \"%%\""
       - separator: true
+      # Vi-style navigation (oh-my-tmux defaults)
       - name: Left
         key: h
         command: selectp -L
@@ -127,50 +287,32 @@ items:
       - name: Right
         key: l
         command: selectp -R
+      # Custom prefix-free navigation (from patch)
+      - name: Left Alt+Left
+        key: '[M-Left]'
+        command: selectp -L
+      - name: Down Alt+Down
+        key: '[M-Down]'
+        command: selectp -D
+      - name: Up Alt+Up
+        key: '[M-Up]'
+        command: selectp -U
+      - name: Right Alt+Right
+        key: '[M-Right]'
+        command: selectp -R
       - separator: true
-      - name: Zoom
-        key: z
-        command: resizep -Z
-      - name: +Resize
-        key: r
-        menu:
-          - name: Left
-            key: h
-            command: resizep -L
-            transient: true
-          - name: Down
-            key: j
-            command: resizep -D
-            transient: true
-          - name: Up
-            key: k
-            command: resizep -U
-            transient: true
-          - name: Right
-            key: l
-            command: resizep -R
-            transient: true
-          - name: Left more
-            key: H
-            command: resizep -L 10
-            transient: true
-          - name: Down more
-            key: J
-            command: resizep -D 10
-            transient: true
-          - name: Up more
-            key: K
-            command: resizep -U 10
-            transient: true
-          - name: Right more
-            key: L
-            command: resizep -R 10
-            transient: true
+      # Swap operations
+      - name: Swap up
+        key: '<'
+        command: swapp -U
+      - name: Swap down
+        key: '>'
+        command: swapp -D
       - name: Swap left
         key: H
         command: swapp -t "{left-of}"
       - name: Swap down
-        key: J
+        key: D
         command: swapp -t "{down-of}"
       - name: Swap up
         key: K
@@ -178,6 +320,64 @@ items:
       - name: Swap right
         key: L
         command: swapp -t "{right-of}"
+      - separator: true
+      # Resize operations
+      - name: Zoom
+        key: z
+        command: resizep -Z
+      - name: Maximize
+        key: '+'
+        macro: maximize-pane
+      - name: +Resize
+        key: r
+        menu:
+          # Single step resize
+          - name: Left
+            key: h
+            command: resizep -L 5
+            transient: true
+          - name: Down
+            key: j
+            command: resizep -D 5
+            transient: true
+          - name: Up
+            key: k
+            command: resizep -U 5
+            transient: true
+          - name: Right
+            key: l
+            command: resizep -R 5
+            transient: true
+          # Smaller steps (2 cells)
+          - name: Left small
+            key: H
+            command: resizep -L 2
+            transient: true
+          - name: Down small
+            key: J
+            command: resizep -D 2
+            transient: true
+          - name: Up small
+            key: K
+            command: resizep -U 2
+            transient: true
+          - name: Right small
+            key: L
+            command: resizep -R 2
+            transient: true
+          # Custom Alt-number resize (from patch)
+          - name: Up Alt+8
+            key: '[M-8]'
+            command: resizep -U
+          - name: Down Alt+2
+            key: '[M-2]'
+            command: resizep -D
+          - name: Right Alt+6
+            key: '[M-6]'
+            command: resizep -R
+          - name: Left Alt+4
+            key: '[M-4]'
+            command: resizep -L
       - name: Break
         key: '!'
         command: break-pane
@@ -191,44 +391,105 @@ items:
       - name: Capture
         key: C
         command: capture-pane
+      - name: Capture to buffer
+        key: q
+        command: capture-pane
       - name: Respawn pane
-        key: R
-        macro: restart-pane
+        key: p
+        command: respawnp -k
+      - name: Clear history
+        key: c
+        command: clear-history
       - name: Kill
         key: X
         command: 'confirm -p "Kill pane #P? (y/n)" killp'
+
+  # === BUFFERS ===
   - name: +Buffers
     key: b
     menu:
       - name: Choose
-        key: b
+        key: c
         command: choose-buffer -Z
       - name: List
         key: l
         command: lsb
+      - name: List (detailed)
+        key: v
+        command: run-shell "tmux list-buffers | less"
       - name: Paste
         key: p
         command: pasteb
+      - name: Delete
+        key: d
+        command: command-prompt -p "Delete buffer:" "delete-buffer -b '%%'"
+      - name: Save
+        key: s
+        command: command-prompt -p "Save to:" "save-buffer '%%'"
+      - name: Load
+        key: L
+        command: command-prompt -p "Load from:" "load-buffer '%%'"
+      - name: Show
+        key: S
+        command: run-shell "tmux show-buffer | less"
+
+  # === SESSIONS ===
   - name: +Sessions
     key: s
     menu:
       - name: Choose
         key: s
         command: choose-tree -Zs
+      - name: Choose tree
+        key: w
+        command: choose-tree
       - name: New
-        key: N
+        key: n
+        command: new
+      - name: New
+        key: C
         command: new
       - name: Rename
         key: r
         command: command-prompt -p "Rename session:" -I "#S" "rename-session -- \"%%\""
+      - name: Find
+        key: f
+        command: command-prompt -p "(find-session)" "switch-client -t %%"
+      - name: List
+        key: l
+        command: list-sessions
+      - name: Lock
+        key: L
+        command: lockc
+      - separator: true
+      - name: Previous session
+        key: '('
+        command: switchc -p
+      - name: Next session
+        key: ')'
+        command: switchc -n
+      - name: Last session
+        key: '[Tab]'
+        command: switchc -l
+      - name: Kill
+        key: k
+        command: 'confirm -p "Kill session #S? (y/n)" kill-session'
+      - name: Detach
+        key: d
+        command: detach
+
+  # === CLIENT ===
   - name: +Client
     key: C
     menu:
+      - name: List clients
+        key: l
+        command: listc
       - name: Choose
         key: c
         command: choose-client -Z
       - name: Last
-        key: l
+        key: '[Tab]'
         command: switchc -l
       - name: Previous
         key: p
@@ -237,41 +498,210 @@ items:
         key: n
         command: switchc -n
       - separator: true
+      - name: Detach
+        key: d
+        command: detach
+      - name: Detach other
+        key: D
+        command: choose-client -Z "detach-client -t '%%'"
+      - name: Suspend
+        key: s
+        command: suspendc
+      - name: Lock
+        key: L
+        command: lockc
+      - separator: true
       - name: Refresh
-        key: R
+        key: r
         command: refresh
       - name: +Plugins
         key: P
         menu:
           - name: Install
             key: i
-            command: run-shell $TMUX_PLUGIN_MANAGER_PATH/tpm/bindings/install_plugins
+            command: run-shell ~/.tmux/plugins/tpm/scripts/install_plugins.sh
           - name: Update
             key: u
-            command: run-shell $TMUX_PLUGIN_MANAGER_PATH/tpm/bindings/update_plugins
-          - name: Clean
-            key: c
-            command: run-shell $TMUX_PLUGIN_MANAGER_PATH/tpm/bindings/clean_plugins
-      - name: Detach
-        key: D
-        command: detach
-      - name: Suspend
-        key: Z
-        command: suspendc
-      - separator: true
-      - name: Reload config
-        key: r
-        macro: reload-config
+            command: run-shell ~/.tmux/plugins/tpm/scripts/update_plugins.sh
+          - name: Uninstall
+            key: M-u
+            command: run-shell ~/.tmux/plugins/tpm/scripts/clean_plugins.sh
       - name: Customize
         key: ','
         command: customize-mode -Z
+
+  # === GIT ===
   - separator: true
-  - name: Time
-    key: T
-    command: clock-mode
-  - name: Show messages
-    key: '~'
-    command: show-messages
-  - name: +Keys
-    key: '?'
-    command: list-keys -N
+  - name: +Git
+    key: g
+    menu:
+      - name: Status
+        key: s
+        command: run-shell -b "git status"
+      - name: Diff
+        key: d
+        command: run-shell -b "git diff"
+      - name: Log
+        key: l
+        command: run-shell -b "git log --oneline -20"
+      - name: Push
+        key: p
+        command: run-shell -b "git push"
+      - name: Pull
+        key: P
+        command: run-shell -b "git pull"
+      - name: Branches
+        key: b
+        command: run-shell -b "git branch -a"
+      - name: Fetch all
+        key: f
+        command: run-shell -b "git fetch --all"
+      - name: Add patch
+        key: a
+        command: run-shell "git add -p"
+      - name: Commit
+        key: c
+        command: run-shell "git commit"
+      - name: Rebase continue
+        key: r
+        command: run-shell "git rebase --continue"
+
+  # === LAYOUTS ===
+  - separator: true
+  - name: +Layouts
+    key: l
+    menu:
+      - name: Next layout
+        key: n
+        command: nextl
+      - name: Previous layout
+        key: p
+        command: previousl
+      - separator: true
+      # Numbered layouts
+      - name: Layout 1 - Even horizontal
+        key: '1'
+        command: selectl even-horizontal
+      - name: Layout 2 - Even vertical
+        key: '2'
+        command: selectl even-vertical
+      - name: Layout 3 - Main horizontal
+        key: '3'
+        command: selectl main-horizontal
+      - name: Layout 4 - Main vertical
+        key: '4'
+        command: selectl main-vertical
+      - name: Layout 5 - Tiled
+        key: '5'
+        command: selectl tiled
+      - separator: true
+      - name: Tiled
+        key: t
+        command: selectl tiled
+      - name: Even horizontal
+        key: s
+        command: selectl even-horizontal
+      - name: Even vertical
+        key: E
+        command: selectl even-vertical
+      - name: Horizontal main
+        key: M
+        command: selectl main-horizontal
+      - name: Vertical main
+        key: m
+        command: selectl main-vertical
+
+  # === OPTIONS ===
+  - separator: true
+  - name: +Options
+    key: o
+    menu:
+      - name: Show global options
+        key: g
+        command: show-options -g
+      - name: Show window options
+        key: w
+        command: show-window-options -g
+      - name: Show environment
+        key: e
+        command: show-environment -g
+      # Quoting caveat: %1/%2 are unquoted on purpose. Top-level single quotes
+      # around the inner command broke the outer single-quoted menu string that
+      # build.py emits (caused "set-option: too many arguments"). If a value you
+      # set contains spaces, quote it manually at the prompt.
+      - name: Set option
+        key: s
+        command: command-prompt -p "Set option:,Value:" "set-option -g '%1' '%2'"
+      - name: Customize mode
+        key: c
+        command: customize-mode -Z
+      - name: Show messages
+        key: m
+        command: show-messages
+      - name: List commands
+        key: k
+        command: list-commands
+
+  # === NAVIGATION (prefix-free) ===
+  - separator: true
+  - name: +Navigation
+    key: n
+    menu:
+      # Alt-arrow pane navigation
+      - name: Left Alt+Left
+        key: h
+        command: selectp -L
+      - name: Down Alt+Down
+        key: j
+        command: selectp -D
+      - name: Up Alt+Up
+        key: k
+        command: selectp -U
+      - name: Right Alt+Right
+        key: l
+        command: selectp -R
+      # Alt-H/L window navigation
+      - name: Previous Alt+H
+        key: H
+        command: previous-window
+      - name: Next Alt+L
+        key: L
+        command: next-window
+      # Shift+Left/Right window navigation
+      - name: Previous Shift+Left
+        key: '[S-Left]'
+        command: previous-window
+      - name: Next Shift+Right
+        key: '[S-Right]'
+        command: next-window
+      # Ctrl+h/l window navigation
+      - name: Previous Ctrl+H
+        key: '[C-h]'
+        command: previous-window
+      - name: Next Ctrl+L
+        key: '[C-l]'
+        command: next-window
+      # Ctrl+Shift swap windows
+      - name: Swap left Ctrl+Shift+H
+        key: '[C-S-H]'
+        command: 'swap-window -t -1 \; select-window -t -1'
+      - name: Swap right Ctrl+Shift+L
+        key: '[C-S-L]'
+        command: 'swap-window -t +1 \; select-window -t +1'
+      # Alt-number resize
+      - name: Resize up Alt+8
+        key: '8'
+        command: resizep -U
+      - name: Resize down Alt+2
+        key: '2'
+        command: resizep -D
+      - name: Resize right Alt+6
+        key: '6'
+        command: resizep -R
+      - name: Resize left Alt+4
+        key: '4'
+        command: resizep -L
+      # Last window Tab
+      - name: Last window Tab
+        key: '[Tab]'
+        command: last-window
