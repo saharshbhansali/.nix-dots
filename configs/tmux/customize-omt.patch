@@ -2,7 +2,7 @@ diff --git a/.tmux.conf.local b/.tmux.conf.local
 index 0366cef..49d9755 100644
 --- a/.tmux.conf.local
 +++ b/.tmux.conf.local
-@@ -446,11 +446,84 @@ tmux_conf_uninstall_plugins_on_reload=true
+@@ -446,11 +446,89 @@ tmux_conf_uninstall_plugins_on_reload=true
  
  # to enable a plugin, use the 'set -g @plugin' syntax:
  # visit https://github.com/tmux-plugins for available plugins
@@ -16,14 +16,19 @@ index 0366cef..49d9755 100644
 +set -g @plugin 'tmux-plugins/tmux-yank'
 +set -g @plugin 'tmux-plugins/tmux-cpu'
 +#set -g @plugin 'christoomey/vim-tmux-navigator'
-+#set -g @plugin 'alexwforsythe/tmux-which-key'
-+set -g @plugin 'Nucc/tmux-which-key'
++set -g @plugin 'alexwforsythe/tmux-which-key'
++#set -g @plugin 'Nucc/tmux-which-key'
 +set -g @plugin 'tmux-plugins/tmux-resurrect'
 +set -g @plugin 'tmux-plugins/tmux-continuum'
 +set -g @continuum-restore 'on'
 +
 +
 +# -- saharsh customizations ----------------------------------------------------
++
++# Plugin config
++set -g @tmux-which-key-xdg-enable 1
++set -g @tmux-which-key-xdg-plugin-path tmux-which-key
++#set -g @which-key-config '~/.config/tmux-which-key/config.json'
 +
 +# Set <prefix> to Ctrl + Space
 +
