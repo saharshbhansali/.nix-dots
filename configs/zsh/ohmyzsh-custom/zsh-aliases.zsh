@@ -43,7 +43,7 @@ alias 'uncommit'='git reset --soft HEAD~1'
 # alias 'rm'='rm -i'
 #alias 'rip'='rip -i'
 alias 'rem'='rip -i'
-alias 'ln'='ln -i'
+# alias 'ln'='ln -i'
 alias 'ip'='ip -c'
 
 ## pkill
