@@ -46,8 +46,8 @@ alias 'rem'='rip -i'
 # alias 'ln'='ln -i'
 alias 'ip'='ip -c'
 
-## pkill
-alias 'pkill'='pkill -e'
+# ## pkill
+# alias 'pkill'='pkill -e'
 
 # Diff 
 alias 'vdiff'="diff --color -EZy"
