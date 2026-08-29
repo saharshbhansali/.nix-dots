@@ -97,7 +97,7 @@
       opencode
       claude-code
       docker-sbx
-      inputs.hermes-agent.packages.${stdenv.hostPlatform.system}.default
+      # inputs.hermes-agent.packages.${stdenv.hostPlatform.system}.default
       # vimPlugins.opencode-nvim
       # vimPlugins.claudecode-nvim
       inputs.perplexityai-bumblebee.packages.${stdenv.hostPlatform.system}.default
