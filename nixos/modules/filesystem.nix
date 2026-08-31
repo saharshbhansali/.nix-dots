@@ -97,6 +97,10 @@
   environment.systemPackages = with pkgs; [
     duperemove
     bees
+
+    # APFS tools
+    apfs-fuse
+    apfsprogs
   ];
 
   ## Gaming specialization: disable BTRFS scrub during gaming
