@@ -7,7 +7,7 @@
   ## Mount disk partitions
   fileSystems = {
     "/user/lfs" = {
-      device = "/dev/disk/by-uuid/2c013b70-8636-4b0c-824f-47cee3521721";
+      device = "/dev/disk/by-uuid/2760ca2c-14a1-4779-8e23-c7408b92d68c";
       fsType = "btrfs";
       options = [
         "noauto"
@@ -18,7 +18,7 @@
     };
 
     "/user/data" = {
-      device = "/dev/disk/by-uuid/ab314217-2ceb-45cb-bdea-2c98961b9367";
+      device = "/dev/disk/by-uuid/118f5bf2-abd9-476f-a0c1-755fcdccf5be";
       fsType = "btrfs";
       options = [
         "noauto"
