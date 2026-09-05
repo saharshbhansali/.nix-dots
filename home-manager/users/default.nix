@@ -1,16 +1,18 @@
-{ nixpkgs, inputs, config, lib, pkgs, ... }@args:
-
 {
-
+  nixpkgs,
+  inputs,
+  config,
+  lib,
+  pkgs,
+  ...
+} @ args: {
   home.stateVersion = "24.11";
 
   home.username = "${args.username}";
   home.homeDirectory = "/home/${args.username}";
 
-
   ## Starting user services via systemd
   systemd.user.startServices = true;
-
 
   ## Import modules
   imports = [
@@ -20,6 +22,7 @@
     ../modules/hm-programs.nix
     ../modules/hm-flatpaks.nix
     ../modules/hm-devtools.nix
+    ../modules/hm-services.nix
     # Specific
     ../modules/hm-nvim.nix
     ../modules/hm-nushell.nix
@@ -39,8 +42,6 @@
     ../modules/hm-desktop-shortcuts.nix
   ];
 
-
   ## Configure home-manager
   # home-manager.backupFileExtension = "hm.bak";
-
 }

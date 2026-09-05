@@ -1,134 +1,163 @@
-{ config, lib, pkgs, inputs, ... }:
-
 {
-
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+} @ args: {
   ## Install packages
   # nixpkgs.config.allowUnfree = true;
 
   ## User level packages
-  home.packages = with pkgs; [
+  home.packages = with pkgs;
+    [
+      ## Terminal programs
+      chezmoi
+      grc
 
-    ## Terminal programs
-    chezmoi
-    grc
-    tdf
+      ## VCS
+      oh-my-git
+      graphite-cli
+      mercurial
+      lazyjj
+      jjui
+      # jj-fzf
+      distrobox-tui
+      distroshelf
 
-    ## VCS
-    oh-my-git
-    graphite-cli
-    mercurial
-    lazyjj
-    jjui
-    # jj-fzf
+      ## Terminal emulators
+      wezterm
 
-    ## Terminal emulators
-    wezterm
+      ## Disk utils
+      # ventoy-full
+      # ventoy
+      # ventoy-full-qt
+      # ventoy-full-gtk
+      impression
+      # spacedrive
 
-    # ## Disk utils
-    # ventoy-full
+      ## Spotify
+      # spotify
+      # spicetify-cli
+      spotifyd
+      spotify-player
+      spotify-cli-linux
+      # spotify-tui
 
-    ## Spotify
-    # spotify
-    # spicetify-cli
-    spotifyd
-    spotify-player
-    spotify-cli-linux
-    # spotify-tui
+      ## Browsers
+      # zen
+      inputs.zen-browser.packages.${stdenv.hostPlatform.system}.twilight
+      # vivaldi
+      (
+        (vivaldi.overrideAttrs (oldattrs: {
+          dontwrapqtapps = false;
+          dontpatchelf = true;
+          nativeBuildInputs = oldattrs.nativeBuildInputs ++ [pkgs.kdePackages.wrapQtAppsHook];
+        })).override
+        {
+          commandLineArgs = [
+            "--enable-features=TouchpadOverscrollHistoryNavigation"
+            "--password-store=kwallet5"
+          ];
+          proprietaryCodecs = true;
+          enableWidevine = true;
+        }
+      )
+      # inputs.browseros-ai.packages.${stdenv.hostPlatform.system}.browseros-ai
+      # firefox and chromium
+      firefox
+      chromium
+      tor-browser
+      # text-based/terminal web browser
+      chawan
+      browsh
+      elinks
+      links2
+      lynx
+      w3m
 
-    ## Browsers
-    # zen
-    inputs.zen-browser.packages.${stdenv.hostPlatform.system}.twilight
-    # vivaldi
-    ((vivaldi.overrideAttrs
-      (oldattrs: {
-        dontwrapqtapps = false;
-        dontpatchelf = true;
-        nativeBuildInputs = oldattrs.nativeBuildInputs ++ [pkgs.kdePackages.wrapQtAppsHook];
-    })).override {
-      commandLineArgs = [
-        "--enable-features=TouchpadOverscrollHistoryNavigation"
-        "--password-store=kwallet5"
-      ];
-      proprietaryCodecs = true;
-      enableWidevine = true;
-    })
-    inputs.browseros-ai.packages.${stdenv.hostPlatform.system}.browseros-ai
-    # firefox and chromium
-    firefox
-    chromium
-    tor-browser
-    # text-based/terminal web browser
-    chawan
-    browsh
-    elinks
-    links2
-    lynx
-    w3m
+      ## VPN software
+      proton-vpn
+      # cloudflare-warp
+      cloudflare-cli
+      wgcf
 
-    ## VPN software
-    proton-vpn
-    cloudflare-warp
-    cloudflare-cli
-    wgcf
+      ## LLMs
+      aichat
+      ollama
+      lmstudio
+      # ollama-cuda
+      # open-webui
+      kdePackages.alpaka
+      # alpaca
+      oterm
+      litellm
 
-    ## LLMs
-    aichat
-    ollama
-    lmstudio
-    # ollama-cuda
-    open-webui
-    kdePackages.alpaka
-    alpaca
-    oterm
-    litellm
+      # AI Coding agents
+      opencode
+      claude-code
+      docker-sbx
+      # inputs.hermes-agent.packages.${stdenv.hostPlatform.system}.default
+      # vimPlugins.opencode-nvim
+      # vimPlugins.claudecode-nvim
+      inputs.perplexityai-bumblebee.packages.${stdenv.hostPlatform.system}.default
 
-    # AI Coding agents
-    opencode
-    claude-code
-    # vimPlugins.opencode-nvim
-    # vimPlugins.claudecode-nvim
+      ## Media
+      # mpv and vlc are in system packages (nixos/modules/packages.nix)
+      # stremio-linux-shell
+      # obs-studio
+      pulsemeeter
+      mediainfo-gui
 
-    ## Media
-    # mpv and vlc are in system packages (nixos/modules/packages.nix)
-    # stremio-linux-shell
-    # obs-studio
-    pulsemeeter
+      ## Notes
+      obsidian
+      appflowy
+      notion-app-enhanced
 
-    ## Notes
-    obsidian
-    appflowy
-    notion-app-enhanced
+      ## TUI apps
+      # ytui-music
+      youtube-tui
+      wiki-tui
+      systemctl-tui
 
-    ## TUI apps
-    # ytui-music
-    youtube-tui
-    wiki-tui
-    systemctl-tui
+      # Torrent
+      qbittorrent
 
-    # Torrent
-    qbittorrent
+      ## Other Programs
+      ## RSS Feed
+      newsboat
 
-    ## Other Programs
-    ## RSS Feed
-    newsboat
+      ## KDE Utils
+      konsave
 
-    ## KDE Utils
-    konsave
+      ## Document viewers
+      calibre
+      zathura
 
-    ## Document viewers
-    calibre
-    zathura
+      ## Launcher
+      # vicinae
+      # albert
+      # wox
 
-    ## Launcher
-    # vicinae
-    # albert
-    # wox
+      ## Chat Applications
+      # whatsie
+      # wasistlos
+      karere
+      whatsapp-electron
 
-    ## Chat Applications
-    # whatsie
-    wasistlos
-    whatsapp-electron
-
-  ];
-
+      # Anki
+      # (anki.withAddons [
+      #   ankiAddons.passfail2
+      #   ankiAddons.anki-connect
+      #   ankiAddons.review-heatmap
+      #   ankiAddons.fsrs4anki-helper
+      # ])
+      anki
+    ]
+    ++ (
+      with args.pkgs-stable; [
+        spacedrive
+        # open-webui
+      ]
+    );
 }

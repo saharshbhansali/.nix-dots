@@ -1,7 +1,9 @@
-{ config, lib, pkgs, ... }:
-
 {
-
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
   programs.nushell = {
     enable = true;
     # The config.nu can be anywhere you want if you like to edit your Nushell with Nu
@@ -39,19 +41,17 @@
     #   nano = "hx";
     # };
   };
-    
+
   programs.carapace.enableNushellIntegration = true;
 
   home.packages = with pkgs; [
-
     ## Official nushell plugins available in nixpkgs-unstable
     nushellPlugins.semver
-    nushellPlugins.query        # SQL-like query support
+    nushellPlugins.query # SQL-like query support
     # nushellPlugins.highlight    # syntax highlighting
     # nushellPlugins.units
-    nushellPlugins.polars       # DataFrame support via Polars (super powerful)
-    nushellPlugins.gstat        # git plugin
+    nushellPlugins.polars # DataFrame support via Polars (super powerful)
+    nushellPlugins.gstat # git plugin
     nushellPlugins.formats
   ];
-
 }

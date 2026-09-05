@@ -1,10 +1,13 @@
-{ config, lib, pkgs, inputs, ... }:
-let
+{
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}: let
   # dotfilesDir = "/path/to/dotfiles";
   # dotfilesDir = "$HOME/.config/.nix-dots";
-
   # Apply the customization patch to oh-my-tmux's tmux.conf.local using tmux/customize-omt.patch and tmux/tmux.conf.local symlink
-
   # Directory paths relative to this Nix file
   tmuxDir = ../../configs/tmux;
   ohMyTmuxSrc = ../../configs/oh-my-tmux;
@@ -17,9 +20,7 @@ let
     patch -d $out -p1 < ${tmuxDir}/customize-omt.patch
     chmod a-w $out/.tmux.conf.local
   '';
-in
-{
-
+in {
   # Configure programs
   home.file.".zshrc".source = ../../configs/zsh/.zshrc;
   home.file.".p10k.zsh".source = ../../configs/zsh/.p10k.zsh;
@@ -44,6 +45,11 @@ in
   # Use patched oh-my-tmux as the source
   home.file.".config/oh-my-tmux" = {
     source = patchedOhMyTmux;
+    recursive = true;
+  };
+
+  home.file.".config/tmux-which-key" = {
+    source = ../../configs/tmux-which-key;
     recursive = true;
   };
 
@@ -77,7 +83,8 @@ in
   };
 
   home.file.".config/konsave/kde-profile.knsv".source = ../../configs/konsave/kde-profile.knsv;
-  home.file.".config/konsave/keyboard-shortcuts.kksrc".source = ../../configs/konsave/keyboard-shortcuts.kksrc;
+  home.file.".config/konsave/keyboard-shortcuts.kksrc".source =
+    ../../configs/konsave/keyboard-shortcuts.kksrc;
 
   home.file."configs/vicinae/settings.json".source = ../../configs/vicinae/settings.json;
 
@@ -109,5 +116,4 @@ in
   #   ln -sf ${dotfilesDir}/configs/links/links.cfg $HOME/.links/links.cfg
   #   ln -sf ${dotfilesDir}/configs/elinks/elinks.conf $HOME/.config/elinks/elinks.conf
   # '';
-
 }

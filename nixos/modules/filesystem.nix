@@ -1,28 +1,53 @@
-{ config, lib, pkgs, ... }:
-
 {
-
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
   ## Mount disk partitions
   fileSystems = {
     "/user/lfs" = {
-      device = "/dev/disk/by-uuid/2c013b70-8636-4b0c-824f-47cee3521721";
+      device = "/dev/disk/by-uuid/2760ca2c-14a1-4779-8e23-c7408b92d68c";
       fsType = "btrfs";
-      options = [ "noauto" "nofail" "noexec" "users" ];
+      options = [
+        "noauto"
+        "nofail"
+        "noexec"
+        "users"
+      ];
     };
 
     "/user/data" = {
-      device = "/dev/disk/by-uuid/ab314217-2ceb-45cb-bdea-2c98961b9367";
+      device = "/dev/disk/by-uuid/118f5bf2-abd9-476f-a0c1-755fcdccf5be";
       fsType = "btrfs";
-      options = [ "noauto" "nofail" "noexec" "users" ];
+      options = [
+        "noauto"
+        "nofail"
+        "noexec"
+        "users"
+      ];
     };
   };
+
+  ## Garbage collection
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 30d";
+  };
+
+  ## Nix store optimisation on every build
+  nix.settings.auto-optimise-store = true;
+
+  ## Auto clean /tmp on boot
+  boot.tmp.cleanOnBoot = true;
 
   ## BTRFS optimizations
 
   ## Scrubbing
   services.btrfs.autoScrub = {
     enable = true;
-    interval = "monthly";  # Reduced from weekly for less I/O interference
+    interval = "monthly"; # Reduced from weekly for less I/O interference
   };
 
   ## Deduping
@@ -39,14 +64,22 @@
       spec = "/"; # mount point
       hashTableSizeMB = 128; # ~128MiB per TiB of data
       verbosity = "crit";
-      extraOptions = [ "--thread-count=2" "--loadavg-target" "2.0" ];
+      extraOptions = [
+        "--thread-count=2"
+        "--loadavg-target"
+        "2.0"
+      ];
     };
     home = {
       # spec = "LABEL=nix-home";
       spec = "/home";
       hashTableSizeMB = 128;
       verbosity = "crit";
-      extraOptions = [ "--thread-count=2" "--loadavg-target" "2.0" ];
+      extraOptions = [
+        "--thread-count=2"
+        "--loadavg-target"
+        "2.0"
+      ];
     };
   };
   ## To disable autostart, run the following for each filesystem
@@ -64,6 +97,10 @@
   environment.systemPackages = with pkgs; [
     duperemove
     bees
+
+    # APFS tools
+    apfs-fuse
+    apfsprogs
   ];
 
   ## Gaming specialization: disable BTRFS scrub during gaming
@@ -72,5 +109,4 @@
       services.btrfs.autoScrub.enable = lib.mkForce false;
     };
   };
-
 }

@@ -1,14 +1,17 @@
-{ pkgs, config, lib, inputs, ... }:
-
 {
-
+  pkgs,
+  config,
+  lib,
+  inputs,
+  ...
+}: {
   # imports = [
   #   ./gdm.nix
   # ];
 
   xdg.portal = {
     enable = true;
-    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+    extraPortals = [pkgs.xdg-desktop-portal-gtk];
   };
   xdg.portal.config.common.default = "*";
 
@@ -21,7 +24,6 @@
 
   # GNOME Tweaks
   environment.systemPackages = with pkgs; [
-
     gdm-settings
     # gsettings
     nwg-look
@@ -40,13 +42,13 @@
     gnomeExtensions.workspace-indicator
     gnomeExtensions.unmess
     gnomeExtensions.clipboard-indicator
-    gnomeExtensions.pano
+    # gnomeExtensions.pano
     gnomeExtensions.clipboard-history
     gnomeExtensions.vitals
     # gnomeExtensions.cmud
     gnomeExtensions.forge
     gnomeExtensions.tiling-shell
-    gnomeExtensions.tilingnome
+    # gnomeExtensions.tilingnome
     gnomeExtensions.paperwm
     gnomeExtensions.focus
     # gnomeExtensions.freon
@@ -62,7 +64,7 @@
     gnomeExtensions.boost-volume
     gnomeExtensions.yakuake
     # gnomeExtensions.zilence
-    gnomeExtensions.wallhub
+    # gnomeExtensions.wallhub
     gnomeExtensions.dev-container-manager
     gnomeExtensions.unblank
     gnomeExtensions.vicinae

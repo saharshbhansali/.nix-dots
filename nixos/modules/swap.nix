@@ -1,6 +1,9 @@
-{ config, lib, pkgs, ... }:
 {
-
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
   ## Swap config in hardware-configuration.nix
   # fileSystems."/swap" =
   #   { device = "/dev/disk/by-uuid/38cc3a86-d6bd-4ab1-b372-df6f346eb213";
@@ -12,7 +15,7 @@
   swapDevices = [
     {
       device = "/swap/swapfile";
-      size = 32*1024;
+      size = 32 * 1024;
       priority = -1;
     }
   ];
@@ -27,7 +30,6 @@
   };
 
   boot.kernel.sysctl = {
-    "vm.swappiness" = 60;
+    "vm.swappiness" = 30;
   };
-
 }

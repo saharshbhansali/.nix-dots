@@ -1,7 +1,12 @@
-{ config, lib, pkgs, inputs, ... }@args:
 {
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+} @ args: {
   # Add user to groups for containerization
-  users.users.${args.username}.extraGroups = [ "podman" ];
+  users.users.${args.username}.extraGroups = ["podman" "libvirtd" "kvm"];
 
   # Enable containerization
   virtualisation.containers.enable = true;
@@ -24,20 +29,76 @@
         enable = true;
         setSocketVariable = true;
       };
+      autoPrune = {
+        enable = true;
+        persistent = true;
+        randomizedDelaySec = "15min";
+        dates = "monthly";
+      };
     };
+
+    libvirtd = {
+      enable = true;
+      qemu.swtpm.enable = true; # Optional: TPM support (e.g., for Windows 11)
+    };
+    spiceUSBRedirection.enable = true;
+  };
+
+  programs.virt-manager.enable = true;
+
+  boot.binfmt = {
+    emulatedSystems = ["aarch64-linux"];
+    preferStaticEmulators = true; # required to work with podman
   };
 
   # Prevent Docker from auto-starting
-  systemd.services.docker.wantedBy = lib.mkForce [ ]; # Don't auto-start
+  systemd.services.docker.wantedBy = lib.mkForce []; # Don't auto-start
   # Manual activation: sudo systemctl start docker
 
   # Useful other development tools
   environment.systemPackages = with pkgs; [
-    dive # look into docker image layers
+    ## Containerization
+    # Docker
     docker-compose # docker - start group of containers for dev
+    # Podman
     podman-compose # podman - start group of containers for dev
     podman-tui # status of containers in the terminal
     podman-desktop # graphical tool for developing on containers and Kubernetes
     pods # podman desktop application
+    ## Container utils and tools
+    dive # look into docker image layers
+    slirp4netns # user-mode TCP/IP networking (via slirp) for unprivileged Linux network namespaces
+    runc
+    crun
+    containerd
+    lazydocker
+
+    ## Virtualization
+    # VMWare
+    vmware-workstation
+    # QEMU
+    qemu
+    qemu-user # QEMU userspace emulator
+    qemu-utils
+    # Virt-Manager
+    virt-manager
+    virt-viewer
+    # Misc
+    spice
+    spice-gtk
+    spice-protocol
+    virtio-win
+
+    ## Kubernetes
+    minikube
+    kind
+    k3s
+    k3d
+    k0sctl
+    kubernetes
+    # kubernetes-helm
+    kubernetes-helm-wrapped
+    (lib.hiPrio kubectl)
+    kubernix
   ];
 }

@@ -1,8 +1,9 @@
-{ pkgs, config, lib, ... }:
-
-
 {
-
+  pkgs,
+  config,
+  lib,
+  ...
+}: {
   # SDDM - set package and theme
   services.displayManager.sddm.enable = true;
   services.displayManager.sddm.wayland.enable = true;
@@ -36,5 +37,4 @@
   #     ExecStart = "${pkgs.numlockx}/bin/numlockx on";
   #   };
   # };
-
 }

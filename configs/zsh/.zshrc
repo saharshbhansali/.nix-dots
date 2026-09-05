@@ -50,7 +50,7 @@ zinit light Freed-Wu/fzf-tab-source
 ## Add in snippets
 # OMZ plugins
 # source "$ZINIT_CUSTOM/plugins/plugins.zsh"
-plugins="common-aliases git asdf aliases colored-man-pages colorize ssh-agent timer"
+plugins="common-aliases git asdf aliases colored-man-pages colorize ssh-agent timer" # fzf
 for plugin in $(echo "$plugins"); do 
   zinit snippet OMZP::${plugin}
 done
@@ -148,55 +148,70 @@ setopt hist_find_no_dups
 # ENABLE_CORRECTION="true"
 # setopt correct
 
-## Completion styling
-zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
-zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
-zstyle ':completion:*' menu no
+## Zsh styling
+# # fzf styling
+# export FZF_DEFAULT_OPTS="
+#   --style=full
+#   --ansi
+#   --ignore-case
+#   --preview='fzf-preview {}'
+#   --bind='focus:transform-header:file --brief {}'
+# "
 
+# completion settings
+zstyle ':completion:*' menu no
+zstyle ':completion:*' group-order 'main commands' 'alias commands' 'external commands'
+zstyle ':completion:*:^:fzf-tab:*' matcher-list 'm:{a-z}={A-Za-z}'
+zstyle ':completion:*:^:fzf-tab:*' list-colors "${(s.:.)LS_COLORS}"
+
+# fzf-tab settings
+zstyle ':fzf-tab:*' use-fzf-default-opts no
+zstyle ':fzf-tab:*' list-colors "${(s.:.)LS_COLORS}"
 zstyle ':fzf-tab:*' switch-group '<' '>'
 zstyle ':fzf-tab:*' prefix '·'
-
+zstyle ':fzf-tab:*' fzf-flags --style=full --preview='fzf-preview $realpath' --bind='focus:transform-header:file --brief $realpath' --ansi --ignore-case
+zstyle ':fzf-tab:*' matcher-list \
+  'm:{a-z}={A-Za-z}' \
+  'r:|[._-]=* r:|=*'
 # zstyle ':fzf-tab:*' query-string prefix longest
 # zstyle ':fzf-tab:*' query-string prefix first
 # zstyle ':fzf-tab:*' query-string prefix input first
 
-zstyle ':fzf-tab:complete:nvim:*' fzf-preview 'fzf-preview $realpath'
-
-zstyle ':fzf-tab:complete:bat:*' fzf-preview 'fzf-preview $realpath'
-# zstyle ':fzf-tab:complete:cat:*' fzf-preview 'fzf-preview $realpath'
-
-zstyle ':fzf-tab:complete:cd:*' fzf-preview 'fzf-preview $realpath'
-zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'fzf-preview $realpath'
-
-# zstyle ':fzf-tab:complete:ls:*' fzf-preview 'fzf-preview $realpath'
-# zstyle ':fzf-tab:complete:la:*' fzf-preview 'fzf-preview $(realpath $PWD/$word)'
-zstyle ':fzf-tab:complete:la:*' fzf-preview 'fzf-preview $realpath'
-# zstyle ':fzf-tab:complete:ll:*' fzf-preview 'fzf-preview $(realpath $PWD/$word)'
-zstyle ':fzf-tab:complete:ll:*' fzf-preview 'fzf-preview $realpath'
-zstyle ':fzf-tab:complete:exa:*' fzf-preview 'fzf-preview $realpath'
-
-# zstyle ':fzf-tab:complete:mv:*' fzf-preview 'fzf-preview $realpath'
-
-# zstyle ':fzf-tab:complete:cp:*' fzf-preview 'fzf-preview $realpath'
-
-# zstyle ':fzf-tab:complete:rm:*' fzf-preview 'fzf-preview $realpath'
-zstyle ':fzf-tab:complete:rem:*' fzf-preview 'fzf-preview $realpath'
-zstyle ':fzf-tab:complete:rip:*' fzf-preview 'fzf-preview $realpath'
-#
-# zstyle ':fzf-tab:complete:mkdir:*' fzf-preview 'fzf-preview $realpath'
-zstyle ':fzf-tab:complete:md:*' fzf-preview 'fzf-preview $realpath'
-
-# zstyle ':fzf-tab:complete:diff:*' fzf-preview 'fzf-preview $realpath'
-zstyle ':fzf-tab:complete:vdiff:*' fzf-preview 'fzf-preview $realpath'
-
-# zstyle ':fzf-tab:complete:find:*' fzf-preview 'fzf-preview $realpath'
-zstyle ':fzf-tab:complete:fd:*' fzf-preview 'fzf-preview $realpath'
-
-# zstyle ':fzf-tab:complete:grep:*' fzf-preview 'fzf-preview $realpath'
-zstyle ':fzf-tab:complete:rg:*' fzf-preview 'fzf-preview $realpath'
-# zstyle ':fzf-tab:complete:egrep:*' fzf-preview 'fzf-preview $realpath'
-
-zstyle ':fzf-tab:complete:chezmoi:*' fzf-preview 'fzf-preview $realpath'
+# Smart fzf preview
+# zstyle ':fzf-tab:complete:*' fzf-preview 'fzf-preview $realpath --bind="focus:transform-header:file --brief" --ansi --ignore-case'
+# zstyle ':fzf-tab:complete:*' fzf-preview 'fzf-preview $realpath'
+fzf_preview_util='
+  mime=$(file -b --mime-type "$realpath")
+  
+  # 1. Images
+  if [[ $mime == image/* ]]; then
+    chafa --format=symbols --size=${FZF_PREVIEW_COLUMNS}x${FZF_PREVIEW_LINES} "$realpath"
+  
+  # 2. PDFs (Safely ignored for tmux compatibility)
+  elif [[ $mime == application/pdf ]]; then
+    echo "PDF File: $(basename "$realpath")"
+    echo "(Preview disabled)"
+  
+  # 3. Video and Audio
+  elif [[ $mime == video/* || $mime == audio/* ]]; then
+    mediainfo "$realpath" 2>/dev/null || echo "Media file: $realpath"
+  
+  # 4. Archives
+  elif [[ $mime == application/zip ]]; then
+    unzip -l "$realpath"
+  elif [[ $mime == application/gzip || $mime == application/x-tar || $mime == application/x-bzip2 ]]; then
+    tar -tvf "$realpath"
+  
+  # 5. Directories
+  elif [[ -d $realpath ]]; then
+    eza -1 --color=always --icons=always "$realpath"
+  
+  # 6. Everything else (Code, text, configs)
+  else
+    bat --color=always --style=numbers "$realpath"
+  fi
+'
+zstyle ':fzf-tab:complete:*' fzf-preview "${fzf_preview_util}"
 
 # # Carapace completions
 # export CARAPACE_BRIDGES='zsh' # optional
@@ -208,9 +223,6 @@ zstyle ':fzf-tab:complete:chezmoi:*' fzf-preview 'fzf-preview $realpath'
 # # Run carapace and apply the regex pattern via sed
 # source <(carapace _carapace | sed -E "s/(^|\\s)${CARAPACE_PATTERN}(\\s|$)/ /g")
 # # source <(carapace _carapace | sed -E 's/(^|\s)(nvim|ls|la|rm|rem|cd|vscode)(\s|$)/ /g')
-
-zstyle ':completion:*:git:*' group-order 'main commands' 'alias commands' 'external commands'
-zstyle ':completion:*:jj:*' group-order 'main commands' 'alias commands' 'external commands'
 
 # Shell integrations
 eval "$(fzf --zsh)"

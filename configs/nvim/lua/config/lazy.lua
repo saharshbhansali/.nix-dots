@@ -11,7 +11,9 @@ require("lazy").setup({
         -- add LazyVim and import its plugins
         { "LazyVim/LazyVim", import = "lazyvim.plugins" },
         -- import any extras modules here
+        { import = "lazyvim.plugins.extras.ai.claudecode" },
         { import = "lazyvim.plugins.extras.ai.copilot-chat" },
+        -- { import = "lazyvim.plugins.extras.ai.copilot-native" },
         { import = "lazyvim.plugins.extras.ai.supermaven" },
         { import = "lazyvim.plugins.extras.ui.edgy" },
         { import = "lazyvim.plugins.extras.coding.blink" },

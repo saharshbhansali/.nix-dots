@@ -1,16 +1,25 @@
-{ config, lib, pkgs, inputs, ... }@args:
-
 {
-
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+} @ args: {
   system.stateVersion = "24.11";
 
   ## Nix settings
 
   # System settings
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
 
   # # Trusted-users list
-  nix.settings.trusted-users = [ "root" "${args.username}" ];
+  nix.settings.trusted-users = [
+    "root"
+    "${args.username}"
+  ];
 
   # Extra options
   nix.extraOptions = ''
@@ -18,7 +27,6 @@
     extra-substituters = https://devenv.cachix.org
     extra-trusted-public-keys = devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw=
   '';
-
 
   ## Package/module imports
 
@@ -33,6 +41,7 @@
     ../modules/power-management.nix
     ../modules/virtualization.nix
     ../modules/bluetooth.nix
+    ../modules/keyboard.nix
     ## Application installation
     # System
     ../modules/packages.nix
@@ -42,6 +51,7 @@
     # Specific
     # ../modules/nixvim.nix
     ../modules/shell.nix
+    ../modules/nix.nix
     # Feature
     ../modules/gaming.nix
     ## Application configurations
@@ -63,12 +73,16 @@
     # ../modules/cosmic-desktop.nix
   ];
 
-
   ## User setup
 
   users.users.${args.username} = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "video" "audio" "input" ];
+    extraGroups = [
+      "wheel"
+      "video"
+      "audio"
+      "input"
+    ];
     shell = pkgs.zsh;
   };
 
@@ -76,14 +90,16 @@
 
   ## Enable services
 
-
   ## Miscellaneous settings
 
   # Firmware and kernel settings
   hardware.enableRedistributableFirmware = true;
-  boot.kernelModules = [ "kvm-amd" "rtw89" ];
+  boot.kernelModules = [
+    "kvm-amd"
+    "rtw89"
+  ];
   hardware.usb-modeswitch.enable = true;
-  services.udev.packages = [ pkgs.usb-modeswitch-data ];
+  services.udev.packages = [pkgs.usb-modeswitch-data];
   hardware.enableAllFirmware = true;
   hardware.firmware = with pkgs; [
     linux-firmware
@@ -96,5 +112,4 @@
   # boot.kernelPackages = pkgs.linuxPackages_xanmod;
   # boot.kernelPackages = pkgs.linuxPackages_lqx;
   # boot.kernelPackages = pkgs.linuxPackages_hardened;
-
 }

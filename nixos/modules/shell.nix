@@ -1,7 +1,10 @@
-{ config, lib, pkgs, inputs, ... }:
-
 {
-
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}: {
   programs = {
     # Shells
     zsh.enable = true;
@@ -15,5 +18,4 @@
       nix-direnv.enable = true;
     };
   };
-
 }

@@ -1,8 +1,9 @@
-{ config, lib, pkgs, inputs, ... }:
-
 {
-
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}: {
   # services.network-manager-applet.enable = true;
-
 }
-

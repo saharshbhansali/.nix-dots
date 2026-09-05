@@ -1,13 +1,15 @@
-{ config, lib, pkgs, inputs, ... }:
-
 {
-
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}: {
   # Set environment variables
   home.sessionVariables = {
     EDITOR = "nvim";
     # QT_QPA_PLATFORMTHEME = "kvantum";
     DOTNET_SYSTEM_GLOBALIZATION_INVARIANT = "1";
+    KIND_EXPERIMENTAL_PROVIDER = "podman";
   };
-
 }
-

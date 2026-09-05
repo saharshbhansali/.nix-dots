@@ -4,14 +4,12 @@
   pkgs,
   inputs,
   ...
-}@args:
-let
+} @ args: let
   hasIPv6Internet = true;
   StateDirectory = "dnscrypt-proxy";
-in
-{
+in {
   # Turn off PCIe ASPM
-  boot.kernelParams = [ "pcie_aspm=off" ];
+  boot.kernelParams = ["pcie_aspm=off"];
   boot.extraModprobeConfig = ''
     options rtw89_pci disable_clkreq=1 disable_aspm_l1=1 disable_aspm_l1ss=1
     options rtw89_core disable_ps_mode=1
@@ -26,7 +24,7 @@ in
   networking.networkmanager.dns = "none"; # prevent DHCP DNS override
   networking.networkmanager.wifi.powersave = false;
 
-  users.users.${args.username}.extraGroups = lib.mkAfter [ "networkmanager" ];
+  users.users.${args.username}.extraGroups = lib.mkAfter ["networkmanager"];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's
@@ -98,8 +96,8 @@ in
   programs.captive-browser.interface = "wlo1";
 
   # Enable the WARP daemon (manual start only)
-  services.cloudflare-warp.enable = true;
-  systemd.services.cloudflare-warp.wantedBy = lib.mkForce [];  # Don't auto-start
+  services.cloudflare-warp.enable = false;
+  systemd.services.cloudflare-warp.wantedBy = lib.mkForce []; # Don't auto-start
   # Manual activation: warp-cli enable or systemctl start cloudflare-warp
 
   # ## Temporary fix (disable autoconnect) for broken Realtek PCI WiFi card
@@ -134,8 +132,8 @@ in
     enable = true;
     description = "disable WiFi interface wlo1 after graphical login";
     # Ensure it runs after the graphical session has started
-    after = [ "graphical-session.target" ];
-    wantedBy = [ "graphical-session.target" ];
+    after = ["graphical-session.target"];
+    wantedBy = ["graphical-session.target"];
     # after = [ "network-online.target" ];
     # wantedBy = [ "network-online.target" ];
 
@@ -153,5 +151,4 @@ in
   services.udev.extraRules = ''
     ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="0bda", ATTRS{idProduct}=="1a2b", RUN+="${pkgs.usb-modeswitch}/bin/usb_modeswitch -KW -v 0bda -p 1a2b"
   '';
-
 }

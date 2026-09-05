@@ -1,9 +1,13 @@
-{ config, lib, pkgs, inputs, ... }:
-
 {
-
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}: {
   ## Set cursor configuration and theme in home-manager
   home.pointerCursor = {
+    enable = true;
     gtk.enable = true;
     x11.enable = true;
     hyprcursor.enable = true;
@@ -20,5 +24,4 @@
     HYPRCURSOR_THEME = lib.mkForce "Catppuccin Mocha Mauve";
     HYPRCURSOR_SIZE = lib.mkForce "20";
   };
-
 }

@@ -1,6 +1,10 @@
-{ config, pkgs, lib, inputs, ... }:
-
 {
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}: {
   # imports = [ inputs.nixCatsNvim.nixosModules.default ];
 
   environment.systemPackages = [
@@ -16,5 +20,4 @@
     "L+ /root/.config/nvim - - - - /etc/lazyvim"
     "L+ /etc/nvim - - - - /etc/lazyvim"
   ];
-
 }

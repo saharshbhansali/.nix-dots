@@ -19,7 +19,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nix-flatpak = { 
+    nix-flatpak = {
       url = "github:gmodena/nix-flatpak/?ref=latest";
       # inputs.nixpkgs.follows = "nixpkgs";
     };
@@ -77,45 +77,67 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    perplexityai-bumblebee = {
+      url = "github:saharshbhansali/perplexityai-bumblebee-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    hermes-agent = {
+      url = "github:NousResearch/hermes-agent";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, nixpkgs-stable, home-manager, nur,  ... } @ inputs:
-    let
-      system = "x86_64-linux";
-      pkgs = import nixpkgs {
-        inherit system;
-        config.allowUnfree = true;
-      };
-      pkgs-stable = import nixpkgs-stable {
-        inherit system;
-        config.allowUnfree = true;
-      };
-      username = "saharsh";
-    in
-    {
-      nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
-        inherit system;
-        specialArgs = { inherit inputs pkgs pkgs-stable username; };
-        modules = [
-          ./hardware-configuration.nix
-          ./nixos/hosts/default.nix
-
-          # Home Manager as NixOS module
-          home-manager.nixosModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.users.${username} = import ./home-manager/users/default.nix;
-
-            ## Set backup file extension
-            home-manager.backupFileExtension = "hm.bak";
-
-            # Pass flake inputs to home-manager modules
-            home-manager.extraSpecialArgs = {
-              inherit inputs home-manager username;
-            };
-          }
-        ];
-      };
+  outputs = {
+    self,
+    nixpkgs,
+    nixpkgs-stable,
+    home-manager,
+    nur,
+    ...
+  } @ inputs: let
+    system = "x86_64-linux";
+    pkgs-stable = import nixpkgs-stable {
+      inherit system;
+      config.allowUnfree = true;
     };
+    username = "saharsh";
+  in {
+    nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
+      inherit system;
+      specialArgs = {
+        inherit
+          inputs
+          pkgs-stable
+          username
+          ;
+      };
+      modules = [
+        ./hardware-configuration.nix
+        ./nixos/hosts/default.nix
+
+        {
+          nixpkgs.config = {
+            allowUnfree = true;
+          };
+        }
+
+        # Home Manager as NixOS module
+        home-manager.nixosModules.home-manager
+        {
+          home-manager.useGlobalPkgs = true;
+          home-manager.useUserPackages = true;
+          home-manager.users.${username} = import ./home-manager/users/default.nix;
+
+          ## Set backup file extension
+          home-manager.backupFileExtension = "hm.bak";
+
+          # Pass flake inputs to home-manager modules
+          home-manager.extraSpecialArgs = {
+            inherit inputs home-manager username pkgs-stable;
+          };
+        }
+      ];
+    };
+  };
 }

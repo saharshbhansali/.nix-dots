@@ -1,9 +1,11 @@
-{ config, lib, pkgs, inputs, ... }:
-
 {
-
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}: {
   programs = {
-
     # zsh.enable = true;
     # fish.enable = true;
     # starship.enable = true;
@@ -30,13 +32,10 @@
       #   };
       # };
     };
-
   };
-
 
   ## User level packages
   home.packages = with pkgs; [
-
     ## Fish plugins
     fishPlugins.z
     fishPlugins.plugin-git
@@ -47,7 +46,5 @@
     fishPlugins.grc
     fishPlugins.colored-man-pages
     fishPlugins.bass
-
   ];
-
 }

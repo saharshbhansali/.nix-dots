@@ -1,10 +1,14 @@
-
-{ config, lib, pkgs, inputs, ... }:
-
 {
-
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}: {
   ## User level packages
   home.packages = with pkgs; [
+    # Omnix: improved DevEx on nixos - https://omnix.page
+    omnix
 
     # ## VS Code
     vscode-fhs
@@ -34,7 +38,7 @@
     ## AI editors
     # code-cursor
     code-cursor-fhs
-    windsurf
+    devin-desktop # formerly: windsurf
     # zed-editor
     zed-editor-fhs
 
@@ -46,6 +50,7 @@
     aider-chat-full
     cursor-cli
 
+    # AWS CLI
+    awscli2
   ];
-
 }
