@@ -7,6 +7,12 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-25.11";
 
+    # Declarative disk partitioning
+    disko = {
+      url = "github:nix-community/disko/latest";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -94,6 +100,7 @@
     nixpkgs-stable,
     home-manager,
     nur,
+    disko,
     ...
   } @ inputs: let
     system = "x86_64-linux";
@@ -115,6 +122,9 @@
       modules = [
         ./hardware-configuration.nix
         ./nixos/hosts/default.nix
+
+        # Declarative disk partitioning (disko.devices in nixos/modules/filesystem.nix)
+        disko.nixosModules.disko
 
         {
           nixpkgs.config = {
