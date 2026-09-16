@@ -46,7 +46,6 @@
 
   home.packages = with pkgs; [
     ## Official nushell plugins available in nixpkgs-unstable
-    nushellPlugins.semver
     nushellPlugins.query # SQL-like query support
     # nushellPlugins.highlight    # syntax highlighting
     # nushellPlugins.units
