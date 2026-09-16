@@ -46,10 +46,10 @@
   ## Gaming specialization: reduce logging overhead
   specialisation = {
     gaming.configuration = {
-      services.journald.extraConfig = ''
-        SystemMaxUse=50M
-        RuntimeMaxUse=10M
-      '';
+      services.journald.settings.Journal = {
+        SystemMaxUse = "50M";
+        RuntimeMaxUse = "10M";
+      };
     };
   };
 }
