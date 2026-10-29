@@ -90,7 +90,7 @@
       # open-webui
       kdePackages.alpaka
       # alpaca
-      oterm
+      # oterm
       litellm
 
       # AI Coding agents

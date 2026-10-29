@@ -47,7 +47,7 @@
     claude-code
     gpt-cli
     # aider-chat
-    aider-chat-full
+    # aider-chat-full
     cursor-cli
 
     # AWS CLI
