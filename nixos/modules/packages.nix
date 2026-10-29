@@ -35,7 +35,7 @@
       nix-output-monitor
       distrobox
       toolbox
-      darling-dmg
+      # darling-dmg
       winboat
 
       # ## Hypr utils
