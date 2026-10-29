@@ -15,8 +15,8 @@
     "debug=0" # Disable kernel debugging overhead
   ];
 
-  ## Config hibernate/suspend/resume settings (via systemd)
-  boot.initrd.systemd.enable = true;
+  # ## Config hibernate/suspend/resume settings (via systemd)
+  # boot.initrd.systemd.enable = true;
 
   ## Gaming specialization: optimize kernel parameters for gaming
   # NOTE: Hibernate (S4) saves system state - resume must use same specialization
