@@ -35,22 +35,33 @@
     # evil-helix
     # helix-gpt
 
-    ## AI editors
+    ## Code editors
     # code-cursor
     code-cursor-fhs
-    devin-desktop # formerly: windsurf
     # zed-editor
     zed-editor-fhs
 
-    # AI code assistant
+    # AI tooling
+    docker-sbx
+    # inputs.hermes-agent.packages.${stdenv.hostPlatform.system}.default
+    chatgpt
     opencode
+    opencode-desktop
     claude-code
-    gpt-cli
+    cursor-cli
+    # devin-desktop # formerly: windsurf
+    # gpt-cli
+    # vimPlugins.opencode-nvim
+    # vimPlugins.claudecode-nvim
     # aider-chat
     # aider-chat-full
-    cursor-cli
+    # cmux
+    herdr
 
     # AWS CLI
     awscli2
+
+    # Package management and audit
+    inputs.perplexityai-bumblebee.packages.${stdenv.hostPlatform.system}.default
   ];
 }

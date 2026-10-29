@@ -83,24 +83,15 @@
       wgcf
 
       ## LLMs
-      aichat
-      ollama
       lmstudio
+      ollama
       # ollama-cuda
       # open-webui
+      # aichat
       kdePackages.alpaka
       # alpaca
       # oterm
-      litellm
-
-      # AI Coding agents
-      opencode
-      claude-code
-      docker-sbx
-      # inputs.hermes-agent.packages.${stdenv.hostPlatform.system}.default
-      # vimPlugins.opencode-nvim
-      # vimPlugins.claudecode-nvim
-      inputs.perplexityai-bumblebee.packages.${stdenv.hostPlatform.system}.default
+      # litellm
 
       ## Media
       # mpv and vlc are in system packages (nixos/modules/packages.nix)
