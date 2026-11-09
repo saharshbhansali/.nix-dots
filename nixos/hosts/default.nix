@@ -49,6 +49,7 @@
     ../modules/programs.nix
     ../modules/flatpaks.nix
     ../modules/appimages.nix
+    ../modules/containers.nix
     # Specific
     # ../modules/nixvim.nix
     ../modules/shell.nix
