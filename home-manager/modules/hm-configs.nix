@@ -88,6 +88,11 @@ in {
 
   home.file."configs/vicinae/settings.json".source = ../../configs/vicinae/settings.json;
 
+  home.file."searxng/core-config" = {
+    source = ../../configs/searxng;
+    recursive = true;
+  };
+
   home.file.".newsboat" = {
     source = ../../configs/newsboat;
     recursive = true;
