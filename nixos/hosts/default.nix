@@ -85,6 +85,20 @@
       "input"
     ];
     shell = pkgs.zsh;
+    # Enable systemd user lingering - spawns session-independent user management service at boot
+    linger = true;
+    subUidRanges = [
+      {
+        startUid = 100000;
+        count = 65536;
+      }
+    ];
+    subGidRanges = [
+      {
+        startGid = 100000;
+        count = 65536;
+      }
+    ];
   };
 
   users.defaultUserShell = pkgs.zsh;
