@@ -24,6 +24,7 @@
     ../modules/hm-flatpaks.nix
     ../modules/hm-devtools.nix
     ../modules/hm-services.nix
+    ../modules/hm-containers.nix
     # Specific
     ../modules/hm-nvim.nix
     ../modules/hm-nushell.nix
