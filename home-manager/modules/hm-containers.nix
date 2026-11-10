@@ -68,8 +68,6 @@ in {
 
   home.activation.createContainerData = ''
     $DRY_RUN_CMD mkdir -p \
-      ${data}/degoog \
-      ${data}/degoog/data \
       ${data}/searxng/valkey \
       ${data}/searxng/cache
   '';
