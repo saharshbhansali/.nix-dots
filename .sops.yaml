@@ -1,7 +1,9 @@
 keys:
-  - &personal age15zwr5cfj6f6hdxc2lnztw3qc76lww3wz2u0zxgcw923p0nps4avqrpkwsm
+  - &github age15zwr5cfj6f6hdxc2lnztw3qc76lww3wz2u0zxgcw923p0nps4avqrpkwsm
+  - &bitwarden age1m3nwwvpqpm3a2upgulnqf9hvt5qad426karj0uvzpz0gud0r2e9qychtva
 creation_rules:
   - path_regex: secrets/[^/]+\.(yaml|json|env|ini|sops)$
     key_groups:
       - age:
-          - *personal
+          - *github
+          - *bitwarden
