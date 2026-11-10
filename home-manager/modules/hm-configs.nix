@@ -24,66 +24,66 @@ in {
   # Configure programs
   home.file.".zshrc".source = ../../configs/zsh/.zshrc;
   home.file.".p10k.zsh".source = ../../configs/zsh/.p10k.zsh;
-  home.file.".config/ohmyzsh-custom" = {
+  xdg.configFile."ohmyzsh-custom" = {
     source = ../../configs/zsh/ohmyzsh-custom;
     recursive = true;
   };
 
-  home.file.".config/fish/config.fish".source = ../../configs/fish/config.fish;
+  xdg.configFile."fish/config.fish".source = ../../configs/fish/config.fish;
 
-  # home.file.".config/nvim" = {
+  # xdg.configFile."nvim" = {
   #   source = ../../configs/nvim;
   #   recursive = true;
   # };
 
   # Your tmux directory (contains patch + symlink)
-  home.file.".config/tmux" = {
+  xdg.configFile."tmux" = {
     source = tmuxDir;
     recursive = true;
   };
 
   # Use patched oh-my-tmux as the source
-  home.file.".config/oh-my-tmux" = {
+  xdg.configFile."oh-my-tmux" = {
     source = patchedOhMyTmux;
     recursive = true;
   };
 
-  home.file.".config/tmux-which-key" = {
+  xdg.configFile."tmux-which-key" = {
     source = ../../configs/tmux-which-key;
     recursive = true;
   };
 
-  home.file.".config/kitty" = {
+  xdg.configFile."kitty" = {
     source = ../../configs/kitty;
     recursive = true;
   };
 
-  home.file.".config/ghostty" = {
+  xdg.configFile."ghostty" = {
     source = ../../configs/ghostty;
     recursive = true;
   };
 
-  home.file.".config/zellij" = {
+  xdg.configFile."zellij" = {
     source = ../../configs/zellij;
     recursive = true;
   };
 
-  home.file.".config/wezterm" = {
+  xdg.configFile."wezterm" = {
     source = ../../configs/wezterm;
     recursive = true;
   };
 
-  home.file.".config/atuin/config.toml".source = ../../configs/atuin/config.toml;
-  home.file.".config/pay-respects/config.toml".source = ../../configs/pay-respects/config.toml;
+  xdg.configFile."atuin/config.toml".source = ../../configs/atuin/config.toml;
+  xdg.configFile."pay-respects/config.toml".source = ../../configs/pay-respects/config.toml;
 
-  home.file.".config/libinput-gestures.conf".source = ../../configs/gestures/libinput-gestures.conf;
-  home.file.".config/gestures/alt_tab_switcher" = {
+  xdg.configFile."libinput-gestures.conf".source = ../../configs/gestures/libinput-gestures.conf;
+  xdg.configFile."gestures/alt_tab_switcher" = {
     source = ../../configs/gestures/alt_tab_switcher;
     recursive = true;
   };
 
-  home.file.".config/konsave/kde-profile.knsv".source = ../../configs/konsave/kde-profile.knsv;
-  home.file.".config/konsave/keyboard-shortcuts.kksrc".source =
+  xdg.configFile."konsave/kde-profile.knsv".source = ../../configs/konsave/kde-profile.knsv;
+  xdg.configFile."konsave/keyboard-shortcuts.kksrc".source =
     ../../configs/konsave/keyboard-shortcuts.kksrc;
 
   home.file."configs/vicinae/settings.json".source = ../../configs/vicinae/settings.json;
@@ -101,11 +101,11 @@ in {
   };
 
   home.file.".links/links.cfg".source = ../../configs/links/links.cfg;
-  home.file.".config/elinks/elinks.conf".source = ../../configs/elinks/elinks.conf;
+  xdg.configFile."elinks/elinks.conf".source = ../../configs/elinks/elinks.conf;
   home.file.".w3m/keymap".source = ../../configs/w3m/keymap;
 
   # home.file.".links/links.cfg".text = builtins.readFile ../../configs/links/links.cfg;
-  # home.file.".config/elinks/elinks.conf".text = builtins.readFile ../../configs/elinks/elinks.conf;
+  # xdg.configFile."elinks/elinks.conf".text = builtins.readFile ../../configs/elinks/elinks.conf;
 
   # home.activation.make-symlinks = lib.hm.dag.entryAfter ["writeBoundary"] ''
   #   # Create the directories
