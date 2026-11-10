@@ -2,10 +2,11 @@
   cfg = "${config.home.homeDirectory}/searxng/core-config";
   data = "${config.xdg.dataHome}/containers";
 in {
-  sops.secrets."searxng/secret_key" = {};
-  sops.templates."searxng-env".content = ''
-    SEARXNG_SECRET=${config.sops.placeholder."searxng/secret_key"}
-  '';
+  sops.secrets."searxng-env" = {
+    format = "dotenv";
+    sopsFile = ../../secrets/searxng.enc.env;
+    key = ""; # Empty key outputs the whole decrypted file
+  };
 
   services.podman = {
     enable = true;
@@ -42,7 +43,7 @@ in {
         ];
         environmentFile = [
           # "${cfg}/.env"
-          config.sops.templates."searxng-env".path
+          config.sops.secrets."searxng-env".path
         ];
         volumes = [
           # "${cfg}:/etc/searxng:ro"
