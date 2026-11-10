@@ -13,6 +13,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Declarative secrets management
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -101,6 +107,7 @@
     home-manager,
     nur,
     disko,
+    sops-nix,
     ...
   } @ inputs: let
     system = "x86_64-linux";
@@ -126,6 +133,9 @@
         # Declarative disk partitioning (disko.devices in nixos/modules/filesystem.nix)
         disko.nixosModules.disko
 
+        # Declarative secrets management (in nixos/modules/secrets.nix)
+        sops-nix.nixosModules.sops
+
         {
           nixpkgs.config = {
             allowUnfree = true;
@@ -137,6 +147,9 @@
         {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
+          home-manager.sharedModules = [
+            sops-nix.homeManagerModules.sops
+          ];
           home-manager.users.${username} = import ./home-manager/users/default.nix;
 
           ## Set backup file extension

@@ -41,6 +41,7 @@
     ../modules/power-management.nix
     ../modules/virtualization.nix
     ../modules/bluetooth.nix
+    ../modules/secrets.nix
     ../modules/keyboard.nix
     ## Application installation
     # System

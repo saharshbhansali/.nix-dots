@@ -20,6 +20,7 @@
     # System
     ../modules/hm-packages.nix
     ../modules/hm-programs.nix
+    ../modules/hm-secrets.nix
     ../modules/hm-flatpaks.nix
     ../modules/hm-devtools.nix
     ../modules/hm-services.nix
