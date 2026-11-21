@@ -15,7 +15,7 @@
     inputs.nixCatsNvim.packages.${pkgs.stdenv.hostPlatform.system}.nvim
     inputs.nixCatsNvim.packages.${pkgs.stdenv.hostPlatform.system}.testnvim
     # inputs.nixCatsNvim.packages.${pkgs.stdenv.hostPlatform.system}.catsnvim
-    # inputs.nixPatchNvim.packages.${pkgs.stdenv.hostPlatform.system}.default
+    inputs.nixPatchNvim.packages.${pkgs.stdenv.hostPlatform.system}.default
     # vimPlugins.nvim-treesitter.withAllGrammars
     # vimPlugins.nvim-treesitter
   ];
