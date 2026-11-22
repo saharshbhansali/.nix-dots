@@ -14,11 +14,21 @@ return {
 
     {
         "catppuccin/nvim",
-        lazy = true,
+        lazy = false,
+        -- LazyVim (priority 10000) applies the colorscheme during its own config.
+        -- Catppuccin's setup() must run first, otherwise the theme is generated
+        -- with default options (transparent_background = false) and the later
+        -- setup() only recompiles the cache without re-applying the highlights.
+        priority = 10001,
         name = "catppuccin",
         opts = {
-            flavor = "mocha",
+            flavour = "mocha",
             transparent_background = true,
+            -- Optional: Make floating windows (like Telescope, Neo-tree, WhichKey) transparent too
+            float = {
+                transparent = true,
+                solid = false,
+            },
             dim_inactive = {
                 enabled = false, -- dims the background color of inactive window
                 shade = "dark",
