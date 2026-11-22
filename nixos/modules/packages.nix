@@ -252,7 +252,6 @@
       kdePackages.kwalletmanager
 
       ## GTK utils
-      gtk2
       gtk3
       gtk4
 
