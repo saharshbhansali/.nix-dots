@@ -43,6 +43,7 @@
     ../modules/bluetooth.nix
     ../modules/secrets.nix
     ../modules/keyboard.nix
+    ../modules/display.nix
     ## Application installation
     # System
     ../modules/packages.nix
